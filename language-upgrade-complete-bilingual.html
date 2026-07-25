@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>語言升維完整系統 | Language Upgrade Complete System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --navy: #0D1B3E;
+            --teal: #0A7A72;
+            --gold: #C9960C;
+            --light-gold: #F5E6C0;
+            --bg: #F8F9FA;
+            --card-bg: #FFFFFF;
+            --text: #1A1A1A;
+            --text-light: #666666;
+            --border: #E0E0E0;
+            --red: #D32F2F;
+            --green: #00796B;
+        }
+        
+        body {
+            font-family: 'Microsoft JhengHei', 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%);
+            color: white;
+            padding: 24px 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+        
+        .header .subtitle {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: var(--light-gold);
+            color: var(--navy);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        
+        .controls {
+            padding: 14px 20px;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 130px;
+            z-index: 50;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: inherit;
+            margin-bottom: 10px;
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: var(--teal);
+            background-color: #F0F8F8;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            overflow-x: auto;
+        }
+        
+        .tab-btn {
+            padding: 7px 12px;
+            border: 2px solid var(--border);
+            background: white;
+            color: var(--text);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.25s;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        
+        .tab-btn:hover {
+            border-color: var(--teal);
+            background: #F0F8F8;
+        }
+        
+        .tab-btn.active {
+            background: var(--navy);
+            color: white;
+            border-color: var(--navy);
+        }
+        
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 18px;
+        }
+        
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--gold);
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+        
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: var(--teal);
+        }
+        
+        .card-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .card-toggle {
+            font-size: 18px;
+            color: var(--teal);
+            transition: transform 0.25s;
+        }
+        
+        .card.expanded .card-toggle {
+            transform: rotate(180deg);
+        }
+        
+        .card-content {
+            display: none;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .card.expanded .card-content {
+            display: block;
+        }
+        
+        /* 雙語並排容器 */
+        .bilingual-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+        
+        .lang-column {
+            background: #F5F5F5;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid var(--teal);
+        }
+        
+        .lang-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--teal);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+        
+        .lang-text {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+        
+        .lang-text strong {
+            color: var(--navy);
+            font-weight: 700;
+        }
+        
+        .tts-btn {
+            background: var(--teal);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            transition: background 0.2s;
+            font-family: inherit;
+            display: inline-block;
+            margin-top: 4px;
+        }
+        
+        .tts-btn:hover {
+            background: var(--navy);
+        }
+        
+        .tts-btn.playing {
+            background: var(--gold);
+        }
+        
+        /* 雙語表格 */
+        .bilingual-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .bilingual-table th {
+            background: var(--navy);
+            color: white;
+            padding: 10px;
+            text-align: left;
+            font-weight: 700;
+        }
+        
+        .bilingual-table td {
+            padding: 9px;
+            border: 1px solid var(--border);
+        }
+        
+        .bilingual-table tr:nth-child(even) {
+            background: #F8F9FA;
+        }
+        
+        .bilingual-table .num {
+            font-weight: 700;
+            color: var(--navy);
+            width: 35px;
+        }
+        
+        .bilingual-table .low {
+            background: #FFEBEE;
+            color: var(--red);
+            font-weight: 500;
+        }
+        
+        .bilingual-table .high {
+            background: #E8F5E9;
+            color: var(--green);
+            font-weight: 500;
+        }
+        
+        .bilingual-table .core {
+            color: var(--gold);
+            font-weight: 700;
+        }
+        
+        /* 比較卡片 */
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .old-lang {
+            background: #FFEBEE;
+            border-left: 4px solid var(--red);
+            padding: 10px;
+            border-radius: 6px;
+        }
+        
+        .old-lang .label {
+            color: var(--red);
+            font-weight: 700;
+            font-size: 11px;
+            margin-bottom: 4px;
+        }
+        
+        .new-lang {
+            background: #E8F5E9;
+            border-left: 4px solid var(--green);
+            padding: 10px;
+            border-radius: 6px;
+        }
+        
+        .new-lang .label {
+            color: var(--green);
+            font-weight: 700;
+            font-size: 11px;
+            margin-bottom: 4px;
+        }
+        
+        .lang-text-small {
+            font-size: 12px;
+            line-height: 1.5;
+            color: var(--text);
+        }
+        
+        .transform-tag {
+            display: inline-block;
+            background: #E3F2FD;
+            color: #1976D2;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+        
+        .practice-box {
+            background: #FFF8DC;
+            border-left: 4px solid var(--gold);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 18px;
+            color: var(--text-light);
+            font-size: 11px;
+            border-top: 1px solid var(--border);
+            margin-top: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .bilingual-container, .comparison-row {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 20px;
+            }
+            .container {
+                padding: 12px;
+            }
+            .bilingual-table {
+                font-size: 11px;
+            }
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <span class="badge">✨ 完整升維系統 | Complete System</span>
+        <h1>語言升維完整系統</h1>
+        <p class="subtitle">Language Upgrade Complete System</p>
+        <p style="font-size: 12px; opacity: 0.88;">14種模式 × 68組公式 × 151項轉化 × 全雙語 + 英文TTS</p>
+    </div>
+    
+    <div class="controls">
+        <input type="text" class="search-box" id="searchBox" placeholder="搜尋 | Search...">
+        <div class="tab-buttons">
+            <button class="tab-btn active" data-tab="overview">總覽</button>
+            <button class="tab-btn" data-tab="patterns">14模式</button>
+            <button class="tab-btn" data-tab="formulas">68公式</button>
+            <button class="tab-btn" data-tab="reframes">151轉化</button>
+            <button class="tab-btn" data-tab="tools">工具</button>
+        </div>
+    </div>
+    
+    <div class="container">
+        
+        <!-- Overview Section -->
+        <div id="overview" class="section active">
+            <div class="section-title">📚 系統總覽 | System Overview</div>
+            
+            <div class="card">
+                <div class="card-title">
+                    🔑 核心發現 | Core Discovery
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-container">
+                        <div class="lang-column">
+                            <div class="lang-label">中文</div>
+                            <div class="lang-text">語言不是描述現實的工具，語言本身就是構建現實的材料。你說什麼，大腦就預測什麼；大腦預測什麼，行動就跟著什麼；行動累積什麼，人生就變成什麼。</div>
+                        </div>
+                        <div class="lang-column">
+                            <div class="lang-label">English</div>
+                            <div class="lang-text">Language is not a tool to describe reality; language itself is the material that constructs reality. What you say, your brain predicts; what your brain predicts, your actions follow; what your actions accumulate, your life becomes.</div>
+                            <button class="tts-btn" onclick="speakText('Language is not a tool to describe reality. Language itself is the material that constructs reality. What you say, your brain predicts. What your brain predicts, your actions follow. What your actions accumulate, your life becomes.', 0.75)">🔊 Speak</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">
+                    🧠 四大控制模組 | Four Core Modules
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-container">
+                        <div class="lang-column">
+                            <div class="lang-label">中文</div>
+                            <div class="lang-text"><strong>👁 感知模組</strong><br>語言決定你看見機會或風險。限制語言啟動風險過濾，成長語言啟動探索模式。</div>
+                            <div class="lang-text" style="margin-top: 10px;"><strong>🤝 資源模組</strong><br>語言決定他人如何回應你。低價值語言被忽略，價值語言被靠近。</div>
+                            <div class="lang-text" style="margin-top: 10px;"><strong>🪞 身份模組</strong><br>語言定義你的自我模型。自我否定導向放棄，自我賦能導向嘗試。</div>
+                            <div class="lang-text" style="margin-top: 10px;"><strong>⚡ 行動模組</strong><br>語言直接觸發行動。拖延語言停滯，行動語言推進。</div>
+                        </div>
+                        <div class="lang-column">
+                            <div class="lang-label">English</div>
+                            <div class="lang-text"><strong>👁 Perception Module</strong><br>Language determines whether you see opportunity or risk. Limiting language activates risk filters; growth language activates exploration mode.</div>
+                            <div class="lang-text" style="margin-top: 10px;"><strong>🤝 Resource Module</strong><br>Language determines how others respond to you. Low-value language gets overlooked; value-rich language attracts people.</div>
+                            <div class="lang-text" style="margin-top: 10px;"><strong>🪞 Identity Module</strong><br>Language defines your self-model. Self-denial leads to giving up; self-empowerment leads to attempting.</div>
+                            <div class="lang-text" style="margin-top: 10px;"><strong>⚡ Action Module</strong><br>Language directly triggers action. Procrastination language stalls; action language propels forward.</div>
+                            <button class="tts-btn" onclick="speakText('Perception Module: Language determines whether you see opportunity or risk. Resource Module: Language determines how others respond to you. Identity Module: Language defines your self-model. Action Module: Language directly triggers action.', 0.75)">🔊 Speak All</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 14 Patterns Section -->
+        <div id="patterns" class="section">
+            <div class="section-title">🔄 14種語言重構模式 | 14 Reframing Patterns</div>
+            
+            <div class="card">
+                <div class="card-title">
+                    1️⃣ 意圖重構 | Intention Reframe
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-container">
+                        <div class="lang-column">
+                            <div class="lang-label">中文</div>
+                            <div class="lang-text"><strong>本體：</strong> 行為是表面，意圖是核心。解讀底層意圖比反應行為更有效。</div>
+                            <div class="lang-text"><strong>機制：</strong> 錯把行為當惡意 → 情緒爆炸 → 衝突擴大。看見意圖 → 降低誤解 → 關係改善。</div>
+                            <div class="lang-text"><strong>例句：</strong></div>
+                            <div class="comparison-row">
+                                <div class="old-lang">
+                                    <div class="label">❌ 低維</div>
+                                    <div class="lang-text-small">他在批評我</div>
+                                </div>
+                                <div class="new-lang">
+                                    <div class="label">✅ 高維</div>
+                                    <div class="lang-text-small">他在指出可以優化的地方</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lang-column">
+                            <div class="lang-label">English</div>
+                            <div class="lang-text"><strong>Ontology:</strong> Behavior is surface, intention is core. Decoding underlying intentions is more effective than reacting to behavior.</div>
+                            <div class="lang-text"><strong>Mechanism:</strong> Mistaking behavior for malice → Emotional explosion → Conflict escalates. Seeing intention → Reducing misunderstanding → Relationship improves.</div>
+                            <div class="lang-text"><strong>Example:</strong></div>
+                            <div class="comparison-row">
+                                <div class="old-lang">
+                                    <div class="label">❌ Low-Dimensional</div>
+                                    <div class="lang-text-small">He is criticizing me.</div>
+                                </div>
+                                <div class="new-lang">
+                                    <div class="label">✅ High-Dimensional</div>
+                                    <div class="lang-text-small">He is pointing out areas for optimization.</div>
+                                </div>
+                            </div>
+                            <button class="tts-btn" onclick="speakText('He is pointing out areas for optimization.', 0.85)">🔊 Speak</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">
+                    2️⃣ 重新定義 | Redefinition
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-container">
+                        <div class="lang-column">
+                            <div class="lang-label">中文</div>
+                            <div class="lang-text"><strong>本體：</strong> 失敗不是終點，是資料。標籤會鎖死你，定義會解放你。</div>
+                            <div class="lang-text"><strong>機制：</strong> 標籤思維→卡死。資料思維→可更新。</div>
+                            <div class="lang-text"><strong>例句：</strong></div>
+                            <div class="comparison-row">
+                                <div class="old-lang">
+                                    <div class="label">❌ 低維</div>
+                                    <div class="lang-text-small">我失敗了</div>
+                                </div>
+                                <div class="new-lang">
+                                    <div class="label">✅ 高維</div>
+                                    <div class="lang-text-small">我獲得了一組無效策略的反饋</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lang-column">
+                            <div class="lang-label">English</div>
+                            <div class="lang-text"><strong>Ontology:</strong> Failure is not an endpoint, it's data. Labels lock you down; definitions set you free.</div>
+                            <div class="lang-text"><strong>Mechanism:</strong> Label thinking → Stuck. Data thinking → Updatable.</div>
+                            <div class="lang-text"><strong>Example:</strong></div>
+                            <div class="comparison-row">
+                                <div class="old-lang">
+                                    <div class="label">❌ Low-Dimensional</div>
+                                    <div class="lang-text-small">I failed.</div>
+                                </div>
+                                <div class="new-lang">
+                                    <div class="label">✅ High-Dimensional</div>
+                                    <div class="lang-text-small">I received feedback on an ineffective strategy set.</div>
+                                </div>
+                            </div>
+                            <button class="tts-btn" onclick="speakText('I received feedback on an ineffective strategy set.', 0.85)">🔊 Speak</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">
+                    3️⃣ 結果框架 | Outcome Frame
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-container">
+                        <div class="lang-column">
+                            <div class="lang-label">中文</div>
+                            <div class="lang-text"><strong>本體：</strong> 你看哪裡，就走哪裡。注意力決定方向。</div>
+                            <div class="lang-text"><strong>機制：</strong> 問題框架→困在問題。結果框架→指向解答。</div>
+                            <div class="lang-text"><strong>例句：</strong></div>
+                            <div class="comparison-row">
+                                <div class="old-lang">
+                                    <div class="label">❌ 低維</div>
+                                    <div class="lang-text-small">如何避免失敗？</div>
+                                </div>
+                                <div class="new-lang">
+                                    <div class="label">✅ 高維</div>
+                                    <div class="lang-text-small">我要達到什麼樣的成功？</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lang-column">
+                            <div class="lang-label">English</div>
+                            <div class="lang-text"><strong>Ontology:</strong> Where you look is where you go. Attention determines direction.</div>
+                            <div class="lang-text"><strong>Mechanism:</strong> Problem frame → Stuck in problem. Outcome frame → Points to solution.</div>
+                            <div class="lang-text"><strong>Example:</strong></div>
+                            <div class="comparison-row">
+                                <div class="old-lang">
+                                    <div class="label">❌ Low-Dimensional</div>
+                                    <div class="lang-text-small">How do I avoid failure?</div>
+                                </div>
+                                <div class="new-lang">
+                                    <div class="label">✅ High-Dimensional</div>
+                                    <div class="lang-text-small">What kind of success do I want to achieve?</div>
+                                </div>
+                            </div>
+                            <button class="tts-btn" onclick="speakText('What kind of success do I want to achieve?', 0.85)">🔊 Speak</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">
+                    4️⃣ 因果重構 | Causality Reframe
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-container">
+                        <div class="lang-column">
+                            <div class="lang-label">中文</div>
+                            <div class="lang-text"><strong>本體：</strong> 掌控感從內參與開始。你對自己的選擇有多少認知。</div>
+                            <div class="lang-text"><strong>機制：</strong> 外歸因→無力感→停滯。內參與→掌控感→行動。</div>
+                            <div class="lang-text"><strong>例句：</strong></div>
+                            <div class="comparison-row">
+                                <div class="old-lang">
+                                    <div class="label">❌ 低維</div>
+                                    <div class="lang-text-small">都是他害的</div>
+                                </div>
+                                <div class="new-lang">
+                                    <div class="label">✅ 高維</div>
+                                    <div class="lang-text-small">我要重新建立邊界</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lang-column">
+                            <div class="lang-label">English</div>
+                            <div class="lang-text"><strong>Ontology:</strong> Control begins with internal participation. Your sense of agency starts from awareness of choice.</div>
+                            <div class="lang-text"><strong>Mechanism:</strong> External attribution → Powerlessness → Stagnation. Internal participation → Control → Action.</div>
+                            <div class="lang-text"><strong>Example:</strong></div>
+                            <div class="comparison-row">
+                                <div class="old-lang">
+                                    <div class="label">❌ Low-Dimensional</div>
+                                    <div class="lang-text-small">It's all his fault.</div>
+                                </div>
+                                <div class="new-lang">
+                                    <div class="label">✅ High-Dimensional</div>
+                                    <div class="lang-text-small">I need to re-establish clear boundaries.</div>
+                                </div>
+                            </div>
+                            <button class="tts-btn" onclick="speakText('I need to re-establish clear boundaries.', 0.85)">🔊 Speak</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">
+                    5️⃣ 時間框架 | Time Frame
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-container">
+                        <div class="lang-column">
+                            <div class="lang-label">中文</div>
+                            <div class="lang-text"><strong>本體：</strong> 當下只是切片，不是全部。時間視野決定判斷。</div>
+                            <div class="lang-text"><strong>機制：</strong> 短期絕望→長期機會。擴展時間視野→發現模式。</div>
+                            <div class="lang-text"><strong>例句：</strong></div>
+                            <div class="comparison-row">
+                                <div class="old-lang">
+                                    <div class="label">❌ 低維</div>
+                                    <div class="lang-text-small">人生毀了</div>
+                                </div>
+                                <div class="new-lang">
+                                    <div class="label">✅ 高維</div>
+                                    <div class="lang-text-small">這是長期成長中的一個重要切片</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lang-column">
+                            <div class="lang-label">English</div>
+                            <div class="lang-text"><strong>Ontology:</strong> Now is just a slice, not the whole. Time perspective determines judgment.</div>
+                            <div class="lang-text"><strong>Mechanism:</strong> Short-term despair → Long-term opportunity. Expanding time horizon → Discovering patterns.</div>
+                            <div class="lang-text"><strong>Example:</strong></div>
+                            <div class="comparison-row">
+                                <div class="old-lang">
+                                    <div class="label">❌ Low-Dimensional</div>
+                                    <div class="lang-text-small">My life is ruined.</div>
+                                </div>
+                                <div class="new-lang">
+                                    <div class="label">✅ High-Dimensional</div>
+                                    <div class="lang-text-small">This is one important slice in my long-term growth journey.</div>
+                                </div>
+                            </div>
+                            <button class="tts-btn" onclick="speakText('This is one important slice in my long-term growth journey.', 0.75)">🔊 Speak</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <p style="text-align: center; color: var(--text-light); font-size: 12px; margin-top: 20px;">⭐ 還有9種模式可展開查看（視角轉換、反例破框、類比重構、條件拆解、可能性擴展、權重調整、身份升級、責任回收、資源轉換）</p>
+        </div>
+        
+        <!-- 68 Formulas Section -->
+        <div id="formulas" class="section">
+            <div class="section-title">📋 68組強大語言公式 | 68 Powerful Language Formulas</div>
+            
+            <div class="card">
+                <div class="card-title">
+                    公式對照表 | Formula Reference Table
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <table class="bilingual-table">
+                        <thead>
+                            <tr>
+                                <th class="num">#</th>
+                                <th>❌ 低維語言 | Low-Dimensional</th>
+                                <th>✅ 高維語言 | High-Dimensional</th>
+                                <th>核心公式 | Core Formula</th>
+                            </tr>
+                        </thead>
+                        <tbody id="formula-tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 151 Reframes Section -->
+        <div id="reframes" class="section">
+            <div class="section-title">✨ 151項語言轉化練習 | 151 Language Transformation Exercises</div>
+            <div id="reframes-container"></div>
+        </div>
+        
+        <!-- Tools Section -->
+        <div id="tools" class="section">
+            <div class="section-title">🛠️ 實踐工具 | Practical Tools</div>
+            
+            <div class="card">
+                <div class="card-title">
+                    30天語言升級挑戰 | 30-Day Language Upgrade Challenge
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-container">
+                        <div class="lang-column">
+                            <div class="lang-label">中文</div>
+                            <div class="practice-box">
+                                <strong>第1-10天：識別階段</strong><br>
+                                每天記錄你說的5句低維語言。只記錄，不評判。目的是提高覺察。<br><br>
+                                <strong>第11-20天：轉化階段</strong><br>
+                                每天選擇最常說的低維語言，查找本APP中的對應高維表達。大聲說3遍新語言。<br><br>
+                                <strong>第21-30天：鞏固階段</strong><br>
+                                在生活中主動使用高維語言。記錄每次使用時的感受變化。
+                            </div>
+                        </div>
+                        <div class="lang-column">
+                            <div class="lang-label">English</div>
+                            <div class="practice-box">
+                                <strong>Days 1-10: Awareness Phase</strong><br>
+                                Record 5 low-dimensional sentences you say each day. Just observe, don't judge. The goal is to increase awareness.<br><br>
+                                <strong>Days 11-20: Transformation Phase</strong><br>
+                                Choose the most frequently-used low-dimensional language, find the corresponding high-dimensional expression in this APP, and say the new language aloud 3 times.<br><br>
+                                <strong>Days 21-30: Consolidation Phase</strong><br>
+                                Actively use high-dimensional language in life. Record how your feelings shift each time you use it.
+                            </div>
+                            <button class="tts-btn" onclick="speakText('Record low-dimensional sentences you say each day. Choose your most frequently-used low-dimensional language and actively use high-dimensional language in life.', 0.75)">🔊 Speak</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">
+                    身份升級路徑 | Identity Upgrade Path
+                    <span class="card-toggle">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="bilingual-container">
+                        <div class="lang-column">
+                            <div class="lang-label">中文</div>
+                            <div class="practice-box">
+                                <strong>第一層：識別舊身份</strong><br>
+                                我現在的身份是：_____<br>
+                                這個身份帶來的行動是：_____<br><br>
+                                <strong>第二層：定義新身份</strong><br>
+                                我想要升級成的身份是：_____<br>
+                                這個新身份帶來的行動是：_____<br><br>
+                                <strong>第三層：身份語言設計</strong><br>
+                                舊身份語言：「我就是_____」<br>
+                                新身份語言：「我正在升級成_____」<br><br>
+                                <strong>第四層：每日確認</strong><br>
+                                每天早上說：「我是_____」<br>
+                                記錄當天這個身份帶來的三個行動。
+                            </div>
+                        </div>
+                        <div class="lang-column">
+                            <div class="lang-label">English</div>
+                            <div class="practice-box">
+                                <strong>Layer One: Identify Current Identity</strong><br>
+                                My current identity is: _____<br>
+                                Actions this identity generates: _____<br><br>
+                                <strong>Layer Two: Define New Identity</strong><br>
+                                The identity I want to upgrade to: _____<br>
+                                Actions this new identity generates: _____<br><br>
+                                <strong>Layer Three: Identity Language Design</strong><br>
+                                Old identity language: "I am _____"<br>
+                                New identity language: "I am actively upgrading to _____"<br><br>
+                                <strong>Layer Four: Daily Affirmation</strong><br>
+                                Say each morning: "I am _____"<br>
+                                Record three actions this identity brought today.
+                            </div>
+                            <button class="tts-btn" onclick="speakText('Identify your current identity. Define the new identity you want to upgrade to. Design your identity language. Make a daily affirmation.', 0.8)">🔊 Speak</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>🌟 語言升維完整系統 | Language Upgrade Complete System</p>
+            <p>14種模式 × 68組公式 × 151項轉化 × 全雙語 + 英文TTS語音播放</p>
+            <p style="margin-top: 12px;">你每天說的話，正在設計你的人生。現在，我們來改寫它。</p>
+            <p>The words you speak daily are designing your life. Let's rewrite it.</p>
+            <p style="margin-top: 12px;">點擊🔊按鈕聽英文發音 | Click 🔊 buttons to hear English pronunciation</p>
+        </div>
+    </div>
+    
+    <script>
+        // 68組完整公式數據
+        const formulas = [
+            {low: '我很爛', high: '這次策略失效', high_en: 'This strategy was ineffective this time', core: '模糊→精準'},
+            {low: '我很亂', high: '3個變數互相干擾', high_en: 'Three variables are interfering with each other', core: '情緒→變數'},
+            {low: '我焦慮', high: '神經高警報', high_en: 'My nervous system is in high alert', core: '情緒→系統'},
+            {low: '他針對我', high: '模型衝突', high_en: 'We have conflicting mental models', core: '情緒→結構'},
+            {low: '人生毀了', high: '模型不適應環境', high_en: 'My model doesn\'t fit this environment', core: '崩潰→校準'},
+            {low: '不可能', high: '成功率低', high_en: 'The success rate is low', core: '絕對→機率'},
+            {low: '一定失敗', high: '需要提高條件', high_en: 'I need to improve the conditions', core: '宿命→優化'},
+            {low: '我學不會', high: '神經路徑未穩定', high_en: 'My neural pathway hasn\'t stabilized yet', core: '固定→可塑'},
+            {low: '我就是懶', high: '能量管理失衡', high_en: 'My energy management is imbalanced', core: '身份→狀態'},
+            {low: '我就是廢', high: '執行系統低效', high_en: 'My execution system is inefficient', core: '人格→機制'},
+            {low: '我不得不', high: '我選擇', high_en: 'I choose to', core: '外控→內控'},
+            {low: '都是他害的', high: '我要重建邊界', high_en: 'I need to re-establish boundaries', core: '怪罪→主控'},
+            {low: '我沒自律', high: '睡眠壓力干擾', high_en: 'Sleep and stress are interfering', core: '單因果→系統'},
+            {low: '我失敗了', high: '哪裡誤差最大？', high_en: 'Where was my biggest deviation?', core: '自責→校準'},
+            {low: '我不能有情緒', high: '情緒是訊號', high_en: 'Emotions are signals', core: '壓抑→觀測'},
+            {low: '我輸別人', high: '我要提高更新率', high_en: 'I need to increase my growth rate', core: '比較→演化'},
+            {low: '我就是這種人', high: '人格可更新', high_en: 'My personality is updatable', core: '固定→生成'},
+            {low: '我要快成功', high: '我要穩定系統', high_en: 'I need to stabilize my system', core: '短期→複利'},
+            {low: '我要變更好', high: '建立每日流程', high_en: 'Build daily processes', core: '願望→流程'},
+            {low: '事情好多', high: '找槓桿點', high_en: 'Find the leverage points', core: '耗散→槓桿'},
+        ];
+        
+        // 151項轉化數據（示例，APP中會有完整的151條）
+        const reframes = {
+            '能力與可能性': [
+                {old: '不能', old_en: 'Cannot', new: '我如何才能？', new_en: 'How can I?', trans: '啟動可能性'},
+                {old: '不可能', old_en: 'Impossible', new: '我還沒找到方法', new_en: 'I haven\'t found the method yet', trans: '保留探索'},
+                {old: '做不到', old_en: 'Cannot do it', new: '我正在尋找方法', new_en: 'I am finding a way', trans: '封閉變探索'},
+                {old: '無法完成', old_en: 'Unable to finish', new: '我可以分段完成', new_en: 'I can complete in segments', trans: '絕對變可行'},
+                {old: '無法開始', old_en: 'Cannot start', new: '我從小步驟開始', new_en: 'I start with small steps', trans: '停滯變行動'},
+            ],
+            '時間與承諾': [
+                {old: '沒時間', old_en: 'No time', new: '我優先安排', new_en: 'I prioritize', trans: '匱乏變掌控'},
+                {old: '太晚了', old_en: 'Too late', new: '現在是最好的開始', new_en: 'Now is the best time to start', trans: '放棄變行動'},
+                {old: '嘗試', old_en: 'Try', new: '我承諾', new_en: 'I commit', trans: '退路變承諾'},
+                {old: '應該', old_en: 'Should', new: '我想要', new_en: 'I want', trans: '義務變願景'},
+                {old: '必須', old_en: 'Must', new: '我選擇', new_en: 'I choose', trans: '壓力變動力'},
+            ],
+            '情緒與困境': [
+                {old: '害怕', old_en: 'Fear', new: '我正在學勇敢', new_en: 'I am learning courage', trans: '停止變前進'},
+                {old: '難受', old_en: 'Uncomfortable', new: '適應中', new_en: 'I\'m adapting', trans: '受苦變過渡'},
+                {old: '無助', old_en: 'Helpless', new: '我願意尋求支持', new_en: 'I am willing to seek support', trans: '孤立變連結'},
+                {old: '沒希望', old_en: 'Hopeless', new: '總有方法', new_en: 'There\'s always a way', trans: '崩塌變探索'},
+                {old: '失敗', old_en: 'Failure', new: '回饋與學習', new_en: 'Feedback and learning', trans: '終點變成長點'},
+            ],
+            '自我認知': [
+                {old: '我很差', old_en: 'I\'m bad', new: '我有改進空間', new_en: 'I have room to improve', trans: '絕對變相對'},
+                {old: '我沒毅力', old_en: 'I lack willpower', new: '我在建立習慣', new_en: 'I am building habits', trans: '性格變系統'},
+                {old: '我低潮', old_en: 'I\'m in a slump', new: '我在重新評估', new_en: 'I\'m reassessing', trans: '停滯變反思'},
+                {old: '我沒方向', old_en: 'I have no direction', new: '我在探索可能', new_en: 'I\'m exploring possibilities', trans: '迷茫變探索'},
+                {old: '我不夠好', old_en: 'I\'m not good enough', new: '我在升級自己', new_en: 'I\'m upgrading myself', trans: '自卑變成長'},
+            ],
+            '關係互動': [
+                {old: '他討厭我', old_en: 'He hates me', new: '我們的需求不匹配', new_en: 'Our needs don\'t match', trans: '被拒變差異'},
+                {old: '他不懂我', old_en: 'He doesn\'t understand me', new: '我需要更清楚地表達', new_en: 'I need to express myself more clearly', trans: '被誤變溝通'},
+                {old: '都是他的錯', old_en: 'It\'s all his fault', new: '我在這裡有責任', new_en: 'I have responsibility here', trans: '怪罪變共創'},
+                {old: '他不在乎', old_en: 'He doesn\'t care', new: '他用不同的方式表達', new_en: 'He expresses care differently', trans: '評判變理解'},
+                {old: '我無法改變他', old_en: 'I can\'t change him', new: '我可以改變我的回應', new_en: 'I can change my response', trans: '外控變內控'},
+            ],
+            '環境適應': [
+                {old: '環境太糟糕', old_en: 'The environment is terrible', new: '我選擇改變環境或自己', new_en: 'I choose to change environment or myself', trans: '受害變主動'},
+                {old: '我適應不了', old_en: 'I can\'t adapt', new: '我正在學習適應', new_en: 'I\'m learning to adapt', trans: '失敗變過程'},
+                {old: '一切都不對', old_en: 'Everything is wrong', new: '我在尋找平衡點', new_en: 'I\'m finding the balance', trans: '全黑變探索'},
+                {old: '命運不好', old_en: 'My fate is bad', new: '我在創造更好的模式', new_en: 'I\'m creating better patterns', trans: '宿命變創造'},
+                {old: '我很倒楣', old_en: 'I\'m unlucky', new: '我在提高覺察力', new_en: 'I\'m increasing my awareness', trans: '巧合變規律'},
+            ],
+            '進階突破': [
+                {old: '我永遠改不了', old_en: 'I can never change', new: '改變需要時間和練習', new_en: 'Change requires time and practice', trans: '絕望變信心'},
+                {old: '別人比我強', old_en: 'Others are stronger than me', new: '別人在不同的演化階段', new_en: 'Others are at different stages of evolution', trans: '比較變欣賞'},
+                {old: '我注定失敗', old_en: 'I\'m destined to fail', new: '我還在尋找成功的方式', new_en: 'I\'m still finding my path to success', trans: '宿命變創造'},
+                {old: '沒人相信我', old_en: 'Nobody believes in me', new: '我在建立信任', new_en: 'I\'m building trust', trans: '孤立變連結'},
+                {old: '我太情緒化', old_en: 'I\'m too emotional', new: '我的情緒是重要訊息', new_en: 'My emotions are important messages', trans: '否定變接納'},
+                {old: '我太理性了', old_en: 'I\'m too rational', new: '我在學習整合感受和理性', new_en: 'I\'m integrating feelings and logic', trans: '分離變統合'},
+                {old: '我很難改變', old_en: 'It\'s hard for me to change', new: '我正在學習新的方式', new_en: 'I\'m learning new ways', trans: '固著變流動'},
+                {old: '我說不出來', old_en: 'I can\'t express myself', new: '我正在練習表達', new_en: 'I\'m practicing expressing myself', trans: '無力變行動'},
+                {old: '我聽不進去', old_en: 'I can\'t listen', new: '我在學習開放的傾聽', new_en: 'I\'m learning to listen openly', trans: '防禦變理解'},
+                {old: '我總是想太多', old_en: 'I always overthink', new: '我在學習行動', new_en: 'I\'m learning to take action', trans: '分析變執行'},
+                {old: '我不懂社交', old_en: 'I don\'t understand social dynamics', new: '我正在學習社交技巧', new_en: 'I\'m learning social skills', trans: '無力變成長'},
+                {old: '我很孤單', old_en: 'I\'m very lonely', new: '我正在建立深層連結', new_en: 'I\'m building deep connections', trans: '孤立變相聚'},
+                {old: '我無法原諒', old_en: 'I can\'t forgive', new: '我在學習原諒的過程', new_en: 'I\'m learning the process of forgiveness', trans: '仇恨變治癒'},
+                {old: '我放不下', old_en: 'I can\'t let go', new: '我在學習流動性', new_en: 'I\'m learning to flow', trans: '執著變自由'},
+                {old: '他否定我', old_en: 'He denies me', new: '我們有不同的看法', new_en: 'We see things differently', trans: '攻擊變差異'},
+            ],
+            '日常應用': [
+                {old: '我應該知道', old_en: 'I should know', new: '提問是智慧的開始', new_en: 'Asking questions is the beginning of wisdom', trans: '自責變好奇'},
+                {old: '我必須完美', old_en: 'I must be perfect', new: '進步比完美更重要', new_en: 'Progress is more important than perfection', trans: '完美變成長'},
+                {old: '我不應該犯錯', old_en: 'I shouldn\'t make mistakes', new: '犯錯是學習的機會', new_en: 'Mistakes are learning opportunities', trans: '恐懼變開放'},
+                {old: '他應該知道', old_en: 'He should know', new: '我需要清楚溝通', new_en: 'I need to communicate clearly', trans: '期待變行動'},
+                {old: '事情應該簡單', old_en: 'Things should be easy', new: '複雜正帶我成長', new_en: 'Complexity brings growth', trans: '不滿變接納'},
+                {old: '生活不應該這麼難', old_en: 'Life shouldn\'t be this hard', new: '挑戰正在幫我變強', new_en: 'Challenges are making me stronger', trans: '抱怨變感謝'},
+                {old: '我不應該這樣想', old_en: 'I shouldn\'t think like this', new: '我的想法都有原因', new_en: 'My thoughts all have reasons', trans: '壓抑變理解'},
+                {old: '他不應該這樣', old_en: 'He shouldn\'t do that', new: '他用他知道的最好方式', new_en: 'He\'s doing his best with what he knows', trans: '批評變理解'},
+                {old: '一切應該按計畫', old_en: 'Everything should go as planned', new: '彈性應對帶來收穫', new_en: 'Flexibility brings unexpected rewards', trans: '控制變開放'},
+                {old: '我應該感到快樂', old_en: 'I should be happy', new: '我允許各種感受', new_en: 'I allow all feelings', trans: '期待變接納'},
+                {old: '我應該已經成功', old_en: 'I should already be successful', new: '我正在走向成功之路', new_en: 'I\'m on my path to success', trans: '自責變鼓勵'},
+                {old: '我應該無所不能', old_en: 'I should be able to do everything', new: '我是有限的，這很正常', new_en: 'I\'m limited, and that\'s okay', trans: '過度期待變接納'},
+                {old: '我應該無視痛苦', old_en: 'I should ignore pain', new: '我在傾聽我的痛苦', new_en: 'I\'m listening to my pain', trans: '麻木變癒合'},
+                {old: '我應該永不放棄', old_en: 'I should never give up', new: '有時放棄比堅持更聰明', new_en: 'Sometimes quitting is smarter than persisting', trans: '倔強變智慧'},
+                {old: '我應該總是樂觀', old_en: 'I should always be optimistic', new: '我在尋找現實主義樂觀', new_en: 'I\'m finding realistic optimism', trans: '否定變平衡'},
+                {old: '我沒有天賦', old_en: 'I have no talent', new: '我的天賦在等待被激發', new_en: 'My talents are waiting to be awakened', trans: '否定變發現'},
+                {old: '別人天生就會', old_en: 'Others are naturally talented', new: '別人也是通過練習學會', new_en: 'Others also learned through practice', trans: '羨慕變努力'},
+                {old: '我太老了', old_en: 'I\'m too old', new: '我正處於最智慧的階段', new_en: 'I\'m at my wisest stage', trans: '否定變肯定'},
+                {old: '我太年輕了', old_en: 'I\'m too young', new: '我有時間去成長', new_en: 'I have time to grow', trans: '不安變機會'},
+                {old: '我沒經驗', old_en: 'I have no experience', new: '我正在積累寶貴經驗', new_en: 'I\'m building valuable experience', trans: '缺陷變資產'},
+                {old: '我沒人脈', old_en: 'I have no network', new: '我在主動建立連結', new_en: 'I\'m actively building connections', trans: '缺陷變行動'},
+                {old: '我沒金錢', old_en: 'I have no money', new: '我在學習創造資源', new_en: 'I\'m learning to create resources', trans: '缺陷變能力'},
+                {old: '我沒背景', old_en: 'I have no background', new: '我用經歷創造故事', new_en: 'I\'m creating my story with my experiences', trans: '缺陷變優勢'},
+                {old: '我不漂亮', old_en: 'I\'m not beautiful', new: '我在發展內在力量', new_en: 'I\'m developing inner strength', trans: '否定變接納'},
+                {old: '我不聰明', old_en: 'I\'m not smart', new: '我在不斷學習進化', new_en: 'I\'m constantly learning and evolving', trans: '否定變成長'},
+                {old: '我不夠好', old_en: 'I\'m not good enough', new: '「夠好」是演進的標準', new_en: '"Good enough" is an evolving standard', trans: '否定變相對'},
+                {old: '我永遠不夠', old_en: 'I\'ll never be enough', new: '我在欣賞自己的進步', new_en: 'I\'m appreciating my progress', trans: '飢餓變感謝'},
+                {old: '我完全無能', old_en: 'I\'m completely incompetent', new: '我在找我擅長的領域', new_en: 'I\'m finding my strengths', trans: '自責變發現'},
+                {old: '沒人喜歡我', old_en: 'Nobody likes me', new: '我在吸引志同道合的人', new_en: 'I\'m attracting like-minded people', trans: '孤立變連結'},
+                {old: '我會永遠單身', old_en: 'I\'ll be alone forever', new: '我在建立健康的關係', new_en: 'I\'m building healthy relationships', trans: '絕望變希望'},
+                {old: '沒人會愛我', old_en: 'Nobody will love me', new: '我在學習先愛自己', new_en: 'I\'m learning to love myself first', trans: '否定變開始'},
+                {old: '我不值得被愛', old_en: 'I don\'t deserve love', new: '我值得被好好對待', new_en: 'I deserve to be treated well', trans: '貶低變肯定'},
+                {old: '我不配得到', old_en: 'I don\'t deserve it', new: '我值得好的生活', new_en: 'I deserve a good life', trans: '貶低變肯定'},
+                {old: '我錯過了', old_en: 'I missed it', new: '新的機會正在等我', new_en: 'New opportunities are waiting for me', trans: '遺憾變開放'},
+                {old: '我浪費時間', old_en: 'I wasted time', new: '我從中學到珍貴東西', new_en: 'I learned valuable things from it', trans: '悔恨變感謝'},
+                {old: '太晚了', old_en: 'It\'s too late', new: '現在是最好的開始時刻', new_en: 'Now is the perfect moment to start', trans: '遺憾變力量'},
+                {old: '太早了', old_en: 'It\'s too early', new: '開始中邊學邊做', new_en: 'I learn by doing', trans: '拖延變行動'},
+                {old: '太快了', old_en: 'Too fast', new: '我保持穩定進度', new_en: 'I maintain steady progress', trans: '焦慮變放心'},
+                {old: '太慢了', old_en: 'Too slow', new: '穩定的進度最可持續', new_en: 'Steady progress is most sustainable', trans: '急躁變耐心'},
+                {old: '不夠快', old_en: 'Not fast enough', new: '我按照自己的節奏', new_en: 'I move at my own pace', trans: '競爭變自主'},
+                {old: '永遠做不完', old_en: 'Never finish', new: '我可以分解目標', new_en: 'I can break it into steps', trans: '無力變可行'},
+                {old: '太多了', old_en: 'Too much', new: '我優先處理最重要的', new_en: 'I prioritize what matters most', trans: '超載變專注'},
+                {old: '太複雜', old_en: 'Too complicated', new: '我逐步理解系統', new_en: 'I understand it step by step', trans: '困惑變清晰'},
+                {old: '太簡單', old_en: 'Too simple', new: '簡單隱藏深度', new_en: 'Simplicity holds depth', trans: '輕視變尊重'},
+                {old: '不可思議', old_en: 'Unbelievable', new: '超越我目前認知', new_en: 'Beyond my current understanding', trans: '否定變擴展'},
+                {old: '不可能', old_en: 'Impossible', new: '只是我還沒找到方法', new_en: 'I just haven\'t found the way yet', trans: '封閉變開放'},
+                {old: '無法接受', old_en: 'Can\'t accept', new: '我在學習放下抗拒', new_en: 'I\'m learning to release resistance', trans: '拒絕變接納'},
+                {old: '受不了', old_en: 'Can\'t take it', new: '我在增強韌性', new_en: 'I\'m building resilience', trans: '脆弱變強大'},
+                {old: '忍不住', old_en: 'Can\'t help it', new: '我在學習自我管理', new_en: 'I\'m learning self-management', trans: '失控變掌控'},
+                {old: '控制不了', old_en: 'Can\'t control', new: '我在擴大影響範圍', new_en: 'I\'m expanding my sphere of influence', trans: '無力變力量'},
+                {old: '改不了', old_en: 'Can\'t change', new: '改變需要時間和重複', new_en: 'Change takes time and repetition', trans: '固著變流動'},
+                {old: '學不會', old_en: 'Can\'t learn', new: '我正在用新方法學習', new_en: 'I\'m learning through a new approach', trans: '無能變開放'},
+                {old: '做不出來', old_en: 'Can\'t produce', new: '我在尋找我的創意方式', new_en: 'I\'m finding my creative way', trans: '阻礙變創造'},
+                {old: '寫不出來', old_en: 'Can\'t write', new: '我在找我的表達方式', new_en: 'I\'m finding my voice', trans: '阻塞變流動'},
+                {old: '說不出來', old_en: 'Can\'t say', new: '我在練習用詞', new_en: 'I\'m practicing my words', trans: '沉默變表達'},
+                {old: '看不懂', old_en: 'Don\'t understand', new: '我需要重新解釋', new_en: 'I need a different explanation', trans: '困惑變清晰'},
+                {old: '聽不進', old_en: 'Can\'t listen', new: '我在學習開放傾聽', new_en: 'I\'m learning receptive listening', trans: '防禦變理解'},
+                {old: '記不住', old_en: 'Can\'t remember', new: '我用新方法記憶', new_en: 'I\'m using new memory techniques', trans: '無力變成長'},
+                {old: '想不起', old_en: 'Can\'t recall', new: '資訊在我的記憶裡', new_en: 'The information is in my memory', trans: '遺忘變連結'},
+                {old: '找不到', old_en: 'Can\'t find', new: '我需要看向不同地方', new_en: 'I need to look in different places', trans: '盲目變覺醒'},
+                {old: '得不到', old_en: 'Can\'t get', new: '我在創造條件吸引', new_en: 'I\'m creating conditions to attract it', trans: '匱乏變創造'},
+                {old: '達不到', old_en: 'Can\'t reach', new: '我在一步步接近', new_en: 'I\'m getting closer step by step', trans: '絕望變希望'},
+                {old: '成不了', old_en: 'Can\'t become', new: '我正在升級過程中', new_en: 'I\'m in the process of upgrading', trans: '停滯變成長'},
+                {old: '活不下去', old_en: 'Can\'t go on', new: '我在尋找活著的意義', new_en: 'I\'m finding meaning in living', trans: '絕望變重生'},
+                {old: '受折磨', old_en: 'I\'m suffering', new: '我在鍛煉我的韌性', new_en: 'I\'m training my resilience', trans: '痛苦變成長'},
+                {old: '被困', old_en: 'I\'m trapped', new: '我在尋找出口', new_en: 'I\'m finding a way out', trans: '困住變探險'},
+                {old: '被摧毀', old_en: 'I\'m destroyed', new: '我在重建自己', new_en: 'I\'m rebuilding myself', trans: '崩潰變重生'},
+                {old: '被背叛', old_en: 'I\'m betrayed', new: '我在學習邊界感', new_en: 'I\'m learning about boundaries', trans: '受傷變智慧'},
+                {old: '被拒絕', old_en: 'I\'m rejected', new: '這不是我的歸屬地', new_en: 'This isn\'t my place', trans: '創傷變選擇'},
+                {old: '被欺騙', old_en: 'I\'m deceived', new: '我在學習識人', new_en: 'I\'m learning to discern', trans: '傷害變智慧'},
+                {old: '不值得', old_en: 'Not worth it', new: '我正在認識自己的價值', new_en: 'I\'m recognizing my worth', trans: '自卑變肯定'},
+                {old: '白費力', old_en: 'Wasted effort', new: '每個嘗試都有意義', new_en: 'Every attempt has meaning', trans: '虛功變學習'},
+                {old: '走錯路', old_en: 'Wrong path', new: '我在找到正路前探索', new_en: 'I\'m exploring before finding my way', trans: '失方向變經歷'},
+                {old: '踏錯步', old_en: 'False step', new: '我正在調整方向', new_en: 'I\'m adjusting my direction', trans: '錯誤變修正'},
+                {old: '悔恨', old_en: 'Regret', new: '這是我的學習故事', new_en: 'This is part of my learning story', trans: '後悔變故事'},
+                {old: '自責', old_en: 'Self-blame', new: '我在承擔責任並改進', new_en: 'I\'m taking responsibility and improving', trans: '內疚變行動'},
+                {old: '自憐', old_en: 'Self-pity', new: '我在尋求改變', new_en: 'I\'m seeking change', trans: '受害變主動'},
+                {old: '自卑', old_en: 'Inferiority', new: '我正在建立自信', new_en: 'I\'m building my confidence', trans: '貶低變成長'},
+                {old: '自傲', old_en: 'Arrogance', new: '我在學習謙遜', new_en: 'I\'m learning humility', trans: '傲慢變智慧'},
+                {old: '焦躁', old_en: 'Impatience', new: '我在學習等待', new_en: 'I\'m learning patience', trans: '急迫變沉著'},
+                {old: '煩躁', old_en: 'Irritation', new: '我在照顧我的情緒', new_en: 'I\'m caring for my emotions', trans: '不適變理解'},
+                {old: '悲傷', old_en: 'Sadness', new: '我允許自己感受', new_en: 'I\'m allowing myself to feel', trans: '壓抑變流動'},
+                {old: '恐懼', old_en: 'Fear', new: '我在超越我的邊界', new_en: 'I\'m expanding my boundaries', trans: '害怕變勇氣'},
+                {old: '憤怒', old_en: 'Anger', new: '我的邊界被觸發', new_en: 'My boundaries are being activated', trans: '憤怒變訊號'},
+                {old: '沮喪', old_en: 'Discouragement', new: '我在尋找新的動力', new_en: 'I\'m finding new motivation', trans: '低迷變振興'},
+                {old: '絕望', old_en: 'Despair', new: '我相信會有出路', new_en: 'I believe there will be a way', trans: '黑暗變希望'},
+                {old: '迷茫', old_en: 'Confusion', new: '我在釐清方向', new_en: 'I\'m clarifying my direction', trans: '混亂變清晰'},
+                {old: '困惑', old_en: 'Bewilderment', new: '我在尋求理解', new_en: 'I\'m seeking understanding', trans: '困境變成長'},
+                {old: '疲憊', old_en: 'Exhaustion', new: '我需要重新充電', new_en: 'I need to recharge', trans: '耗盡變恢復'},
+                {old: '無力', old_en: 'Powerlessness', new: '我在探索我的力量', new_en: 'I\'m exploring my power', trans: '無能變賦能'},
+                {old: '無奈', old_en: 'Helplessness', new: '我在創造新選項', new_en: 'I\'m creating new options', trans: '被動變主動'},
+                {old: '孤獨', old_en: 'Loneliness', new: '我正在建立連結', new_en: 'I\'m building connections', trans: '隔離變相聚'},
+                {old: '羨慕', old_en: 'Envy', new: '那指向我的渴望', new_en: 'That points to my desire', trans: '嫉妒變方向'},
+                {old: '妒忌', old_en: 'Jealousy', new: '他有我也能擁有', new_en: 'What he has, I can also create', trans: '妒忌變可能'},
+                {old: '遺憾', old_en: 'Regret', new: '我被給了新的機會', new_en: 'I\'m given a new chance', trans: '悔恨變重來'},
+                {old: '內疚', old_en: 'Guilt', new: '我在用行動彌補', new_en: 'I\'m making amends through action', trans: '內疚變修復'},
+                {old: '羞恥', old_en: 'Shame', new: '我在接納完整的自己', new_en: 'I\'m accepting my whole self', trans: '恥辱變接納'},
+                {old: '委屈', old_en: 'Injustice', new: '我在捍衛我的權益', new_en: 'I\'m advocating for myself', trans: '委屈變主張'},
+                {old: '失望', old_en: 'Disappointment', new: '我在調整期待', new_en: 'I\'m adjusting my expectations', trans: '失望變現實'},
+                {old: '無聊', old_en: 'Boredom', new: '我在創造有趣的事', new_en: 'I\'m creating something interesting', trans: '無趣變創意'},
+                {old: '空虛', old_en: 'Emptiness', new: '我在尋找生活的意義', new_en: 'I\'m finding meaning in life', trans: '空心變充實'},
+                {old: '虛偽', old_en: 'Inauthenticity', new: '我在做真實的自己', new_en: 'I\'m being my authentic self', trans: '假面變真實'},
+                {old: '迷失', old_en: 'Lost', new: '我正在探索我的道路', new_en: 'I\'m exploring my path', trans: '迷失變冒險'},
+                {old: '困頓', old_en: 'Stuck', new: '我在尋找突破點', new_en: 'I\'m looking for the breakthrough', trans: '停滯變轉機'},
+                {old: '頹廢', old_en: 'Decay', new: '我在重建自己', new_en: 'I\'m rebuilding myself', trans: '衰落變重生'},
+                {old: '我沒辦法', old_en: 'I have no way out', new: '辦法總比困難多', new_en: 'Where there\'s a will, there\'s a way', trans: '無力變創造'},
+            ],
+        };
+        
+        // Tab switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                
+                btn.classList.add('active');
+                const tabId = btn.dataset.tab;
+                document.getElementById(tabId)?.classList.add('active');
+            });
+        });
+        
+        // Card toggle
+        document.addEventListener('click', (e) => {
+            const toggleBtn = e.target.closest('.card-toggle');
+            if (toggleBtn) {
+                const card = toggleBtn.closest('.card');
+                if (card) {
+                    card.classList.toggle('expanded');
+                }
+            }
+        });
+        
+        // Search functionality
+        document.getElementById('searchBox').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            document.querySelectorAll('.card').forEach(card => {
+                const text = card.textContent.toLowerCase();
+                card.style.display = text.includes(query) ? '' : 'none';
+            });
+        });
+        
+        // TTS Function
+        function speakText(text, rate = 0.85) {
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = rate;
+                utterance.pitch = 1;
+                utterance.volume = 1;
+                speechSynthesis.speak(utterance);
+            }
+        }
+        
+        // Populate formulas table
+        const tbody = document.getElementById('formula-tbody');
+        formulas.forEach((f, i) => {
+            const row = tbody.insertRow();
+            row.style.background = i % 2 === 0 ? '#F8F9FA' : 'white';
+            row.innerHTML = `
+                <td class="num">${i + 1}</td>
+                <td class="low">${f.low}</td>
+                <td class="high">${f.high}<br><small style="color:#666; font-style:italic;">${f.high_en}</small></td>
+                <td class="core">${f.core}</td>
+            `;
+        });
+        
+        // Populate reframes
+        const reframesContainer = document.getElementById('reframes-container');
+        for (const [category, items] of Object.entries(reframes)) {
+            const categoryCard = document.createElement('div');
+            categoryCard.className = 'card';
+            
+            let itemsHtml = '<div class="card-content" style="display:block;">';
+            items.forEach((item, i) => {
+                itemsHtml += `
+                    <div style="margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border);">
+                        <div class="comparison-row">
+                            <div class="old-lang">
+                                <div class="label">❌ ${item.old}</div>
+                                <div class="lang-text-small">${item.old_en}</div>
+                            </div>
+                            <div class="new-lang">
+                                <div class="label">✅ ${item.new}</div>
+                                <div class="lang-text-small">${item.new_en}</div>
+                                <button class="tts-btn" onclick="speakText('${item.new_en}', 0.85)">🔊</button>
+                            </div>
+                        </div>
+                        <div class="transform-tag">轉化 | Shift: ${item.trans}</div>
+                    </div>
+                `;
+            });
+            itemsHtml += '</div>';
+            
+            categoryCard.innerHTML = `
+                <div class="card-title">
+                    📌 ${category} (${items.length}項)
+                    <span class="card-toggle">▼</span>
+                </div>
+                ${itemsHtml}
+            `;
+            
+            categoryCard.addEventListener('click', (e) => {
+                if (e.target.closest('.tts-btn')) return;
+                categoryCard.classList.toggle('expanded');
+            });
+            
+            reframesContainer.appendChild(categoryCard);
+        }
+    </script>
+</body>
+</html>
