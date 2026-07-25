@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>靈魂重構工程學 | 完整擴展版本</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --navy: #1A2B5F;
+            --gold: #C9960C;
+            --teal: #0A7A72;
+        }
+        
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Microsoft JhengHei', '微軟正黑體', -apple-system, sans-serif;
+            background: white;
+            color: var(--navy);
+            line-height: 1.8;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--navy), var(--teal));
+            color: white;
+            padding: 50px 20px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+        
+        header h1 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: 3px;
+        }
+        
+        header p {
+            font-size: 15px;
+            opacity: 0.95;
+            margin: 6px 0;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        /* 導航標籤 */
+        .doc-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            border-bottom: 4px solid #f0f0f0;
+            overflow-x: auto;
+            padding-bottom: 15px;
+        }
+        
+        .doc-tab {
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            color: var(--navy);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            border-bottom: 4px solid transparent;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .doc-tab.active {
+            color: var(--gold);
+            border-bottom-color: var(--gold);
+        }
+        
+        .doc-tab:hover {
+            color: var(--teal);
+        }
+        
+        /* 文檔內容 */
+        .doc-section {
+            display: none;
+        }
+        
+        .doc-section.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* 文檔標題 */
+        .doc-header {
+            background: linear-gradient(135deg, rgba(26,43,95,0.95), rgba(10,122,114,0.95));
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .doc-header h2 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        
+        .doc-header .section-count {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        
+        /* 圖表區域 */
+        .diagram-section {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 30px 20px;
+            margin-bottom: 40px;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .diagram-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 20px;
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--gold);
+        }
+        
+        .diagram-container {
+            overflow-x: auto;
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .diagram-container svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* 內容部分 */
+        .content-sections {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .content-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+        
+        .content-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: var(--gold);
+        }
+        
+        .content-header {
+            background: linear-gradient(135deg, #f5f5f5, #efefef);
+            padding: 14px 16px;
+            border-bottom: 1px solid #ddd;
+            font-weight: 600;
+            color: var(--navy);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            font-size: 13px;
+        }
+        
+        .content-header:hover {
+            background: linear-gradient(135deg, #eee, #e8e8e8);
+        }
+        
+        .content-title {
+            flex: 1;
+        }
+        
+        .content-toggle {
+            font-size: 16px;
+            color: var(--teal);
+            transition: transform 0.3s;
+            margin-left: 10px;
+        }
+        
+        .content-card.open .content-toggle {
+            transform: rotate(180deg);
+        }
+        
+        .content-body {
+            display: none;
+            padding: 16px;
+        }
+        
+        .content-card.open .content-body {
+            display: block;
+        }
+        
+        /* 雙語對照 */
+        .bilingual-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 12px;
+            background: #fafafa;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .lang-column {
+            padding: 12px;
+            border-right: 1px solid #ddd;
+        }
+        
+        .lang-column:last-child {
+            border-right: none;
+        }
+        
+        .lang-header {
+            font-weight: 600;
+            color: var(--gold);
+            font-size: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .tts-btn {
+            padding: 4px 8px;
+            background: var(--gold);
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        .tts-btn:hover {
+            background: #B8860B;
+            transform: scale(1.05);
+        }
+        
+        .tts-btn.playing {
+            background: var(--teal);
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .text-content {
+            font-size: 12px;
+            line-height: 1.6;
+            color: #333;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        /* 統計 */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 12px;
+            margin-top: 50px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f9f9f9, #f0f0f0);
+            border-radius: 10px;
+            border-top: 4px solid var(--gold);
+        }
+        
+        .stat {
+            text-align: center;
+            padding: 12px;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .stat-num {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--gold);
+        }
+        
+        .stat-label {
+            font-size: 11px;
+            color: #666;
+            margin-top: 4px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+            font-size: 13px;
+            border-top: 2px solid #f0f0f0;
+            margin-top: 60px;
+        }
+        
+        /* 響應式 */
+        @media (max-width: 1024px) {
+            header h1 { font-size: 32px; }
+            .bilingual-layout {
+                grid-template-columns: 1fr;
+            }
+            .lang-column {
+                border-right: none;
+                border-bottom: 1px solid #ddd;
+            }
+            .lang-column:last-child {
+                border-bottom: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🧠 靈魂重構工程學</h1>
+        <p>Soul Reconstruction Engineering</p>
+        <p>✨ 完整擴展版本 | Comprehensive Extended Edition ✨</p>
+    </header>
+    
+    <div class="container">
+        <!-- 導航 -->
+        <div class="doc-tabs" id="docTabs"></div>
+        
+        <!-- 文檔內容 -->
+        <div id="docsContainer"></div>
+        
+        <!-- 統計 -->
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-num">5</div>
+                <div class="stat-label">📚 文檔</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num">10</div>
+                <div class="stat-label">📊 圖表</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num">85</div>
+                <div class="stat-label">📑 內容</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num">170+</div>
+                <div class="stat-label">🌍 語言組</div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>💎 靈魂重構工程學 - 重新設計生成自己的結構</p>
+        <p>© 補充不足・精準表達 | Complete Extended Edition | 2026</p>
+    </footer>
+
+    <script>
+        const diagramsData = {"靈魂重構工程學": {"mindmap": "<svg width=\"1000\" height=\"860\" viewBox=\"0 0 1000 860\" xmlns=\"http://www.w3.org/2000/svg\">\n    <defs>\n        <marker id=\"arrow-down\" markerWidth=\"10\" markerHeight=\"10\" refX=\"5\" refY=\"5\" orient=\"auto\">\n            <polygon points=\"0,0 10,5 0,10\" fill=\"#0A7A72\"/>\n        </marker>\n    </defs>\n    <style>\n        .mm-center {\n            fill: #C9960C;\n            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));\n        }\n        .mm-title {\n            font-family: 微軟正黑體;\n            font-size: 16px;\n            font-weight: 700;\n            text-anchor: middle;\n            fill: white;\n        }\n        .mm-subtitle {\n            font-family: Arial;\n            font-size: 12px;\n            fill: white;\n            text-anchor: middle;\n        }\n        .mm-line {\n            stroke: #0A7A72;\n            stroke-width: 3;\n            fill: none;\n            marker-end: url(#arrow-down);\n        }\n        .mm-box {\n            fill: #e8f5f5;\n            stroke: #0A7A72;\n            stroke-width: 2;\n            rx: 8;\n            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.1));\n        }\n        .mm-label-zh {\n            font-family: 微軟正黑體;\n            font-size: 14px;\n            font-weight: 700;\n            text-anchor: middle;\n            fill: #1A2B5F;\n        }\n        .mm-label-en {\n            font-family: Arial;\n            font-size: 11px;\n            font-weight: 600;\n            text-anchor: middle;\n            fill: #0A7A72;\n        }\n        .mm-desc {\n            font-family: 微軟正黑體;\n            font-size: 10px;\n            text-anchor: middle;\n            fill: #666;\n        }\n    </style>\n    \n    <!-- 中心圓 -->\n    <circle cx=\"500\" cy=\"40\" r=\"35\" class=\"mm-center\"/>\n    <text x=\"500\" y=\"35\" class=\"mm-title\">靈魂重構工程學</text>\n    <text x=\"500\" y=\"50\" class=\"mm-subtitle\">Soul Reconstruction Engineering</text>\n    \n    <!-- 向下的主線 -->\n    <line x1=\"500\" y1=\"75\" x2=\"500\" y2=\"105\" class=\"mm-line\" stroke-width=\"2\"/>\n        <line x1=\"500\" y1=\"120\" x2=\"500\" y2=\"105\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"120\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"138\" class=\"mm-label-zh\">時代背景</text>\n    <text x=\"500\" y=\"152\" class=\"mm-label-en\">Era Background</text>\n    <text x=\"500\" y=\"168\" class=\"mm-desc\" font-size=\"9\">高熵化時代 | High-entropy era</text>\n    <line x1=\"500\" y1=\"185\" x2=\"500\" y2=\"185\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"200\" x2=\"500\" y2=\"185\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"200\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"218\" class=\"mm-label-zh\">核心問題</text>\n    <text x=\"500\" y=\"232\" class=\"mm-label-en\">Core Problem</text>\n    <text x=\"500\" y=\"248\" class=\"mm-desc\" font-size=\"9\">舊模型失效 | Old models fail</text>\n    <line x1=\"500\" y1=\"265\" x2=\"500\" y2=\"265\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"280\" x2=\"500\" y2=\"265\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"280\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"298\" class=\"mm-label-zh\">本質是什麼</text>\n    <text x=\"500\" y=\"312\" class=\"mm-label-en\">What is it</text>\n    <text x=\"500\" y=\"328\" class=\"mm-desc\" font-size=\"9\">模型誤差信號 | Model error signal</text>\n    <line x1=\"500\" y1=\"345\" x2=\"500\" y2=\"345\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"360\" x2=\"500\" y2=\"345\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"360\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"378\" class=\"mm-label-zh\">人生本質</text>\n    <text x=\"500\" y=\"392\" class=\"mm-label-en\">Life Nature</text>\n    <text x=\"500\" y=\"408\" class=\"mm-desc\" font-size=\"9\">預測系統 | Prediction system</text>\n    <line x1=\"500\" y1=\"425\" x2=\"500\" y2=\"425\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"440\" x2=\"500\" y2=\"425\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"440\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"458\" class=\"mm-label-zh\">真正自由</text>\n    <text x=\"500\" y=\"472\" class=\"mm-label-en\">True Freedom</text>\n    <text x=\"500\" y=\"488\" class=\"mm-desc\" font-size=\"9\">可更新模型 | Updatable model</text>\n    <line x1=\"500\" y1=\"505\" x2=\"500\" y2=\"505\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"520\" x2=\"500\" y2=\"505\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"520\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"538\" class=\"mm-label-zh\">成長定義</text>\n    <text x=\"500\" y=\"552\" class=\"mm-label-en\">Growth</text>\n    <text x=\"500\" y=\"568\" class=\"mm-desc\" font-size=\"9\">提升預測精度 | Improve prediction</text>\n    <line x1=\"500\" y1=\"585\" x2=\"500\" y2=\"585\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"600\" x2=\"500\" y2=\"585\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"600\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"618\" class=\"mm-label-zh\">AI時代能力</text>\n    <text x=\"500\" y=\"632\" class=\"mm-label-en\">AI Era Skill</text>\n    <text x=\"500\" y=\"648\" class=\"mm-desc\" font-size=\"9\">結構更新 | Structure update</text>\n    <line x1=\"500\" y1=\"665\" x2=\"500\" y2=\"665\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"680\" x2=\"500\" y2=\"665\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"680\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"698\" class=\"mm-label-zh\">人生生成</text>\n    <text x=\"500\" y=\"712\" class=\"mm-label-en\">Life Generation</text>\n    <text x=\"500\" y=\"728\" class=\"mm-desc\" font-size=\"9\">動態生成系統 | Dynamic system</text>\n</svg>", "architecture": "<svg width=\"1000\" height=\"700\" viewBox=\"0 0 1000 700\" xmlns=\"http://www.w3.org/2000/svg\">\n    <defs>\n        <marker id=\"arrow-down-arch\" markerWidth=\"10\" markerHeight=\"10\" refX=\"5\" refY=\"5\" orient=\"auto\">\n            <polygon points=\"0,0 10,5 0,10\" fill=\"#0A7A72\"/>\n        </marker>\n    </defs>\n    <style>\n        .arch-title {\n            font-family: 微軟正黑體;\n            font-size: 20px;\n            font-weight: 800;\n            text-anchor: middle;\n            fill: #1A2B5F;\n        }\n        .arch-subtitle {\n            font-family: Arial;\n            font-size: 13px;\n            text-anchor: middle;\n            fill: #0A7A72;\n        }\n        .arch-box {\n            fill: #f0f8f8;\n            stroke: #0A7A72;\n            stroke-width: 3;\n            rx: 10;\n            filter: drop-shadow(0 3px 8px rgba(0,0,0,0.15));\n        }\n        .arch-label-zh {\n            font-family: 微軟正黑體;\n            font-size: 15px;\n            font-weight: 700;\n            text-anchor: middle;\n            fill: #1A2B5F;\n        }\n        .arch-label-en {\n            font-family: Arial;\n            font-size: 12px;\n            font-weight: 600;\n            text-anchor: middle;\n            fill: #0A7A72;\n        }\n        .arch-desc {\n            font-family: 微軟正黑體;\n            font-size: 10px;\n            text-anchor: middle;\n            fill: #666;\n        }\n        .arch-arrow {\n            stroke: #0A7A72;\n            stroke-width: 3;\n            fill: none;\n            marker-end: url(#arrow-down-arch);\n        }\n        .step-number {\n            font-family: Arial;\n            font-size: 14px;\n            font-weight: 800;\n            text-anchor: middle;\n            fill: white;\n            background: #C9960C;\n        }\n    </style>\n    \n    <!-- 標題 -->\n    <text x=\"500\" y=\"35\" class=\"arch-title\">靈魂重構工程學</text>\n    <text x=\"500\" y=\"53\" class=\"arch-subtitle\">Soul Reconstruction Engineering</text>\n    \n        <rect x=\"340\" y=\"80\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"120\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"126\" class=\"step-number\">1</text>\n    <text x=\"500\" y=\"105\" class=\"arch-label-zh\">第一部：靈魂本體論</text>\n    <text x=\"500\" y=\"122\" class=\"arch-label-en\">Part 1: Soul Ontology</text>\n    <text x=\"500\" y=\"140\" class=\"arch-desc\">理解靈魂本質 · Understanding soul essence</text>\n    <line x1=\"500\" y1=\"160\" x2=\"500\" y2=\"190\" class=\"arch-arrow\"/>\n    <rect x=\"340\" y=\"200\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"240\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"246\" class=\"step-number\">2</text>\n    <text x=\"500\" y=\"225\" class=\"arch-label-zh\">第二部：重構工程</text>\n    <text x=\"500\" y=\"242\" class=\"arch-label-en\">Part 2: Reconstruction Engineering</text>\n    <text x=\"500\" y=\"260\" class=\"arch-desc\">五大工程項目 · Five reconstruction works</text>\n    <line x1=\"500\" y1=\"280\" x2=\"500\" y2=\"310\" class=\"arch-arrow\"/>\n    <rect x=\"340\" y=\"320\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"360\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"366\" class=\"step-number\">3</text>\n    <text x=\"500\" y=\"345\" class=\"arch-label-zh\">第三部：系統模型</text>\n    <text x=\"500\" y=\"362\" class=\"arch-label-en\">Part 3: System Model</text>\n    <text x=\"500\" y=\"380\" class=\"arch-desc\">完整系統架構 · Complete system architecture</text>\n    <line x1=\"500\" y1=\"400\" x2=\"500\" y2=\"430\" class=\"arch-arrow\"/>\n    <rect x=\"340\" y=\"440\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"480\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"486\" class=\"step-number\">4</text>\n    <text x=\"500\" y=\"465\" class=\"arch-label-zh\">第四部：實踐應用</text>\n    <text x=\"500\" y=\"482\" class=\"arch-label-en\">Part 4: Practical Application</text>\n    <text x=\"500\" y=\"500\" class=\"arch-desc\">日常生活應用 · Daily life application</text>\n    <line x1=\"500\" y1=\"520\" x2=\"500\" y2=\"550\" class=\"arch-arrow\"/>\n    <rect x=\"340\" y=\"560\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"600\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"606\" class=\"step-number\">5</text>\n    <text x=\"500\" y=\"585\" class=\"arch-label-zh\">第五部：智慧生成</text>\n    <text x=\"500\" y=\"602\" class=\"arch-label-en\">Part 5: Wisdom Generation</text>\n    <text x=\"500\" y=\"620\" class=\"arch-desc\">高維智慧輸出 · High-dimensional wisdom</text>\n</svg>"}, "靈魂重構工程學_2": {"mindmap": "<svg width=\"1000\" height=\"700\" viewBox=\"0 0 1000 700\" xmlns=\"http://www.w3.org/2000/svg\">\n    <defs>\n        <marker id=\"arrow-down\" markerWidth=\"10\" markerHeight=\"10\" refX=\"5\" refY=\"5\" orient=\"auto\">\n            <polygon points=\"0,0 10,5 0,10\" fill=\"#0A7A72\"/>\n        </marker>\n    </defs>\n    <style>\n        .mm-center {\n            fill: #C9960C;\n            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));\n        }\n        .mm-title {\n            font-family: 微軟正黑體;\n            font-size: 16px;\n            font-weight: 700;\n            text-anchor: middle;\n            fill: white;\n        }\n        .mm-subtitle {\n            font-family: Arial;\n            font-size: 12px;\n            fill: white;\n            text-anchor: middle;\n        }\n        .mm-line {\n            stroke: #0A7A72;\n            stroke-width: 3;\n            fill: none;\n            marker-end: url(#arrow-down);\n        }\n        .mm-box {\n            fill: #e8f5f5;\n            stroke: #0A7A72;\n            stroke-width: 2;\n            rx: 8;\n            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.1));\n        }\n        .mm-label-zh {\n            font-family: 微軟正黑體;\n            font-size: 14px;\n            font-weight: 700;\n            text-anchor: middle;\n            fill: #1A2B5F;\n        }\n        .mm-label-en {\n            font-family: Arial;\n            font-size: 11px;\n            font-weight: 600;\n            text-anchor: middle;\n            fill: #0A7A72;\n        }\n        .mm-desc {\n            font-family: 微軟正黑體;\n            font-size: 10px;\n            text-anchor: middle;\n            fill: #666;\n        }\n    </style>\n    \n    <!-- 中心圓 -->\n    <circle cx=\"500\" cy=\"40\" r=\"35\" class=\"mm-center\"/>\n    <text x=\"500\" y=\"35\" class=\"mm-title\">靈魂重構工程學_2</text>\n    <text x=\"500\" y=\"50\" class=\"mm-subtitle\">Analysis & Interpretation - AI Era Growth</text>\n    \n    <!-- 向下的主線 -->\n    <line x1=\"500\" y1=\"75\" x2=\"500\" y2=\"105\" class=\"mm-line\" stroke-width=\"2\"/>\n        <line x1=\"500\" y1=\"120\" x2=\"500\" y2=\"105\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"120\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"138\" class=\"mm-label-zh\">本系統不是什麼</text>\n    <text x=\"500\" y=\"152\" class=\"mm-label-en\">What It Is NOT</text>\n    <text x=\"500\" y=\"168\" class=\"mm-desc\" font-size=\"9\">不是心靈安慰課 | Not comfort course</text>\n    <line x1=\"500\" y1=\"185\" x2=\"500\" y2=\"185\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"200\" x2=\"500\" y2=\"185\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"200\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"218\" class=\"mm-label-zh\">而是什麼</text>\n    <text x=\"500\" y=\"232\" class=\"mm-label-en\">What It IS</text>\n    <text x=\"500\" y=\"248\" class=\"mm-desc\" font-size=\"9\">重建人格模型工程系統 | Personality model engineeri</text>\n    <line x1=\"500\" y1=\"265\" x2=\"500\" y2=\"265\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"280\" x2=\"500\" y2=\"265\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"280\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"298\" class=\"mm-label-zh\">本體層</text>\n    <text x=\"500\" y=\"312\" class=\"mm-label-en\">Ontology Layer</text>\n    <text x=\"500\" y=\"328\" class=\"mm-desc\" font-size=\"9\">AI時代真正缺的 | What AI era truly lacks</text>\n    <line x1=\"500\" y1=\"345\" x2=\"500\" y2=\"345\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"360\" x2=\"500\" y2=\"345\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"360\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"378\" class=\"mm-label-zh\">結構層</text>\n    <text x=\"500\" y=\"392\" class=\"mm-label-en\">Structure Layer</text>\n    <text x=\"500\" y=\"408\" class=\"mm-desc\" font-size=\"9\">智慧生成系統架構 | Wisdom generation architectur</text>\n    <line x1=\"500\" y1=\"425\" x2=\"500\" y2=\"425\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"440\" x2=\"500\" y2=\"425\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"440\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"458\" class=\"mm-label-zh\">機制層</text>\n    <text x=\"500\" y=\"472\" class=\"mm-label-en\">Mechanism Layer</text>\n    <text x=\"500\" y=\"488\" class=\"mm-desc\" font-size=\"9\">語言壓縮升維 | Language compression upgrade</text>\n    <line x1=\"500\" y1=\"505\" x2=\"500\" y2=\"505\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"520\" x2=\"500\" y2=\"505\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"520\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"538\" class=\"mm-label-zh\">應用層</text>\n    <text x=\"500\" y=\"552\" class=\"mm-label-en\">Application Layer</text>\n    <text x=\"500\" y=\"568\" class=\"mm-desc\" font-size=\"9\">實踐運算系統 | Practical computation system</text>\n</svg>", "architecture": "<svg width=\"1000\" height=\"700\" viewBox=\"0 0 1000 700\" xmlns=\"http://www.w3.org/2000/svg\">\n    <defs>\n        <marker id=\"arrow-down-arch\" markerWidth=\"10\" markerHeight=\"10\" refX=\"5\" refY=\"5\" orient=\"auto\">\n            <polygon points=\"0,0 10,5 0,10\" fill=\"#0A7A72\"/>\n        </marker>\n    </defs>\n    <style>\n        .arch-title {\n            font-family: 微軟正黑體;\n            font-size: 20px;\n            font-weight: 800;\n            text-anchor: middle;\n            fill: #1A2B5F;\n        }\n        .arch-subtitle {\n            font-family: Arial;\n            font-size: 13px;\n            text-anchor: middle;\n            fill: #0A7A72;\n        }\n        .arch-box {\n            fill: #f0f8f8;\n            stroke: #0A7A72;\n            stroke-width: 3;\n            rx: 10;\n            filter: drop-shadow(0 3px 8px rgba(0,0,0,0.15));\n        }\n        .arch-label-zh {\n            font-family: 微軟正黑體;\n            font-size: 15px;\n            font-weight: 700;\n            text-anchor: middle;\n            fill: #1A2B5F;\n        }\n        .arch-label-en {\n            font-family: Arial;\n            font-size: 12px;\n            font-weight: 600;\n            text-anchor: middle;\n            fill: #0A7A72;\n        }\n        .arch-desc {\n            font-family: 微軟正黑體;\n            font-size: 10px;\n            text-anchor: middle;\n            fill: #666;\n        }\n        .arch-arrow {\n            stroke: #0A7A72;\n            stroke-width: 3;\n            fill: none;\n            marker-end: url(#arrow-down-arch);\n        }\n        .step-number {\n            font-family: Arial;\n            font-size: 14px;\n            font-weight: 800;\n            text-anchor: middle;\n            fill: white;\n            background: #C9960C;\n        }\n    </style>\n    \n    <!-- 標題 -->\n    <text x=\"500\" y=\"35\" class=\"arch-title\">靈魂重構工程學_2</text>\n    <text x=\"500\" y=\"53\" class=\"arch-subtitle\">Analysis & Interpretation - AI Era Growth</text>\n    \n        <rect x=\"340\" y=\"80\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"120\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"126\" class=\"step-number\">1</text>\n    <text x=\"500\" y=\"105\" class=\"arch-label-zh\">ROOT認知</text>\n    <text x=\"500\" y=\"122\" class=\"arch-label-en\">ROOT Understanding</text>\n    <text x=\"500\" y=\"140\" class=\"arch-desc\">系統本質定位 · System nature positioning</text>\n    <line x1=\"500\" y1=\"160\" x2=\"500\" y2=\"190\" class=\"arch-arrow\"/>\n    <rect x=\"340\" y=\"200\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"240\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"246\" class=\"step-number\">2</text>\n    <text x=\"500\" y=\"225\" class=\"arch-label-zh\">AI時代缺失</text>\n    <text x=\"500\" y=\"242\" class=\"arch-label-en\">AI Era Deficiency</text>\n    <text x=\"500\" y=\"258\" class=\"arch-desc\">抽象、拆解、生成能力 · Abstraction, decomposition, gene</text>\n    <text x=\"500\" y=\"270\" class=\"arch-desc\">ration</text>\n    <line x1=\"500\" y1=\"280\" x2=\"500\" y2=\"310\" class=\"arch-arrow\"/>\n    <rect x=\"340\" y=\"320\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"360\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"366\" class=\"step-number\">3</text>\n    <text x=\"500\" y=\"345\" class=\"arch-label-zh\">靈魂重構核心</text>\n    <text x=\"500\" y=\"362\" class=\"arch-label-en\">Soul Reconstruction Core</text>\n    <text x=\"500\" y=\"380\" class=\"arch-desc\">誤差校正機制 · Error correction mechanism</text>\n    <line x1=\"500\" y1=\"400\" x2=\"500\" y2=\"430\" class=\"arch-arrow\"/>\n    <rect x=\"340\" y=\"440\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"480\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"486\" class=\"step-number\">4</text>\n    <text x=\"500\" y=\"465\" class=\"arch-label-zh\">工程系統運作</text>\n    <text x=\"500\" y=\"482\" class=\"arch-label-en\">Engineering System Operation</text>\n    <text x=\"500\" y=\"500\" class=\"arch-desc\">持續迭代更新 · Continuous iteration</text>\n    <line x1=\"500\" y1=\"520\" x2=\"500\" y2=\"550\" class=\"arch-arrow\"/>\n    <rect x=\"340\" y=\"560\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"600\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"606\" class=\"step-number\">5</text>\n    <text x=\"500\" y=\"585\" class=\"arch-label-zh\">高維輸出</text>\n    <text x=\"500\" y=\"602\" class=\"arch-label-en\">High-dimensional Output</text>\n    <text x=\"500\" y=\"620\" class=\"arch-desc\">智慧系統生成 · Wisdom system generation</text>\n</svg>"}, "靈魂重構工程": {"mindmap": "<svg width=\"1000\" height=\"700\" viewBox=\"0 0 1000 700\" xmlns=\"http://www.w3.org/2000/svg\">\n    <defs>\n        <marker id=\"arrow-down\" markerWidth=\"10\" markerHeight=\"10\" refX=\"5\" refY=\"5\" orient=\"auto\">\n            <polygon points=\"0,0 10,5 0,10\" fill=\"#0A7A72\"/>\n        </marker>\n    </defs>\n    <style>\n        .mm-center {\n            fill: #C9960C;\n            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));\n        }\n        .mm-title {\n            font-family: 微軟正黑體;\n            font-size: 16px;\n            font-weight: 700;\n            text-anchor: middle;\n            fill: white;\n        }\n        .mm-subtitle {\n            font-family: Arial;\n            font-size: 12px;\n            fill: white;\n            text-anchor: middle;\n        }\n        .mm-line {\n            stroke: #0A7A72;\n            stroke-width: 3;\n            fill: none;\n            marker-end: url(#arrow-down);\n        }\n        .mm-box {\n            fill: #e8f5f5;\n            stroke: #0A7A72;\n            stroke-width: 2;\n            rx: 8;\n            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.1));\n        }\n        .mm-label-zh {\n            font-family: 微軟正黑體;\n            font-size: 14px;\n            font-weight: 700;\n            text-anchor: middle;\n            fill: #1A2B5F;\n        }\n        .mm-label-en {\n            font-family: Arial;\n            font-size: 11px;\n            font-weight: 600;\n            text-anchor: middle;\n            fill: #0A7A72;\n        }\n        .mm-desc {\n            font-family: 微軟正黑體;\n            font-size: 10px;\n            text-anchor: middle;\n            fill: #666;\n        }\n    </style>\n    \n    <!-- 中心圓 -->\n    <circle cx=\"500\" cy=\"40\" r=\"35\" class=\"mm-center\"/>\n    <text x=\"500\" y=\"35\" class=\"mm-title\">靈魂重構工程</text>\n    <text x=\"500\" y=\"50\" class=\"mm-subtitle\">Soul Reconstruction Engineering - Essence</text>\n    \n    <!-- 向下的主線 -->\n    <line x1=\"500\" y1=\"75\" x2=\"500\" y2=\"105\" class=\"mm-line\" stroke-width=\"2\"/>\n        <line x1=\"500\" y1=\"120\" x2=\"500\" y2=\"105\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"120\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"138\" class=\"mm-label-zh\">本質不是</text>\n    <text x=\"500\" y=\"152\" class=\"mm-label-en\">NOT</text>\n    <text x=\"500\" y=\"168\" class=\"mm-desc\" font-size=\"9\">心靈雞湯、宗教口號 | Not comfort, religion</text>\n    <line x1=\"500\" y1=\"185\" x2=\"500\" y2=\"185\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"200\" x2=\"500\" y2=\"185\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"200\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"218\" class=\"mm-label-zh\">本質是</text>\n    <text x=\"500\" y=\"232\" class=\"mm-label-en\">IS</text>\n    <text x=\"500\" y=\"248\" class=\"mm-desc\" font-size=\"9\">生命系統重建模 | Life system remodeling</text>\n    <line x1=\"500\" y1=\"265\" x2=\"500\" y2=\"265\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"280\" x2=\"500\" y2=\"265\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"280\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"298\" class=\"mm-label-zh\">靈魂定義</text>\n    <text x=\"500\" y=\"312\" class=\"mm-label-en\">Soul Definition</text>\n    <text x=\"500\" y=\"328\" class=\"mm-desc\" font-size=\"9\">核心模型系統 | Core model system</text>\n    <line x1=\"500\" y1=\"345\" x2=\"500\" y2=\"345\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"360\" x2=\"500\" y2=\"345\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"360\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"378\" class=\"mm-label-zh\">靈魂影響</text>\n    <text x=\"500\" y=\"392\" class=\"mm-label-en\">Soul Impact</text>\n    <text x=\"500\" y=\"408\" class=\"mm-desc\" font-size=\"9\">決定人生路徑 | Determines life path</text>\n    <line x1=\"500\" y1=\"425\" x2=\"500\" y2=\"425\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"440\" x2=\"500\" y2=\"425\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"440\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"458\" class=\"mm-label-zh\">真正崩潰</text>\n    <text x=\"500\" y=\"472\" class=\"mm-label-en\">Real Collapse</text>\n    <text x=\"500\" y=\"488\" class=\"mm-desc\" font-size=\"9\">內在模型失效 | Inner model failure</text>\n    <line x1=\"500\" y1=\"505\" x2=\"500\" y2=\"505\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"520\" x2=\"500\" y2=\"505\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"520\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"538\" class=\"mm-label-zh\">重構方向</text>\n    <text x=\"500\" y=\"552\" class=\"mm-label-en\">Reconstruction</text>\n    <text x=\"500\" y=\"568\" class=\"mm-desc\" font-size=\"9\">誤差校正+權重重配 | Error correction + rebalance</text>\n</svg>", "architecture": "<svg width=\"1000\" height=\"700\" viewBox=\"0 0 1000 700\" xmlns=\"http://www.w3.org/2000/svg\">\n    <defs>\n        <marker id=\"arrow-down-arch\" markerWidth=\"10\" markerHeight=\"10\" refX=\"5\" refY=\"5\" orient=\"auto\">\n            <polygon points=\"0,0 10,5 0,10\" fill=\"#0A7A72\"/>\n        </marker>\n    </defs>\n    <style>\n        .arch-title {\n            font-family: 微軟正黑體;\n            font-size: 20px;\n            font-weight: 800;\n            text-anchor: middle;\n            fill: #1A2B5F;\n        }\n        .arch-subtitle {\n            font-family: Arial;\n            font-size: 13px;\n            text-anchor: middle;\n            fill: #0A7A72;\n        }\n        .arch-box {\n            fill: #f0f8f8;\n            stroke: #0A7A72;\n            stroke-width: 3;\n            rx: 10;\n            filter: drop-shadow(0 3px 8px rgba(0,0,0,0.15));\n        }\n        .arch-label-zh {\n            font-family: 微軟正黑體;\n            font-size: 15px;\n            font-weight: 700;\n            text-anchor: middle;\n            fill: #1A2B5F;\n        }\n        .arch-label-en {\n            font-family: Arial;\n            font-size: 12px;\n            font-weight: 600;\n            text-anchor: middle;\n            fill: #0A7A72;\n        }\n        .arch-desc {\n            font-family: 微軟正黑體;\n            font-size: 10px;\n            text-anchor: middle;\n            fill: #666;\n        }\n        .arch-arrow {\n            stroke: #0A7A72;\n            stroke-width: 3;\n            fill: none;\n            marker-end: url(#arrow-down-arch);\n        }\n        .step-number {\n            font-family: Arial;\n            font-size: 14px;\n            font-weight: 800;\n            text-anchor: middle;\n            fill: white;\n            background: #C9960C;\n        }\n    </style>\n    \n    <!-- 標題 -->\n    <text x=\"500\" y=\"35\" class=\"arch-title\">靈魂重構工程</text>\n    <text x=\"500\" y=\"53\" class=\"arch-subtitle\">Soul Reconstruction Engineering - Essence</text>\n    \n        <rect x=\"340\" y=\"80\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"120\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"126\" class=\"step-number\">1</text>\n    <text x=\"500\" y=\"105\" class=\"arch-label-zh\">問題根源</text>\n    <text x=\"500\" y=\"122\" class=\"arch-label-en\">Problem Root</text>\n    <text x=\"500\" y=\"140\" class=\"arch-desc\">內在模型誤差 · Inner model error</text>\n    <line x1=\"500\" y1=\"160\" x2=\"500\" y2=\"190\" class=\"arch-arrow\"/>\n    <rect x=\"340\" y=\"200\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"240\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"246\" class=\"step-number\">2</text>\n    <text x=\"500\" y=\"225\" class=\"arch-label-zh\">認知轉變</text>\n    <text x=\"500\" y=\"242\" class=\"arch-label-en\">Awareness Shift</text>\n    <text x=\"500\" y=\"260\" class=\"arch-desc\">從固定→動態 · From fixed to dynamic</text>\n    <line x1=\"500\" y1=\"280\" x2=\"500\" y2=\"310\" class=\"arch-arrow\"/>\n    <rect x=\"340\" y=\"320\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"360\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"366\" class=\"step-number\">3</text>\n    <text x=\"500\" y=\"345\" class=\"arch-label-zh\">系統診斷</text>\n    <text x=\"500\" y=\"362\" class=\"arch-label-en\">System Diagnosis</text>\n    <text x=\"500\" y=\"380\" class=\"arch-desc\">識別失衡點 · Identify imbalance points</text>\n    <line x1=\"500\" y1=\"400\" x2=\"500\" y2=\"430\" class=\"arch-arrow\"/>\n    <rect x=\"340\" y=\"440\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"480\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"486\" class=\"step-number\">4</text>\n    <text x=\"500\" y=\"465\" class=\"arch-label-zh\">重構執行</text>\n    <text x=\"500\" y=\"482\" class=\"arch-label-en\">Reconstruction Execution</text>\n    <text x=\"500\" y=\"500\" class=\"arch-desc\">權重重新分配 · Weight reallocation</text>\n    <line x1=\"500\" y1=\"520\" x2=\"500\" y2=\"550\" class=\"arch-arrow\"/>\n    <rect x=\"340\" y=\"560\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"600\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"606\" class=\"step-number\">5</text>\n    <text x=\"500\" y=\"585\" class=\"arch-label-zh\">動態更新</text>\n    <text x=\"500\" y=\"602\" class=\"arch-label-en\">Dynamic Update</text>\n    <text x=\"500\" y=\"620\" class=\"arch-desc\">持續進化系統 · Continuous evolution</text>\n</svg>"}, "靈魂工程": {"mindmap": "<svg width=\"1000\" height=\"700\" viewBox=\"0 0 1000 700\" xmlns=\"http://www.w3.org/2000/svg\">\n    <defs>\n        <marker id=\"arrow-down\" markerWidth=\"10\" markerHeight=\"10\" refX=\"5\" refY=\"5\" orient=\"auto\">\n            <polygon points=\"0,0 10,5 0,10\" fill=\"#0A7A72\"/>\n        </marker>\n    </defs>\n    <style>\n        .mm-center {\n            fill: #C9960C;\n            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));\n        }\n        .mm-title {\n            font-family: 微軟正黑體;\n            font-size: 16px;\n            font-weight: 700;\n            text-anchor: middle;\n            fill: white;\n        }\n        .mm-subtitle {\n            font-family: Arial;\n            font-size: 12px;\n            fill: white;\n            text-anchor: middle;\n        }\n        .mm-line {\n            stroke: #0A7A72;\n            stroke-width: 3;\n            fill: none;\n            marker-end: url(#arrow-down);\n        }\n        .mm-box {\n            fill: #e8f5f5;\n            stroke: #0A7A72;\n            stroke-width: 2;\n            rx: 8;\n            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.1));\n        }\n        .mm-label-zh {\n            font-family: 微軟正黑體;\n            font-size: 14px;\n            font-weight: 700;\n            text-anchor: middle;\n            fill: #1A2B5F;\n        }\n        .mm-label-en {\n            font-family: Arial;\n            font-size: 11px;\n            font-weight: 600;\n            text-anchor: middle;\n            fill: #0A7A72;\n        }\n        .mm-desc {\n            font-family: 微軟正黑體;\n            font-size: 10px;\n            text-anchor: middle;\n            fill: #666;\n        }\n    </style>\n    \n    <!-- 中心圓 -->\n    <circle cx=\"500\" cy=\"40\" r=\"35\" class=\"mm-center\"/>\n    <text x=\"500\" y=\"35\" class=\"mm-title\">靈魂工程</text>\n    <text x=\"500\" y=\"50\" class=\"mm-subtitle\">Soul Engineering - From Collapse to Wisdom</text>\n    \n    <!-- 向下的主線 -->\n    <line x1=\"500\" y1=\"75\" x2=\"500\" y2=\"105\" class=\"mm-line\" stroke-width=\"2\"/>\n        <line x1=\"500\" y1=\"120\" x2=\"500\" y2=\"105\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"120\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"138\" class=\"mm-label-zh\">核心核心句</text>\n    <text x=\"500\" y=\"152\" class=\"mm-label-en\">Core Thesis</text>\n    <text x=\"500\" y=\"168\" class=\"mm-desc\" font-size=\"9\">人生=持續更新的模型 | Life = updatable model</text>\n    <line x1=\"500\" y1=\"185\" x2=\"500\" y2=\"185\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"200\" x2=\"500\" y2=\"185\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"200\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"218\" class=\"mm-label-zh\">書籍定位</text>\n    <text x=\"500\" y=\"232\" class=\"mm-label-en\">Book Positioning</text>\n    <text x=\"500\" y=\"248\" class=\"mm-desc\" font-size=\"9\">人格更新工程學 | Personality update engineering</text>\n    <line x1=\"500\" y1=\"265\" x2=\"500\" y2=\"265\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"280\" x2=\"500\" y2=\"265\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"280\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"298\" class=\"mm-label-zh\">融合學科</text>\n    <text x=\"500\" y=\"312\" class=\"mm-label-en\">Integrated Disciplines</text>\n    <text x=\"500\" y=\"328\" class=\"mm-desc\" font-size=\"9\">AI+系統論+神經科學 | AI+systems+neuroscience</text>\n    <line x1=\"500\" y1=\"345\" x2=\"500\" y2=\"345\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"360\" x2=\"500\" y2=\"345\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"360\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"378\" class=\"mm-label-zh\">真正痛苦</text>\n    <text x=\"500\" y=\"392\" class=\"mm-label-en\">True Pain</text>\n    <text x=\"500\" y=\"408\" class=\"mm-desc\" font-size=\"9\">模型誤差信號 | Model error signal</text>\n    <line x1=\"500\" y1=\"425\" x2=\"500\" y2=\"425\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"440\" x2=\"500\" y2=\"425\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"440\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"458\" class=\"mm-label-zh\">重構過程</text>\n    <text x=\"500\" y=\"472\" class=\"mm-label-en\">Reconstruction Process</text>\n    <text x=\"500\" y=\"488\" class=\"mm-desc\" font-size=\"9\">5部分系統設計 | 5-part system design</text>\n    <line x1=\"500\" y1=\"505\" x2=\"500\" y2=\"505\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"520\" x2=\"500\" y2=\"505\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"520\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"538\" class=\"mm-label-zh\">最終目標</text>\n    <text x=\"500\" y=\"552\" class=\"mm-label-en\">Final Goal</text>\n    <text x=\"500\" y=\"568\" class=\"mm-desc\" font-size=\"9\">高維智慧生成 | High-dimensional wisdom</text>\n</svg>", "architecture": "<svg width=\"1000\" height=\"700\" viewBox=\"0 0 1000 700\" xmlns=\"http://www.w3.org/2000/svg\">\n    <defs>\n        <marker id=\"arrow-down-arch\" markerWidth=\"10\" markerHeight=\"10\" refX=\"5\" refY=\"5\" orient=\"auto\">\n            <polygon points=\"0,0 10,5 0,10\" fill=\"#0A7A72\"/>\n        </marker>\n    </defs>\n    <style>\n        .arch-title {\n            font-family: 微軟正黑體;\n            font-size: 20px;\n            font-weight: 800;\n            text-anchor: middle;\n            fill: #1A2B5F;\n        }\n        .arch-subtitle {\n            font-family: Arial;\n            font-size: 13px;\n            text-anchor: middle;\n            fill: #0A7A72;\n        }\n        .arch-box {\n            fill: #f0f8f8;\n            stroke: #0A7A72;\n            stroke-width: 3;\n            rx: 10;\n            filter: drop-shadow(0 3px 8px rgba(0,0,0,0.15));\n        }\n        .arch-label-zh {\n            font-family: 微軟正黑體;\n            font-size: 15px;\n            font-weight: 700;\n            text-anchor: middle;\n            fill: #1A2B5F;\n        }\n        .arch-label-en {\n            font-family: Arial;\n            font-size: 12px;\n            font-weight: 600;\n            text-anchor: middle;\n            fill: #0A7A72;\n        }\n        .arch-desc {\n            font-family: 微軟正黑體;\n            font-size: 10px;\n            text-anchor: middle;\n            fill: #666;\n        }\n        .arch-arrow {\n            stroke: #0A7A72;\n            stroke-width: 3;\n            fill: none;\n            marker-end: url(#arrow-down-arch);\n        }\n        .step-number {\n            font-family: Arial;\n            font-size: 14px;\n            font-weight: 800;\n            text-anchor: middle;\n            fill: white;\n            background: #C9960C;\n        }\n    </style>\n    \n    <!-- 標題 -->\n    <text x=\"500\" y=\"35\" class=\"arch-title\">靈魂工程</text>\n    <text x=\"500\" y=\"53\" class=\"arch-subtitle\">Soul Engineering - From Collapse to Wisdom</text>\n    \n        <rect x=\"340\" y=\"80\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"120\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"126\" class=\"step-number\">1</text>\n    <text x=\"500\" y=\"105\" class=\"arch-label-zh\">第一部：舊世界崩塌</text>\n    <text x=\"500\" y=\"122\" class=\"arch-label-en\">Part 1: Old World Collapse</text>\n    <text x=\"500\" y=\"140\" class=\"arch-desc\">識別系統失效 · Identify system failure</text>\n    <line x1=\"500\" y1=\"160\" x2=\"500\" y2=\"190\" class=\"arch-arrow\"/>\n    <rect x=\"340\" y=\"200\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"240\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"246\" class=\"step-number\">2</text>\n    <text x=\"500\" y=\"225\" class=\"arch-label-zh\">第二部：人格重建</text>\n    <text x=\"500\" y=\"242\" class=\"arch-label-en\">Part 2: Personality Rebuild</text>\n    <text x=\"500\" y=\"260\" class=\"arch-desc\">重新設計自我 · Redesign self</text>\n    <line x1=\"500\" y1=\"280\" x2=\"500\" y2=\"310\" class=\"arch-arrow\"/>\n    <rect x=\"340\" y=\"320\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"360\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"366\" class=\"step-number\">3</text>\n    <text x=\"500\" y=\"345\" class=\"arch-label-zh\">第三部：模型更新</text>\n    <text x=\"500\" y=\"362\" class=\"arch-label-en\">Part 3: Model Update</text>\n    <text x=\"500\" y=\"380\" class=\"arch-desc\">更新預測系統 · Update prediction system</text>\n    <line x1=\"500\" y1=\"400\" x2=\"500\" y2=\"430\" class=\"arch-arrow\"/>\n    <rect x=\"340\" y=\"440\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"480\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"486\" class=\"step-number\">4</text>\n    <text x=\"500\" y=\"465\" class=\"arch-label-zh\">第四部：智慧生成</text>\n    <text x=\"500\" y=\"482\" class=\"arch-label-en\">Part 4: Wisdom Generation</text>\n    <text x=\"500\" y=\"500\" class=\"arch-desc\">高維認知形成 · High-dimensional cognition</text>\n    <line x1=\"500\" y1=\"520\" x2=\"500\" y2=\"550\" class=\"arch-arrow\"/>\n    <rect x=\"340\" y=\"560\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"600\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"606\" class=\"step-number\">5</text>\n    <text x=\"500\" y=\"585\" class=\"arch-label-zh\">第五部：新文明人格</text>\n    <text x=\"500\" y=\"602\" class=\"arch-label-en\">Part 5: New Era Personality</text>\n    <text x=\"500\" y=\"620\" class=\"arch-desc\">AI時代人格類型 · AI era personality type</text>\n</svg>"}, "靈魂8模組___意識醫學9層級": {"mindmap": "<svg width=\"1000\" height=\"860\" viewBox=\"0 0 1000 860\" xmlns=\"http://www.w3.org/2000/svg\">\n    <defs>\n        <marker id=\"arrow-down\" markerWidth=\"10\" markerHeight=\"10\" refX=\"5\" refY=\"5\" orient=\"auto\">\n            <polygon points=\"0,0 10,5 0,10\" fill=\"#0A7A72\"/>\n        </marker>\n    </defs>\n    <style>\n        .mm-center {\n            fill: #C9960C;\n            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));\n        }\n        .mm-title {\n            font-family: 微軟正黑體;\n            font-size: 16px;\n            font-weight: 700;\n            text-anchor: middle;\n            fill: white;\n        }\n        .mm-subtitle {\n            font-family: Arial;\n            font-size: 12px;\n            fill: white;\n            text-anchor: middle;\n        }\n        .mm-line {\n            stroke: #0A7A72;\n            stroke-width: 3;\n            fill: none;\n            marker-end: url(#arrow-down);\n        }\n        .mm-box {\n            fill: #e8f5f5;\n            stroke: #0A7A72;\n            stroke-width: 2;\n            rx: 8;\n            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.1));\n        }\n        .mm-label-zh {\n            font-family: 微軟正黑體;\n            font-size: 14px;\n            font-weight: 700;\n            text-anchor: middle;\n            fill: #1A2B5F;\n        }\n        .mm-label-en {\n            font-family: Arial;\n            font-size: 11px;\n            font-weight: 600;\n            text-anchor: middle;\n            fill: #0A7A72;\n        }\n        .mm-desc {\n            font-family: 微軟正黑體;\n            font-size: 10px;\n            text-anchor: middle;\n            fill: #666;\n        }\n    </style>\n    \n    <!-- 中心圓 -->\n    <circle cx=\"500\" cy=\"40\" r=\"35\" class=\"mm-center\"/>\n    <text x=\"500\" y=\"35\" class=\"mm-title\">靈魂8模組___意識醫學9層級</text>\n    <text x=\"500\" y=\"50\" class=\"mm-subtitle\">8 Soul Modules × 9 Consciousness Medicine Levels</text>\n    \n    <!-- 向下的主線 -->\n    <line x1=\"500\" y1=\"75\" x2=\"500\" y2=\"105\" class=\"mm-line\" stroke-width=\"2\"/>\n        <line x1=\"500\" y1=\"120\" x2=\"500\" y2=\"105\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"120\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"138\" class=\"mm-label-zh\">8個模組</text>\n    <text x=\"500\" y=\"152\" class=\"mm-label-en\">8 Modules</text>\n    <text x=\"500\" y=\"168\" class=\"mm-desc\" font-size=\"9\">感知、情緒、信念等 | Perception, emotion, belief.</text>\n    <line x1=\"500\" y1=\"185\" x2=\"500\" y2=\"185\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"200\" x2=\"500\" y2=\"185\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"200\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"218\" class=\"mm-label-zh\">感知模組</text>\n    <text x=\"500\" y=\"232\" class=\"mm-label-en\">Perception Module</text>\n    <text x=\"500\" y=\"248\" class=\"mm-desc\" font-size=\"9\">觀察世界的能力 | World observation ability</text>\n    <line x1=\"500\" y1=\"265\" x2=\"500\" y2=\"265\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"280\" x2=\"500\" y2=\"265\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"280\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"298\" class=\"mm-label-zh\">情緒模組</text>\n    <text x=\"500\" y=\"312\" class=\"mm-label-en\">Emotion Module</text>\n    <text x=\"500\" y=\"328\" class=\"mm-desc\" font-size=\"9\">情感流動系統 | Emotion flow system</text>\n    <line x1=\"500\" y1=\"345\" x2=\"500\" y2=\"345\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"360\" x2=\"500\" y2=\"345\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"360\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"378\" class=\"mm-label-zh\">信念模組</text>\n    <text x=\"500\" y=\"392\" class=\"mm-label-en\">Belief Module</text>\n    <text x=\"500\" y=\"408\" class=\"mm-desc\" font-size=\"9\">深層預測模型 | Deep prediction model</text>\n    <line x1=\"500\" y1=\"425\" x2=\"500\" y2=\"425\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"440\" x2=\"500\" y2=\"425\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"440\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"458\" class=\"mm-label-zh\">身份模組</text>\n    <text x=\"500\" y=\"472\" class=\"mm-label-en\">Identity Module</text>\n    <text x=\"500\" y=\"488\" class=\"mm-desc\" font-size=\"9\">自我認知結構 | Self-awareness structure</text>\n    <line x1=\"500\" y1=\"505\" x2=\"500\" y2=\"505\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"520\" x2=\"500\" y2=\"505\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"520\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"538\" class=\"mm-label-zh\">能量模組</text>\n    <text x=\"500\" y=\"552\" class=\"mm-label-en\">Energy Module</text>\n    <text x=\"500\" y=\"568\" class=\"mm-desc\" font-size=\"9\">系統供能狀態 | System energy state</text>\n    <line x1=\"500\" y1=\"585\" x2=\"500\" y2=\"585\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"600\" x2=\"500\" y2=\"585\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"600\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"618\" class=\"mm-label-zh\">關係模組</text>\n    <text x=\"500\" y=\"632\" class=\"mm-label-en\">Relationship Module</text>\n    <text x=\"500\" y=\"648\" class=\"mm-desc\" font-size=\"9\">連結品質層級 | Connection quality</text>\n    <line x1=\"500\" y1=\"665\" x2=\"500\" y2=\"665\" class=\"mm-line\" stroke-width=\"2\"/>\n    <line x1=\"500\" y1=\"680\" x2=\"500\" y2=\"665\" class=\"mm-line\" stroke-width=\"2\"/>\n    <rect x=\"360\" y=\"680\" width=\"280\" height=\"65\" class=\"mm-box\"/>\n    <text x=\"500\" y=\"698\" class=\"mm-label-zh\">更新模組</text>\n    <text x=\"500\" y=\"712\" class=\"mm-label-en\">Evolution Module</text>\n    <text x=\"500\" y=\"728\" class=\"mm-desc\" font-size=\"9\">迭代升級能力 | Iteration upgrade ability</text>\n</svg>", "architecture": "<svg width=\"1000\" height=\"700\" viewBox=\"0 0 1000 700\" xmlns=\"http://www.w3.org/2000/svg\">\n    <defs>\n        <marker id=\"arrow-down-arch\" markerWidth=\"10\" markerHeight=\"10\" refX=\"5\" refY=\"5\" orient=\"auto\">\n            <polygon points=\"0,0 10,5 0,10\" fill=\"#0A7A72\"/>\n        </marker>\n    </defs>\n    <style>\n        .arch-title {\n            font-family: 微軟正黑體;\n            font-size: 20px;\n            font-weight: 800;\n            text-anchor: middle;\n            fill: #1A2B5F;\n        }\n        .arch-subtitle {\n            font-family: Arial;\n            font-size: 13px;\n            text-anchor: middle;\n            fill: #0A7A72;\n        }\n        .arch-box {\n            fill: #f0f8f8;\n            stroke: #0A7A72;\n            stroke-width: 3;\n            rx: 10;\n            filter: drop-shadow(0 3px 8px rgba(0,0,0,0.15));\n        }\n        .arch-label-zh {\n            font-family: 微軟正黑體;\n            font-size: 15px;\n            font-weight: 700;\n            text-anchor: middle;\n            fill: #1A2B5F;\n        }\n        .arch-label-en {\n            font-family: Arial;\n            font-size: 12px;\n            font-weight: 600;\n            text-anchor: middle;\n            fill: #0A7A72;\n        }\n        .arch-desc {\n            font-family: 微軟正黑體;\n            font-size: 10px;\n            text-anchor: middle;\n            fill: #666;\n        }\n        .arch-arrow {\n            stroke: #0A7A72;\n            stroke-width: 3;\n            fill: none;\n            marker-end: url(#arrow-down-arch);\n        }\n        .step-number {\n            font-family: Arial;\n            font-size: 14px;\n            font-weight: 800;\n            text-anchor: middle;\n            fill: white;\n            background: #C9960C;\n        }\n    </style>\n    \n    <!-- 標題 -->\n    <text x=\"500\" y=\"35\" class=\"arch-title\">靈魂8模組___意識醫學9層級</text>\n    <text x=\"500\" y=\"53\" class=\"arch-subtitle\">8 Soul Modules × 9 Consciousness Medicine Levels</text>\n    \n        <rect x=\"340\" y=\"80\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"120\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"126\" class=\"step-number\">1</text>\n    <text x=\"500\" y=\"105\" class=\"arch-label-zh\">9層級概述</text>\n    <text x=\"500\" y=\"122\" class=\"arch-label-en\">9 Levels Overview</text>\n    <text x=\"500\" y=\"140\" class=\"arch-desc\">環境到存在 · Environment to existence</text>\n    <line x1=\"500\" y1=\"160\" x2=\"500\" y2=\"190\" class=\"arch-arrow\"/>\n    <rect x=\"340\" y=\"200\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"240\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"246\" class=\"step-number\">2</text>\n    <text x=\"500\" y=\"225\" class=\"arch-label-zh\">①環境層</text>\n    <text x=\"500\" y=\"242\" class=\"arch-label-en\">①Environment Level</text>\n    <text x=\"500\" y=\"260\" class=\"arch-desc\">外界刺激接收 · External stimulus reception</text>\n    <line x1=\"500\" y1=\"280\" x2=\"500\" y2=\"310\" class=\"arch-arrow\"/>\n    <rect x=\"340\" y=\"320\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"360\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"366\" class=\"step-number\">3</text>\n    <text x=\"500\" y=\"345\" class=\"arch-label-zh\">②生理層</text>\n    <text x=\"500\" y=\"362\" class=\"arch-label-en\">②Physical Level</text>\n    <text x=\"500\" y=\"380\" class=\"arch-desc\">身體供能修復 · Body energy repair</text>\n    <line x1=\"500\" y1=\"400\" x2=\"500\" y2=\"430\" class=\"arch-arrow\"/>\n    <rect x=\"340\" y=\"440\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"480\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"486\" class=\"step-number\">4</text>\n    <text x=\"500\" y=\"465\" class=\"arch-label-zh\">③④⑤中層</text>\n    <text x=\"500\" y=\"482\" class=\"arch-label-en\">③④⑤ Mid Levels</text>\n    <text x=\"500\" y=\"500\" class=\"arch-desc\">情緒認知身份層 · Emotional cognitive identity</text>\n    <line x1=\"500\" y1=\"520\" x2=\"500\" y2=\"550\" class=\"arch-arrow\"/>\n    <rect x=\"340\" y=\"560\" width=\"320\" height=\"80\" class=\"arch-box\"/>\n    <circle cx=\"315\" cy=\"600\" r=\"18\" fill=\"#C9960C\"/>\n    <text x=\"315\" y=\"606\" class=\"step-number\">5</text>\n    <text x=\"500\" y=\"585\" class=\"arch-label-zh\">⑥⑦⑧⑨上層</text>\n    <text x=\"500\" y=\"602\" class=\"arch-label-en\">⑥⑦⑧⑨ Upper Levels</text>\n    <text x=\"500\" y=\"618\" class=\"arch-desc\">關係更新意識存在 · Relationship evolution awareness e</text>\n    <text x=\"500\" y=\"630\" class=\"arch-desc\">xistence</text>\n</svg>"}};
+        const contentData = {"靈魂重構工程學": {"sections": [{"title": "為什麼需要靈魂重構", "en": "Why Soul Reconstruction", "zh": "時代正在進入高熵化。舊人生模型正在失效。痛苦本質是模型誤差。人其實活在自己的預測系統裡。", "en_full": "Era is entering high-entropy state. Old life models fail. Pain is model error signal. We live in our own prediction systems."}, {"title": "真正自由的定義", "en": "True Freedom Definition", "zh": "真正自由≠做任何想做的事。真正自由=你有能力更新自己的模型。能夠重新設計生成自己的結構。", "en_full": "True freedom ≠ doing anything. True freedom = ability to update your own model. Redesign and regenerate your structure."}, {"title": "真正成長的定義", "en": "True Growth Definition", "zh": "真正成長≠變成另一個人。真正成長=重新設計生成自己的結構。提升預測精度。模型精度提升=真正成長。", "en_full": "True growth ≠ becoming different person. True growth = redesigning your structure. Improving prediction accuracy = real growth."}, {"title": "AI時代最重要的能力", "en": "AI Era Most Important Skill", "zh": "AI時代不是知識豐富。而是結構更新能力。不是擁有答案。而是能夠重新建模。持續迭代能力=競爭力。", "en_full": "AI era needs NOT knowledge wealth, BUT structure update ability. NOT having answers, BUT remodeling capacity. Continuous iteration = competitiveness."}, {"title": "人生本質是什麼", "en": "What Is Life Nature", "zh": "人生本質不是命運。不是運氣。不是努力程度。人生=可被建模、可被拆解、可被校正、可被更新的生成系統。", "en_full": "Life nature ≠ destiny, luck, effort level. Life = modelable, decomposable, correctable, updatable generation system."}, {"title": "現在情況由什麼決定", "en": "What Determines Current State", "zh": "現在的情緒、關係、收入、健康、決策、命運，本質上都只是：你的內在模型長期運算後的輸出結果。", "en_full": "Current emotion, relationships, income, health, decisions, destiny are all outputs from your inner model computation."}, {"title": "靈魂本體層定義", "en": "Soul Ontology Level Definition", "zh": "靈魂，不是宗教名詞。靈魂=高維內在結構。由信念×情緒×認知×價值×慣性共同構成。決定你如何生成人生。", "en_full": "Soul is NOT religious term. Soul = high-dimensional inner structure. Composed of belief × emotion × cognition × value × habit."}, {"title": "三大骨架架構", "en": "Three Core Frameworks", "zh": "自我模型：決定你如何看待自己。他者模型：決定你如何理解他人。世界模型：決定你如何看待世界和做出決策。", "en_full": "Self Model: how you see yourself. Other Model: how you understand others. World Model: how you see world and make decisions."}, {"title": "五大運算系統", "en": "Five Core Operations", "zh": "感知→認知→情緒→信念→行動。這五個運算環節相互耦合。任何一個環節失衡，整個系統都會失效。", "en_full": "Perception→Cognition→Emotion→Belief→Action. Five operations are coupled. Any imbalance breaks entire system."}, {"title": "靈魂狀態的影響", "en": "Impact of Soul State", "zh": "靈魂狀態直接決定：情緒、注意力、關係、選擇、能量、身體、免疫、人生路徑。底層決定頂層。", "en_full": "Soul state directly determines: emotion, attention, relationships, choices, energy, body, immunity, life path. Base determines top."}, {"title": "舊人生模型如何失效", "en": "How Old Models Fail", "zh": "老一代模式：努力就會被愛、付出就不會失去、控制就能安全、壓抑才能活下來。都在失效。新模型正在形成。", "en_full": "Old patterns: effort=love, giving=security, control=safety, suppression=survival. All failing. New models forming."}, {"title": "重構的本質是什麼", "en": "What Is Reconstruction", "zh": "重構本質=誤差校正+權重重配+動態更新。不是全部推翻。而是精確調整。精準校正。持續迭代。", "en_full": "Reconstruction = error correction + weight reallocation + dynamic update. NOT destroy all. BUT precise adjustment."}, {"title": "工程學視角的理解", "en": "Engineering Perspective", "zh": "把人生當作一個工程系統。有輸入、運算、輸出、反饋。可以被建模、測試、優化、迭代。這就是工程學思維。", "en_full": "Treat life as engineering system. Has input, computation, output, feedback. Can be modeled, tested, optimized, iterated."}, {"title": "高維vs低維的差別", "en": "High-Dimensional vs Low-Dimensional", "zh": "低維停留在反應層。高維看見結構層。低維被情緒驅動。高維用結構指導。低維追逐結果。高維設計系統。", "en_full": "Low-dim: reaction level. High-dim: structure level. Low-dim: emotion-driven. High-dim: structure-guided. Low-dim: chasing results. High-dim: designing systems."}, {"title": "第一部主題：靈魂本體論", "en": "Part 1: Soul Ontology", "zh": "理解靈魂的本質。認識高維內在結構。了解信念、情緒、認知的耦合關係。為重構奠定理論基礎。", "en_full": "Understanding soul essence. Recognizing high-dimensional inner structure. Learning belief-emotion-cognition coupling."}, {"title": "第二部主題：重構工程", "en": "Part 2: Reconstruction Engineering", "zh": "五大工程：感知重構、語言重構、情緒重構、身份重構、目標重構。每一項都是系統級別的升級。", "en_full": "Five works: perception, language, emotion, identity, goal reconstruction. Each system-level upgrade."}, {"title": "第三部主題：系統模型", "en": "Part 3: System Model", "zh": "完整的系統架構。三大骨架×五大運算。8模組×9層級。矩陣式的全景理解。精確定位問題根源。", "en_full": "Complete system architecture. Three frameworks × Five operations. 8 modules × 9 levels. Matrix perspective."}, {"title": "第四部主題：實踐應用", "en": "Part 4: Practical Application", "zh": "日常生活的應用。如何識別失衡。如何啟動更新。如何在工作、關係、健康中實施重構。", "en_full": "Daily life application. Identifying imbalance. Starting update. Applying reconstruction in work, relationships, health."}, {"title": "第五部主題：智慧生成", "en": "Part 5: Wisdom Generation", "zh": "從重構到生成高維智慧。從系統修復到系統進化。從問題解決到生命設計。最終目標=完整的人生重生。", "en_full": "From reconstruction to high-dimensional wisdom. From system repair to evolution. From problem-solving to life design."}]}, "靈魂重構工程學_2": {"sections": [{"title": "系統不是什麼", "en": "What System Is NOT", "zh": "不是心靈安慰課。不是知識堆積課。不是情緒療癒課。不是短期激勵課。也不是另一種靈性修行。", "en_full": "NOT comfort course. NOT knowledge accumulation. NOT emotion therapy. NOT short-term motivation. NOT another spiritual practice."}, {"title": "系統本質是什麼", "en": "What System IS", "zh": "是：重新建構人格模型的工程系統。是一套完整的人生系統重建工程。是結構層面的徹底重構。", "en_full": "IS: Personality model reconstruction engineering. Complete life system reengineering. Fundamental structural reconstruction."}, {"title": "AI時代真正缺什麼", "en": "What AI Era Truly Lacks", "zh": "AI時代不缺資訊。不缺知識。不缺技能。缺：抽象能力、問題拆解能力、模型生成能力、誤差修正能力、跨領域整合能力、持續更新能力。", "en_full": "NOT lacking information, knowledge, skills. LACKING: abstraction, decomposition, model generation, error correction, cross-domain integration, continuous update."}, {"title": "本體層：核心是什麼", "en": "Ontology Layer: Core", "zh": "真正核心不是理論。不是技巧。而是對「人如何生成」的根本理解。認識到人生是可設計的系統。", "en_full": "Core is NOT theory or technique. BUT fundamental understanding of how humans generate. Recognizing life as designable system."}, {"title": "結構層：架構是什麼", "en": "Structure Layer: Architecture", "zh": "智慧生成系統的真正架構。不是App。不是課程。而是系統論基礎上的完整運算體系。理論+工具+方法的統一。", "en_full": "True wisdom system architecture. NOT app or course. BUT computation system based on systems theory. Theory+tools+methods unified."}, {"title": "機制層：語言的力量", "en": "Mechanism Layer: Power of Language", "zh": "語言不是只是表達。語言會分類世界、定義世界、預測世界。語言會塑造思維、生成情緒、創造現實。", "en_full": "Language NOT just expression. Language classifies, defines, predicts world. Shapes thinking, generates emotion, creates reality."}, {"title": "語言對大腦的影響", "en": "Language Impact on Brain", "zh": "你長期怎麼說世界，大腦就怎麼預測世界。你長期怎麼說自己，人格就怎麼形成。語言在訓練神經系統。", "en_full": "How you say world = how brain predicts. How you say self = how personality forms. Language trains nervous system."}, {"title": "低維語言的陷阱", "en": "Low-Dimensional Language Trap", "zh": "低維語言：我沒辦法、我完了、我太差了、都是別人的錯。這樣的語言會讓世界：越來越危險、越來越羞恥、越來越警報。", "en_full": "Low-dim language: I can't, I'm doomed, I'm bad, it's others' fault. Makes world: more dangerous, shameful, alarming."}, {"title": "高維語言的力量", "en": "High-Dimensional Language Power", "zh": "高維語言：我的系統需要重新校準、這是誤差信號、我可以重新設計、這是學習機會。高維語言讓人開始理解結構、理解生成、理解更新。", "en_full": "High-dim language: my system needs recalibration, error signal, I can redesign, learning opportunity. Enables understanding structure, generation, update."}, {"title": "升維的第一步", "en": "First Step of Upgrade", "zh": "升維的第一步，很多時候不是換人生。而是先換語言。換一套更高維的表述方式。開始用系統語言思考。", "en_full": "First upgrade step is NOT changing life, BUT changing language. Higher-dimensional expression. Starting to think in system language."}, {"title": "語言與命運的關係", "en": "Language and Destiny", "zh": "語言最後會改變命運。不是迷信。而是語言改變預測→改變決策→改變行動→改變結果。這是因果的自然延伸。", "en_full": "Language ultimately changes destiny. NOT superstition. Language changes prediction→decision→action→result. Natural causality."}, {"title": "8大AI時代能力", "en": "8 AI Era Abilities", "zh": "抽象能力、拆解能力、生成能力、誤差修正能力、跨領域整合能力、持續更新能力、自我再生成能力、真正成長能力。這8項才是關鍵。", "en_full": "Abstraction, decomposition, generation, error correction, cross-domain integration, continuous update, self-regeneration, true growth. These 8 are key."}, {"title": "系統論基礎", "en": "Systems Theory Foundation", "zh": "人不是零件。而是一個複雜的自適應系統。系統有輸入、運算、輸出、反饋。理解系統才能理解人生。", "en_full": "Humans NOT components. Complex adaptive system. Has input, computation, output, feedback. Understanding systems = understanding life."}, {"title": "模型生成能力", "en": "Model Generation Ability", "zh": "能從觀察中識別模式。能用數據構建模型。能用模型預測未來。能不斷優化模型。這是AI時代的核心能力。", "en_full": "Identifying patterns from observation. Building models from data. Predicting with models. Continuously optimizing. Core AI era skill."}, {"title": "ROOT認識總結", "en": "ROOT Understanding Summary", "zh": "靈魂重構=從低維模型→高維模型的升級。從被動反應→主動設計的轉變。從混亂系統→有序系統的重構。", "en_full": "Soul reconstruction = low-dim → high-dim upgrade. Passive reaction → active design. Chaotic → ordered system."}, {"title": "應用層方向", "en": "Application Layer Direction", "zh": "理論要落地。系統要實踐。重構要進行。最終目標是讓每個人都能設計自己、更新自己、生成自己。", "en_full": "Theory applied. System practiced. Reconstruction performed. Ultimate goal: everyone can design, update, regenerate themselves."}]}, "靈魂重構工程": {"sections": [{"title": "本質不是三種東西", "en": "NOT Three Things", "zh": "靈魂重構工程學本質不是：心靈雞湯。不是宗教口號。不是短期療癒。這三種都不是。", "en_full": "Soul Reconstruction Engineering is NOT: comfort chicken soup, religion motto, short-term therapy. None of these."}, {"title": "本質是系統重建", "en": "IS System Rebuilding", "zh": "本質是：「整個生命系統的重新建模」。不是修補。不是逃避。而是系統級別的完全重構。", "en_full": "IS: \"Complete life system remodeling\". NOT patching or escaping. BUT system-level fundamental reconstruction."}, {"title": "靈魂的高維定義", "en": "Soul High-Dimensional Definition", "zh": "靈魂不是鬼魂概念。靈魂是：「你如何感知世界、解釋世界、預測世界、生成自己人生的核心模型」。高維內在結構。", "en_full": "Soul NOT ghost concept. Soul is: \"core model of how you perceive, interpret, predict world, generate your life\". High-dimensional inner structure."}, {"title": "靈魂的四個維度", "en": "Four Dimensions of Soul", "zh": "感知維度：你看世界的方式。解釋維度：你理解事件的方式。預測維度：你期待未來的方式。生成維度：你創造人生的方式。", "en_full": "Perception: how you see world. Interpretation: how you understand events. Prediction: how you expect future. Generation: how you create life."}, {"title": "靈魂狀態決定人生", "en": "Soul State Determines Life", "zh": "靈魂狀態決定：情緒是否流動、注意力是否清晰、關係是否健康、選擇是否明智、能量是否充足、身體是否健康、免疫是否強大、人生路徑是否光明。", "en_full": "Soul state determines: emotion flow, attention clarity, relationship health, choice wisdom, energy sufficiency, body health, immunity strength, life path brightness."}, {"title": "真正的崩潰是什麼", "en": "What Is True Collapse", "zh": "真正的崩潰通常不是事件本身崩潰。而是內在模型失效。模型失效會導致所有系統連鎖失效。這時候需要重構。", "en_full": "True collapse is NOT event itself. BUT inner model failure. Model failure causes cascade system failure. Then reconstruction needed."}, {"title": "五大重構工程", "en": "Five Reconstruction Works", "zh": "①感知重構：從情緒化→結構化。②語言重構：從低維→高維。③情緒重構：從壓抑爆炸→流動穩定。④身份重構：從固定→流動。⑤目標重構：從短期→長期。", "en_full": "①Perception: emotional→structural. ②Language: low→high-dim. ③Emotion: suppress/explode→flow/stable. ④Identity: fixed→fluid. ⑤Goal: short→long-term."}, {"title": "感知重構的方向", "en": "Perception Reconstruction Direction", "zh": "從看表面→看結構。從情緒反應→理性分析。從主觀感受→客觀認知。從被動觀察→主動建模。能看見世界的本質。", "en_full": "Surface→structure. Emotional→rational. Subjective→objective. Passive→active. Seeing world's essence."}, {"title": "語言重構的力量", "en": "Language Reconstruction Power", "zh": "例如：舊語言「我完了」→新語言「我的系統需要重新校準」。舊語言「都是別人的錯」→新語言「這是我的學習信號」。語言改變會帶來思想、情緒、行動的連鎖改變。", "en_full": "Old: \"I'm doomed\"→New: \"My system needs recalibration\". Old: \"Others' fault\"→New: \"My learning signal\". Language change cascades thinking, emotion, action."}, {"title": "情緒重構的過程", "en": "Emotion Reconstruction Process", "zh": "不是壓抑情緒。也不是爆發情緒。而是讓情緒流動。理解情緒信號。利用情緒能量。從被情緒控制→用情緒指導。", "en_full": "NOT suppress or explode. BUT let emotions flow. Understanding signals. Using energy. From emotion-controlled to emotion-guided."}, {"title": "身份重構的關鍵", "en": "Identity Reconstruction Key", "zh": "舊身份：受害者、討好者、完美主義者、不值得被愛者。這些舊身份困住人。身份重構就是換一個高維的身份視角。學習者、創造者、設計者、不斷進化的系統。", "en_full": "Old: victim, people-pleaser, perfectionist, unworthy. These trap us. Identity reconstruction: learner, creator, designer, evolving system."}, {"title": "目標重構的智慧", "en": "Goal Reconstruction Wisdom", "zh": "很多人痛苦不是沒努力。而是追錯東西。追認同、追控制、追短期刺激、追安全感。真正高維目標：低熵穩定、長期生成、深度連結、持續更新、提高生命流動性。", "en_full": "Pain NOT lack of effort, BUT chasing wrong things. Recognition, control, stimulation, safety. True high-dim: low-entropy stability, long-term generation, deep connection, continuous update, life flow."}, {"title": "重構與修復的差別", "en": "Reconstruction vs Repair", "zh": "修復=修修補補舊系統。重構=設計全新系統。修復是被動應對。重構是主動設計。修復治標。重構治本。", "en_full": "Repair = patching old system. Reconstruction = designing new system. Repair = passive response. Reconstruction = active design. Repair = symptom. Reconstruction = root."}, {"title": "系統性思維", "en": "Systemic Thinking", "zh": "不是單點解決問題。而是看整個系統的運作邏輯。一個問題通常是系統失衡的表現。所以要重構整個系統。", "en_full": "NOT solving single point problems. BUT seeing whole system logic. One problem is system imbalance symptom. So reconstruct entire system."}, {"title": "低熵vs高熵", "en": "Low-Entropy vs High-Entropy", "zh": "高熵狀態：混亂、無序、衰落、痛苦、疲憊。低熵狀態：有序、穩定、生機、活力、持續。重構目標就是從高熵→低熵。", "en_full": "High-entropy: chaos, disorder, decline, pain, fatigue. Low-entropy: order, stability, vitality, energy, continuation. Goal: high→low-entropy."}, {"title": "重構的最終目標", "en": "Ultimate Goal of Reconstruction", "zh": "讓生命系統從高熵崩潰狀態，重新恢復：可更新、可流動、可生成、可長期穩定運轉。這就是完整的靈魂重構。", "en_full": "Restore life system from high-entropy collapse to: updatable, flowable, generative, long-term stable. Complete soul reconstruction."}]}, "靈魂工程": {"sections": [{"title": "核心核心論述", "en": "Core Thesis", "zh": "人生不是固定命運。人生是：持續更新的預測模型。不是你被設定好。而是你在不斷生成自己。", "en_full": "Life NOT fixed destiny. Life IS: continuously updated prediction model. NOT predefined. BUT constantly self-generating."}, {"title": "這本書是什麼", "en": "What This Book Is", "zh": "這不是一本心靈雞湯。這不是一本勵志書。而是一套：人格更新工程學。系統化、結構化、可實操的人生重構方案。", "en_full": "NOT comfort book or motivation book. BUT: Personality update engineering. Systematic, structural, practical life reconstruction."}, {"title": "融合的學科", "en": "Integrated Disciplines", "zh": "融合了：AI模型訓練、系統論、神經科學、佛學觀照、心理學、抽象思維、高維語言、智慧生成系統。多領域知識的統一框架。", "en_full": "Integrated: AI training, systems theory, neuroscience, Buddhist insight, psychology, abstract thinking, high-dim language, wisdom systems."}, {"title": "痛苦的真正含義", "en": "True Meaning of Pain", "zh": "痛苦不是終點。痛苦是：模型誤差的警告信號。是身體和心靈在說：該改變了。痛苦是重構的起點。", "en_full": "Pain NOT endpoint. Pain IS: error warning signal. Body and mind saying: time to change. Pain is reconstruction start."}, {"title": "崩塌與新生", "en": "Collapse and Rebirth", "zh": "舊人格會崩塌。舊世界會瓦解。舊信念會失效。這不是毀滅。這是新生的開始。從舊人格→新人格。從被動→主動。", "en_full": "Old personality collapses. Old world crumbles. Old beliefs fail. NOT destruction. BUT rebirth beginning. Old→new personality. Passive→active."}, {"title": "五個進化階段", "en": "Five Evolution Stages", "zh": "①看見痛苦：認識到問題。②理解結構：看見底層模型。③啟動改變：開始重構。④實現升級：系統更新。⑤持續生成：不斷進化。", "en_full": "①See pain: recognize problem. ②Understand structure: see underlying model. ③Initiate change: start reconstruction. ④Achieve upgrade: system update. ⑤Continuous generation: ongoing evolution."}, {"title": "從情緒看見結構", "en": "See Structure from Emotion", "zh": "情緒不是無理由的。每一個情緒都指向一個底層信念或模型問題。從情緒出發→看見結構→理解問題→解決問題。", "en_full": "Emotion NOT random. Every emotion points to underlying belief or model issue. Emotion→structure→understanding→solution."}, {"title": "從痛苦看見模型", "en": "See Model from Pain", "zh": "痛苦是你的內在模型遇到了現實。模型和現實不匹配時，就產生痛苦。痛苦正在告訴你：該更新模型了。", "en_full": "Pain is inner model meeting reality. Mismatch between model and reality creates pain. Pain says: update model."}, {"title": "從誤差啟動更新", "en": "Start Update from Error", "zh": "錯誤、失敗、誤差不是壞事。這些都是你的系統告訴你：有改進空間。從誤差信號出發，啟動系統更新。", "en_full": "Errors, failures, mistakes NOT bad. System telling you: room for improvement. From error signals, start system update."}, {"title": "從更新生成智慧", "en": "Generate Wisdom from Update", "zh": "不斷更新不是為了追求完美。而是為了提升預測精度。提升精度就是生成智慧。智慧就是更新的累積。", "en_full": "Continuous update NOT chasing perfection. BUT improving prediction accuracy. Accuracy = wisdom generation. Wisdom = accumulated updates."}, {"title": "第一部：舊世界如何崩塌", "en": "Part 1: How Old World Collapses", "zh": "新變量進入導致舊模型失效。新知、新人、新事件、新觀點都會衝擊舊認知。舊世界開始搖晃。這是必須經歷的過程。", "en_full": "New variables cause old models to fail. New knowledge, people, events, perspectives shock old cognition. Old world shakes. Necessary process."}, {"title": "第二部：人格如何重建", "en": "Part 2: How Personality Rebuilds", "zh": "從識別舊人格開始。看見固有模式。理解形成過程。逐步拆解舊結構。再逐步建立新結構。人格重建是一個系統過程。", "en_full": "Start identifying old personality. See patterns. Understand formation. Gradually deconstruct old. Gradually build new. Personality rebuild is systematic."}, {"title": "第三部：模型如何更新", "en": "Part 3: How Models Update", "zh": "不是一次性的改變。而是持續迭代的過程。每一次遇見、每一次失敗、每一次學習都更新模型。這個過程永遠不會停止。", "en_full": "NOT one-time change. BUT continuous iteration. Every encounter, failure, learning updates model. Process never stops."}, {"title": "第四部：智慧如何生成", "en": "Part 4: How Wisdom Generates", "zh": "智慧不是知識的堆積。智慧是經過理解、實踐、反思、迭代而來的深度認知。智慧就是不斷更新過程中形成的高維認知。", "en_full": "Wisdom NOT knowledge accumulation. Wisdom is deep cognition from understanding, practice, reflection, iteration. High-dimensional cognition from updates."}, {"title": "第五部：新人格的誕生", "en": "Part 5: New Personality Birth", "zh": "舊人格死去，新人格誕生。從被動反應者→主動設計者。從被命運驅動→自我生成。從零散的人→系統性的人。完整的重生。", "en_full": "Old personality dies, new born. Passive reactor→active designer. Fate-driven→self-generating. Scattered→systematic. Complete rebirth."}, {"title": "AI時代的人格類型", "en": "AI Era Personality Type", "zh": "AI時代不需要舊人格類型。需要的是：可學習、可升級、可重構的人。不斷進化的人。能夠自我設計的人。這才是新時代的人格。", "en_full": "AI era NOT old personality types. NEEDS: learnable, upgradeable, reconstructible people. Constantly evolving. Self-designing. New era personality."}]}, "靈魂8模組___意識醫學9層級": {"sections": [{"title": "8個靈魂模組概述", "en": "8 Soul Modules Overview", "zh": "感知、情緒、信念、身份、能量、關係、更新、意識。這8個模組構成完整的人格系統。每個模組都有低維和高維兩種狀態。", "en_full": "Perception, Emotion, Belief, Identity, Energy, Relationship, Evolution, Awareness. 8 modules form complete personality. Each has low/high-dim states."}, {"title": "①感知模組", "en": "① Perception Module", "zh": "觀察世界的能力。決定你看到什麼、忽視什麼。低維感知=情緒化、片面。高維感知=結構化、全面。能看見本質和變量。", "en_full": "World observation ability. Determines what you see/ignore. Low-dim: emotional, one-sided. High-dim: structural, comprehensive. See essence and variables."}, {"title": "②情緒模組", "en": "② Emotion Module", "zh": "情感流動系統。決定能量狀態和反應方式。低維情緒=壓抑或爆發。高維情緒=理解和流動。情緒成為指導信號。", "en_full": "Emotion flow system. Determines energy state and response. Low-dim: suppress or explode. High-dim: understand and flow. Emotion as guide signal."}, {"title": "③信念模組", "en": "③ Belief Module", "zh": "深層預測模型。決定你預期什麼、期待什麼。低維信念=限制性、受害者。高維信念=可能性、創造者。信念改變，世界改變。", "en_full": "Deep prediction model. Determines expectations. Low-dim: limiting, victim. High-dim: possibility, creator. Belief changes, world changes."}, {"title": "④身份模組", "en": "④ Identity Module", "zh": "自我定義和認知。決定「我是誰」。低維身份=固定、受困。高維身份=流動、持續進化。身份升級帶來整體升級。", "en_full": "Self definition and recognition. Determines \"who I am\". Low-dim: fixed, trapped. High-dim: fluid, evolving. Identity upgrade brings total upgrade."}, {"title": "⑤能量模組", "en": "⑤ Energy Module", "zh": "系統供能狀態。決定你有多少動力。低維能量=耗散、疲憊。高維能量=充足、流動。能量管理=人生管理。", "en_full": "System energy state. Determines motivation level. Low-dim: depleted, fatigued. High-dim: sufficient, flowing. Energy management = life management."}, {"title": "⑥關係模組", "en": "⑥ Relationship Module", "zh": "連結品質和互動模式。決定關係品質。低維關係=依附、討好、控制。高維關係=平等、尊重、共創。關係是鏡子，映照自我。", "en_full": "Connection quality and interaction patterns. Determines relationship quality. Low-dim: attachment, pleasing, control. High-dim: equal, respect, co-create. Relationships mirror self."}, {"title": "⑦更新模組", "en": "⑦ Evolution Module", "zh": "迭代升級的能力。決定你能多快進化。低維更新=重複老模式。高維更新=持續學習和優化。這是最關鍵的模組。", "en_full": "Iteration upgrade ability. Determines evolution speed. Low-dim: repeat old patterns. High-dim: continuous learning and optimization. Most critical module."}, {"title": "⑧意識模組", "en": "⑧ Awareness Module", "zh": "覺察能力和自我反思。決定你的清醒度。低維意識=無覺察、被動。高維意識=高覺察、主動。意識是一切的基礎。", "en_full": "Awareness and self-reflection. Determines consciousness level. Low-dim: unaware, passive. High-dim: highly aware, active. Foundation of all."}, {"title": "9層級框架①環境層", "en": "9 Levels ① Environment", "zh": "外界刺激和環境影響。高刺激→系統警戒。低刺激→穩定節律。第一步是穩定環境，降低外在噪音。", "en_full": "External stimuli and environment. High stimulus→system alert. Low stimulus→stable rhythm. First: stabilize environment, reduce noise."}, {"title": "9層級框架②生理層", "en": "9 Levels ② Physical", "zh": "身體供能和修復系統。睡眠、呼吸、腸道健康、血糖穩定、安全感建立。生理層失衡=所有層級失衡。", "en_full": "Body energy and repair system. Sleep, breathing, gut health, blood sugar stability, safety. Physical imbalance = all levels fail."}, {"title": "9層級框架③④⑤中層", "en": "9 Levels ③④⑤ Mid", "zh": "③情緒層：情緒是否穩定流動。④認知層：思維是否清晰。⑤身份層：自我認知是否健全。中層是轉折點。", "en_full": "③Emotion: stable flow? ④Cognition: clear thinking? ⑤Identity: healthy self? Mid-levels are turning points."}, {"title": "9層級框架⑥⑦⑧⑨上層", "en": "9 Levels ⑥⑦⑧⑨ Upper", "zh": "⑥關係層：連結品質。⑦進化層：持續更新。⑧意識層：深度覺察。⑨存在層：生命意義。上層決定人生方向。", "en_full": "⑥Relation: connection quality. ⑦Evolution: continuous update. ⑧Awareness: deep insight. ⑨Existence: life meaning. Upper determines direction."}, {"title": "矩陣結構的力量", "en": "Power of Matrix Structure", "zh": "8模組×9層級=72個交點。每個交點都是潛在的失衡點或升級點。用矩陣思維可以精確定位問題，精準設計解決方案。", "en_full": "8 modules × 9 levels = 72 intersection points. Each is potential imbalance or upgrade point. Matrix thinking enables precise problem location and solution design."}, {"title": "低維狀態特徵（高熵）", "en": "Low-Dimensional State (High-Entropy)", "zh": "高刺激、資訊污染、長期警戒、情緒波動、思維混亂、身份困惑、能量耗散、關係糾纏、無法更新、意識模糊。這是崩潰狀態。", "en_full": "High stimulus, info pollution, chronic alert, emotion chaos, thinking confusion, identity confusion, energy depletion, relationship entanglement, can't update, vague awareness. Collapse state."}, {"title": "高維狀態特徵（低熵）", "en": "High-Dimensional State (Low-Entropy)", "zh": "適度刺激、信息清晰、安全感十足、情緒穩定、思維清晰、身份堅定、能量充足、關係健康、持續更新、意識清明。這是最佳狀態。", "en_full": "Optimal stimulus, clear info, secure, stable emotion, clear thinking, strong identity, sufficient energy, healthy relations, continuous update, bright awareness. Optimal state."}, {"title": "診斷與重構", "en": "Diagnosis and Reconstruction", "zh": "用矩陣找出失衡點。在該層級應用相應的重構方案。優先修復底層（生理、環境）。然後向上層逐步升級。", "en_full": "Use matrix to find imbalance points. Apply reconstruction at that level. Prioritize lower levels (physical, environment). Then gradually upgrade upward."}, {"title": "持續監測機制", "en": "Continuous Monitoring", "zh": "不是一次性的重構。而是建立監測機制，持續觀察8個模組在9個層級的狀態。及時調整。持續迭代。這才是真正的系統思維。", "en_full": "NOT one-time reconstruction. BUT continuous monitoring system. Observe 8 modules at 9 levels. Adjust timely. Iterate continuously. True systems thinking."}]}};
+        
+        function init() {
+            renderTabs();
+            renderDocs();
+        }
+        
+        function renderTabs() {
+            const tabsContainer = document.getElementById('docTabs');
+            const docNames = Object.keys(contentData);
+            
+            docNames.forEach((docName, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'doc-tab' + (idx === 0 ? ' active' : '');
+                btn.textContent = docName;
+                btn.onclick = () => switchDoc(docName, btn);
+                tabsContainer.appendChild(btn);
+            });
+        }
+        
+        function switchDoc(docName, btn) {
+            document.querySelectorAll('.doc-section').forEach(s => s.classList.remove('active'));
+            document.getElementById('doc-' + docName.replace(/[\s_]/g, '-')).classList.add('active');
+            
+            document.querySelectorAll('.doc-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            window.scrollTo(0, 0);
+        }
+        
+        function renderDocs() {
+            const container = document.getElementById('docsContainer');
+            const docNames = Object.keys(contentData);
+            
+            docNames.forEach((docName, docIdx) => {
+                const docId = 'doc-' + docName.replace(/[\s_]/g, '-');
+                const docDiv = document.createElement('div');
+                docDiv.className = 'doc-section' + (docIdx === 0 ? ' active' : '');
+                docDiv.id = docId;
+                
+                const sectionCount = contentData[docName].sections.length;
+                
+                // 文檔頭
+                const headerHtml = `
+                    <div class="doc-header">
+                        <h2>${docName}</h2>
+                        <div class="section-count">📑 ${sectionCount} 個內容部分</div>
+                    </div>
+                `;
+                docDiv.innerHTML = headerHtml;
+                
+                // 心智圖
+                if (diagramsData[docName]) {
+                    const mindmapHtml = `
+                        <div class="diagram-section">
+                            <div class="diagram-title">📊 知識心智圖 | Knowledge Mind Map</div>
+                            <div class="diagram-container">
+                                ${diagramsData[docName].mindmap}
+                            </div>
+                        </div>
+                    `;
+                    docDiv.innerHTML += mindmapHtml;
+                    
+                    // 架構圖
+                    const archHtml = `
+                        <div class="diagram-section">
+                            <div class="diagram-title">🏗️ 架構圖 | Architecture Diagram</div>
+                            <div class="diagram-container">
+                                ${diagramsData[docName].architecture}
+                            </div>
+                        </div>
+                    `;
+                    docDiv.innerHTML += archHtml;
+                }
+                
+                // 內容區域
+                const contentHtml = `<div class="content-sections" id="content-${docId}"></div>`;
+                docDiv.innerHTML += contentHtml;
+                
+                container.appendChild(docDiv);
+                
+                // 渲染內容卡片
+                const contentContainer = document.getElementById('content-' + docId);
+                const sections = contentData[docName].sections;
+                
+                sections.forEach((section, idx) => {
+                    const card = document.createElement('div');
+                    card.className = 'content-card' + (idx === 0 ? ' open' : '');
+                    
+                    const header = document.createElement('div');
+                    header.className = 'content-header';
+                    
+                    const title = document.createElement('div');
+                    title.className = 'content-title';
+                    title.textContent = section.title;
+                    
+                    const toggle = document.createElement('div');
+                    toggle.className = 'content-toggle';
+                    toggle.textContent = '▼';
+                    
+                    header.appendChild(title);
+                    header.appendChild(toggle);
+                    header.onclick = () => card.classList.toggle('open');
+                    
+                    const body = document.createElement('div');
+                    body.className = 'content-body';
+                    
+                    const bilingual = document.createElement('div');
+                    bilingual.className = 'bilingual-layout';
+                    bilingual.innerHTML = `
+                        <div class="lang-column">
+                            <div class="lang-header">🇨🇳 中文</div>
+                            <div class="text-content">${section.zh}</div>
+                        </div>
+                        <div class="lang-column">
+                            <div class="lang-header">
+                                🇺🇸 English
+                                <button class="tts-btn" onclick="playTTS(this, '${idx}')">🔊</button>
+                            </div>
+                            <div class="text-content" data-en="${section.en_full}">${section.en_full}</div>
+                        </div>
+                    `;
+                    
+                    body.appendChild(bilingual);
+                    card.appendChild(header);
+                    card.appendChild(body);
+                    contentContainer.appendChild(card);
+                });
+            });
+        }
+        
+        function playTTS(btn, index) {
+            if (!window.speechSynthesis) return;
+            
+            window.speechSynthesis.cancel();
+            
+            const textContent = btn.closest('.lang-column').querySelector('.text-content');
+            const text = textContent.getAttribute('data-en') || textContent.textContent;
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.85;
+            utterance.pitch = 1;
+            
+            btn.classList.add('playing');
+            btn.textContent = '⏸';
+            
+            utterance.onend = () => {
+                btn.classList.remove('playing');
+                btn.textContent = '🔊';
+            };
+            
+            window.speechSynthesis.speak(utterance);
+        }
+        
+        init();
+    </script>
+</body>
+</html>
