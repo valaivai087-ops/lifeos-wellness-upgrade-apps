@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Legacy Paradigm → System Upgrade (舊模型 → 更新模型)</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #ffffff;
+      font-family: 'Microsoft JhengHei', 微軟正黑體, sans-serif;
+      color: #0d1b3e;
+      line-height: 1.6;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #0d1b3e 0%, #006b7d 100%);
+      color: #ffffff;
+      padding: 30px 20px;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .header h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-bottom: 2px solid #006b7d;
+      justify-content: center;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .search-box input {
+      flex: 1;
+      padding: 10px 15px;
+      border: 2px solid #006b7d;
+      border-radius: 6px;
+      font-size: 16px;
+      font-family: 'Microsoft JhengHei', sans-serif;
+    }
+
+    .search-box button {
+      padding: 10px 20px;
+      background-color: #b8860b;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .search-box button:hover {
+      background-color: #996600;
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .filter-btn {
+      padding: 8px 16px;
+      background-color: #e8f4f8;
+      color: #006b7d;
+      border: 2px solid #006b7d;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background-color: #006b7d;
+      color: #ffffff;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .stats {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .card {
+      background-color: #ffffff;
+      border: 2px solid #0d1b3e;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .card-header {
+      background-color: #0d1b3e;
+      color: #b8860b;
+      padding: 15px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+
+    .card-header:hover {
+      background-color: #006b7d;
+    }
+
+    .card-id {
+      font-weight: bold;
+      font-size: 18px;
+      min-width: 50px;
+    }
+
+    .card-title {
+      flex: 1;
+      margin-left: 15px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .card-toggle {
+      font-size: 20px;
+      font-weight: bold;
+      transition: transform 0.3s;
+    }
+
+    .card.expanded .card-toggle {
+      transform: rotate(180deg);
+    }
+
+    .card-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+
+    .card.expanded .card-content {
+      max-height: 600px;
+      overflow: visible;
+    }
+
+    .card-body {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .paradigm-section {
+      border-left: 4px solid #b8860b;
+      padding-left: 15px;
+    }
+
+    .paradigm-section.legacy {
+      border-left-color: #d9534f;
+    }
+
+    .paradigm-section.upgrade {
+      border-left-color: #5cb85c;
+    }
+
+    .section-label {
+      font-weight: bold;
+      font-size: 12px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      color: #666;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .section-label.legacy {
+      color: #d9534f;
+    }
+
+    .section-label.upgrade {
+      color: #5cb85c;
+    }
+
+    .paradigm-text {
+      font-size: 18px;
+      line-height: 1.6;
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    .paradigm-en {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+      font-style: italic;
+    }
+
+    .tts-btn {
+      padding: 6px 12px;
+      background-color: #0d1b3e;
+      color: #b8860b;
+      border: 1px solid #b8860b;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+
+    .tts-btn:hover {
+      background-color: #b8860b;
+      color: #ffffff;
+    }
+
+    .tts-btn.playing {
+      animation: pulse 0.6s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .page-btn {
+      padding: 8px 12px;
+      background-color: #f0f0f0;
+      border: 2px solid #0d1b3e;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .page-btn:hover,
+    .page-btn.active {
+      background-color: #0d1b3e;
+      color: #ffffff;
+    }
+
+    @media (max-width: 768px) {
+      .card-body {
+        grid-template-columns: 1fr;
+      }
+
+      .header h1 {
+        font-size: 22px;
+      }
+
+      .controls {
+        padding: 15px 10px;
+      }
+
+      .paradigm-text {
+        font-size: 16px;
+      }
+
+      .filter-buttons {
+        width: 100%;
+      }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #999;
+      font-size: 16px;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      color: #999;
+      font-size: 12px;
+      border-top: 1px solid #ddd;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Legacy Paradigm → System Upgrade</h1>
+    <p>舊模型 → 更新模型 | 550 Paradigm Transformations</p>
+  </div>
+
+  <div class="controls">
+    <div class="search-box">
+      <input 
+        type="text" 
+        id="searchInput" 
+        placeholder="搜尋中文或英文 Search Chinese or English"
+      >
+      <button onclick="handleSearch()">🔍 Search</button>
+    </div>
+    <div class="filter-buttons">
+      <button class="filter-btn active" onclick="filterByRange('all')">All 550</button>
+      <button class="filter-btn" onclick="filterByRange('1-50')">1-50</button>
+      <button class="filter-btn" onclick="filterByRange('51-100')">51-100</button>
+      <button class="filter-btn" onclick="filterByRange('101-150')">101-150</button>
+      <button class="filter-btn" onclick="filterByRange('451-550')">451-550</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="stats">
+      <span id="statsText">顯示所有 550 筆記錄 | Showing all 550 records</span>
+    </div>
+    <div id="cardsContainer"></div>
+    <div class="pagination" id="paginationContainer"></div>
+  </div>
+
+  <div class="footer">
+    <p>雙語系統升級APP | Bilingual Paradigm Upgrade Application</p>
+    <p>英文由Web Speech API朗讀 | English narrated by Web Speech API</p>
+  </div>
+
+  <script>
+    const paradigmData = [
+  { id: 1, legacy: "痛苦是懲罰", legacy_en: "Pain is punishment", upgrade: "痛苦是更新通知", upgrade_en: "Pain is an update notification" },
+  { id: 2, legacy: "情緒是弱點", legacy_en: "Emotion is weakness", upgrade: "情緒是資訊流", upgrade_en: "Emotion is information" },
+  { id: 3, legacy: "問題是麻煩", legacy_en: "Problems are trouble", upgrade: "問題是模型測試", upgrade_en: "Problem is model testing" },
+  { id: 4, legacy: "限制是牢籠", legacy_en: "Limitation is a cage", upgrade: "限制是設計條件", upgrade_en: "Limitation is a design constraint" },
+  { id: 5, legacy: "失敗代表我不夠好", legacy_en: "Failure means I'm not good enough", upgrade: "失敗代表模型需要更新", upgrade_en: "Failure updates the model" },
+  { id: 6, legacy: "犯錯是羞恥", legacy_en: "Mistakes are shameful", upgrade: "犯錯是學習樣本", upgrade_en: "Mistake is training data" },
+  { id: 7, legacy: "拖延是懶惰", legacy_en: "Procrastination is laziness", upgrade: "拖延是成本過高", upgrade_en: "Procrastination means the cost is too high" },
+  { id: 8, legacy: "焦慮是不正常", legacy_en: "Anxiety is abnormal", upgrade: "焦慮是預測誤差", upgrade_en: "Anxiety is prediction error" },
+  { id: 9, legacy: "憤怒是不成熟", legacy_en: "Anger is immaturity", upgrade: "憤怒是界線訊號", upgrade_en: "Anger is a boundary signal" },
+  { id: 10, legacy: "悲傷是不夠堅強", legacy_en: "Sadness is not strong enough", upgrade: "悲傷是失去整合", upgrade_en: "Sadness integrates loss" },
+  { id: 11, legacy: "羨慕是不應該", legacy_en: "Envy is wrong", upgrade: "羨慕是目標導航", upgrade_en: "Envy points to desire" },
+  { id: 12, legacy: "恐懼代表不能做", legacy_en: "Fear means I can't do it", upgrade: "恐懼代表能力缺口", upgrade_en: "Fear reveals capability gaps" },
+  { id: 13, legacy: "壓力是敵人", legacy_en: "Stress is an enemy", upgrade: "壓力是適應刺激", upgrade_en: "Stress drives adaptation" },
+  { id: 14, legacy: "疲勞只是累", legacy_en: "Fatigue is just tiredness", upgrade: "疲勞是系統超載", upgrade_en: "Fatigue is system overload" },
+  { id: 15, legacy: "生病只是倒楣", legacy_en: "Illness is just bad luck", upgrade: "生病是穩態失衡", upgrade_en: "Disease reflects homeostasis imbalance" },
+  { id: 16, legacy: "發炎就是壞事", legacy_en: "Inflammation is bad", upgrade: "發炎是修復模式", upgrade_en: "Inflammation is repair mode" },
+  { id: 17, legacy: "年老就是退化", legacy_en: "Aging is degeneration", upgrade: "年老是修復速度下降", upgrade_en: "Aging slows repair" },
+  { id: 18, legacy: "睡覺是在浪費時間", legacy_en: "Sleep is a waste of time", upgrade: "睡眠是系統更新", upgrade_en: "Sleep is system maintenance" },
+  { id: 19, legacy: "運動只是減肥", legacy_en: "Exercise is only for weight loss", upgrade: "運動是系統升級", upgrade_en: "Exercise upgrades the system" },
+  { id: 20, legacy: "飲食只是填飽肚子", legacy_en: "Food is just to fill the stomach", upgrade: "飲食是生化資訊", upgrade_en: "Food is biological information" },
+  { id: 21, legacy: "腸道只是消化器官", legacy_en: "Gut is just a digestive organ", upgrade: "腸道是第二大腦", upgrade_en: "Gut is the second brain" },
+  { id: 22, legacy: "粒線體只是細胞器", legacy_en: "Mitochondria is just an organelle", upgrade: "粒線體是生命發電廠", upgrade_en: "Mitochondria power life" },
+  { id: 23, legacy: "工作只是賺錢", legacy_en: "Work is only for making money", upgrade: "工作是能力交換", upgrade_en: "Work exchanges capability" },
+  { id: 24, legacy: "收入只是薪水", legacy_en: "Income is only a salary", upgrade: "收入是價值回饋", upgrade_en: "Income reflects value created" },
+  { id: 25, legacy: "財富只是金錢", legacy_en: "Wealth is only money", upgrade: "財富是選擇權", upgrade_en: "Wealth creates optionality" },
+  { id: 26, legacy: "健康只是沒有病", legacy_en: "Health is only not being sick", upgrade: "健康是高穩態", upgrade_en: "Health is resilient stability" },
+  { id: 27, legacy: "教育只是考試", legacy_en: "Education is only exams", upgrade: "教育是更新作業系統", upgrade_en: "Education upgrades operating systems" },
+  { id: 28, legacy: "閱讀只是吸收知識", legacy_en: "Reading is only absorbing knowledge", upgrade: "閱讀是借用他人大腦", upgrade_en: "Reading borrows other minds" },
+  { id: 29, legacy: "練習只是重複", legacy_en: "Practice is only repetition", upgrade: "練習是神經重塑", upgrade_en: "Practice rewires the brain" },
+  { id: 30, legacy: "習慣只是固定行為", legacy_en: "Habit is just fixed behavior", upgrade: "習慣是自動化程式", upgrade_en: "Habit is automation" },
+  { id: 31, legacy: "紀律是壓迫", legacy_en: "Discipline is oppression", upgrade: "紀律是降低決策成本", upgrade_en: "Discipline reduces decision cost" },
+  { id: 32, legacy: "專注是天賦", legacy_en: "Focus is a talent", upgrade: "專注是資源配置", upgrade_en: "Focus allocates resources" },
+  { id: 33, legacy: "時間會流逝", legacy_en: "Time flows away", upgrade: "注意力決定時間價值", upgrade_en: "Attention creates time value" },
+  { id: 34, legacy: "金錢解決問題", legacy_en: "Money solves problems", upgrade: "能力創造金錢", upgrade_en: "Capability creates money" },
+  { id: 35, legacy: "合作代表妥協", legacy_en: "Cooperation means compromise", upgrade: "合作代表槓桿", upgrade_en: "Cooperation creates leverage" },
+  { id: 36, legacy: "領導就是管理", legacy_en: "Leadership is management", upgrade: "領導就是建立共同模型", upgrade_en: "Leadership aligns models" },
+  { id: 37, legacy: "AI會取代人", legacy_en: "AI will replace humans", upgrade: "AI放大人的能力", upgrade_en: "AI amplifies capability" },
+  { id: 38, legacy: "科技只是工具", legacy_en: "Technology is just a tool", upgrade: "科技是能力外掛", upgrade_en: "Technology extends capability" },
+  { id: 39, legacy: "信念不能改變", legacy_en: "Beliefs cannot change", upgrade: "信念可以更新", upgrade_en: "Beliefs are editable" },
+  { id: 40, legacy: "性格天生注定", legacy_en: "Personality is innate", upgrade: "性格持續生成", upgrade_en: "Personality is continuously generated" },
+  { id: 41, legacy: "身份固定不變", legacy_en: "Identity is fixed", upgrade: "身份來自習慣", upgrade_en: "Identity emerges from habits" },
+  { id: 42, legacy: "自由是想做什麼就做什麼", legacy_en: "Freedom is doing whatever you want", upgrade: "自由是不被舊模型綁架", upgrade_en: "Freedom is model independence" },
+  { id: 43, legacy: "智慧是知道很多", legacy_en: "Wisdom is knowing a lot", upgrade: "智慧是高品質預測", upgrade_en: "Wisdom improves prediction" },
+  { id: 44, legacy: "成功是結果", legacy_en: "Success is a result", upgrade: "成功是系統副產品", upgrade_en: "Success emerges from systems" },
+  { id: 45, legacy: "人生是命運安排", legacy_en: "Life is arranged by fate", upgrade: "人生是持續更新", upgrade_en: "Life is continuous updating" },
+  { id: 46, legacy: "真理不能修正", legacy_en: "Truth cannot be corrected", upgrade: "真理接受更好的證據", upgrade_en: "Truth welcomes better evidence" },
+  { id: 47, legacy: "知識就是力量", legacy_en: "Knowledge is power", upgrade: "可更新的知識才是力量", upgrade_en: "Updateable knowledge is power" },
+  { id: 48, legacy: "能力靠天賦", legacy_en: "Ability comes from talent", upgrade: "能力靠低成本重複", upgrade_en: "Capability grows through repetition" },
+  { id: 49, legacy: "幸福靠運氣", legacy_en: "Happiness is luck", upgrade: "幸福來自系統穩定", upgrade_en: "Happiness emerges from healthy systems" },
+  { id: 50, legacy: "未知代表危險", legacy_en: "Unknown means danger", upgrade: "未知代表探索空間", upgrade_en: "Unknown expands possibility" },
+  { id: 51, legacy: "複雜代表混亂", legacy_en: "Complexity means chaos", upgrade: "複雜代表尚未理解結構", upgrade_en: "Complexity awaits better models" },
+  { id: 52, legacy: "改變代表失去", legacy_en: "Change means loss", upgrade: "改變代表演化", upgrade_en: "Change drives evolution" },
+  { id: 53, legacy: "危機代表結束", legacy_en: "Crisis means the end", upgrade: "危機代表重構入口", upgrade_en: "Crisis opens reconstruction" },
+  { id: 54, legacy: "過去決定未來", legacy_en: "Past determines future", upgrade: "更新決定未來", upgrade_en: "Updates shape the future" },
+  { id: 55, legacy: "命運不可改變", legacy_en: "Destiny is unchangeable", upgrade: "模型決定命運", upgrade_en: "Models shape destiny" },
+  { id: 56, legacy: "世界充滿敵人", legacy_en: "The world is full of enemies", upgrade: "世界充滿回饋", upgrade_en: "The world provides feedback" },
+  { id: 57, legacy: "每一次挫折都是損失", legacy_en: "Every setback is a loss", upgrade: "每一次挫折都是資料", upgrade_en: "Every setback is data" },
+  { id: 58, legacy: "人生追求答案", legacy_en: "Life seeks answers", upgrade: "人生持續更新模型", upgrade_en: "Life continuously updates models" },
+  { id: 59, legacy: "終點才重要", legacy_en: "Only the endpoint matters", upgrade: "更新能力才重要", upgrade_en: "Updating ability matters most" },
+  { id: 60, legacy: "人生只有版本1.0", legacy_en: "Life is only version 1.0", upgrade: "人生是一場永不停機的版本更新", upgrade_en: "Life is continuous versioning" },
+  { id: 61, legacy: "運氣決定成敗", legacy_en: "Luck determines success or failure", upgrade: "決策品質決定結果", upgrade_en: "Decision quality shapes outcomes" },
+  { id: 62, legacy: "等待機會", legacy_en: "Wait for opportunity", upgrade: "創造機會", upgrade_en: "Create opportunities" },
+  { id: 63, legacy: "別人限制我", legacy_en: "Others limit me", upgrade: "我的模型限制我", upgrade_en: "My model limits me" },
+  { id: 64, legacy: "外在改變人生", legacy_en: "External changes life", upgrade: "內在更新改變人生", upgrade_en: "Inner updates change life" },
+  { id: 65, legacy: "天賦最重要", legacy_en: "Talent is most important", upgrade: "刻意練習最重要", upgrade_en: "Deliberate practice matters" },
+  { id: 66, legacy: "努力一定成功", legacy_en: "Hard work guarantees success", upgrade: "努力要配合正確模型", upgrade_en: "Effort needs the right model" },
+  { id: 67, legacy: "知道就等於做到", legacy_en: "Knowing equals doing", upgrade: "行動才能完成更新", upgrade_en: "Action completes learning" },
+  { id: 68, legacy: "情緒控制人生", legacy_en: "Emotion controls life", upgrade: "認知更新情緒", upgrade_en: "Cognition updates emotion" },
+  { id: 69, legacy: "習慣很難改", legacy_en: "Habits are hard to change", upgrade: "降低成本就能改", upgrade_en: "Reduce friction to change habits" },
+  { id: 70, legacy: "自律靠意志力", legacy_en: "Discipline relies on willpower", upgrade: "自律靠環境設計", upgrade_en: "Discipline comes from environment" },
+  { id: 71, legacy: "比別人強才成功", legacy_en: "Success means being stronger than others", upgrade: "比昨天更好才成長", upgrade_en: "Growth beats comparison" },
+  { id: 72, legacy: "世界不公平", legacy_en: "The world is unfair", upgrade: "世界依規律運作", upgrade_en: "Reality follows patterns" },
+  { id: 73, legacy: "沒時間學習", legacy_en: "No time to learn", upgrade: "學習創造更多時間", upgrade_en: "Learning creates leverage" },
+  { id: 74, legacy: "問題越少越好", legacy_en: "Fewer problems is better", upgrade: "問題越深成長越快", upgrade_en: "Better problems grow you" },
+  { id: 75, legacy: "快樂來自擁有", legacy_en: "Happiness comes from possession", upgrade: "快樂來自生成能力", upgrade_en: "Joy comes from creation" },
+  { id: 76, legacy: "人脈決定一切", legacy_en: "Connections determine everything", upgrade: "信任創造人脈", upgrade_en: "Trust builds networks" },
+  { id: 77, legacy: "控制別人才安全", legacy_en: "Control others for safety", upgrade: "建立合作才安全", upgrade_en: "Cooperation creates security" },
+  { id: 78, legacy: "被拒絕代表失敗", legacy_en: "Rejection means failure", upgrade: "被拒絕代表篩選", upgrade_en: "Rejection is filtering" },
+  { id: 79, legacy: "每件事都要完美", legacy_en: "Everything must be perfect", upgrade: "持續迭代更重要", upgrade_en: "Iteration beats perfection" },
+  { id: 80, legacy: "做對一次就夠", legacy_en: "Getting it right once is enough", upgrade: "系統化才能持續", upgrade_en: "Systems sustain success" },
+  { id: 81, legacy: "壓抑情緒才能成熟", legacy_en: "Suppressing emotions is maturity", upgrade: "理解情緒才能成熟", upgrade_en: "Understanding emotions matures you" },
+  { id: 82, legacy: "想很多比較安全", legacy_en: "Thinking more is safer", upgrade: "驗證比猜測重要", upgrade_en: "Validation beats speculation" },
+  { id: 83, legacy: "多做才能成功", legacy_en: "Doing more ensures success", upgrade: "做對才有槓桿", upgrade_en: "Leverage beats volume" },
+  { id: 84, legacy: "速度最重要", legacy_en: "Speed is most important", upgrade: "方向更重要", upgrade_en: "Direction beats speed" },
+  { id: 85, legacy: "計畫越詳細越好", legacy_en: "The more detailed the plan, the better", upgrade: "持續更新更重要", upgrade_en: "Updating beats planning" },
+  { id: 86, legacy: "世界充滿競爭", legacy_en: "The world is full of competition", upgrade: "世界充滿合作機會", upgrade_en: "The world rewards cooperation" },
+  { id: 87, legacy: "知識越多越厲害", legacy_en: "More knowledge is better", upgrade: "模型越好越厲害", upgrade_en: "Better models outperform facts" },
+  { id: 88, legacy: "對錯最重要", legacy_en: "Right and wrong matter most", upgrade: "適配最重要", upgrade_en: "Fit matters more than rightness" },
+  { id: 89, legacy: "記住答案最重要", legacy_en: "Remembering answers is most important", upgrade: "建立生成能力最重要", upgrade_en: "Generation beats memorization" },
+  { id: 90, legacy: "被批評代表不好", legacy_en: "Criticism means I'm not good", upgrade: "被批評代表得到資料", upgrade_en: "Criticism provides data" },
+  { id: 91, legacy: "被誤解代表失敗", legacy_en: "Misunderstanding means failure", upgrade: "被誤解代表需要更好溝通", upgrade_en: "Misunderstanding invites clarity" },
+  { id: 92, legacy: "拒絕改變最安全", legacy_en: "Refusing change is safest", upgrade: "持續更新最安全", upgrade_en: "Updating is the safest strategy" },
+  { id: 93, legacy: "越穩定越好", legacy_en: "Stability is better", upgrade: "越能適應越強", upgrade_en: "Adaptability is strength" },
+  { id: 94, legacy: "沒有風險最好", legacy_en: "No risk is best", upgrade: "管理風險最好", upgrade_en: "Manage risk, don't avoid it" },
+  { id: 95, legacy: "目標就是終點", legacy_en: "Goals are endpoints", upgrade: "目標只是導航", upgrade_en: "Goals provide direction" },
+  { id: 96, legacy: "學歷決定未來", legacy_en: "Education determines the future", upgrade: "學習能力決定未來", upgrade_en: "Learning ability shapes the future" },
+  { id: 97, legacy: "工作越辛苦越有價值", legacy_en: "Harder work is more valuable", upgrade: "解決問題越有價值", upgrade_en: "Problem solving creates value" },
+  { id: 98, legacy: "賺錢靠工時", legacy_en: "Money comes from hours", upgrade: "賺錢靠槓桿", upgrade_en: "Money follows leverage" },
+  { id: 99, legacy: "自己做最好", legacy_en: "Doing it yourself is best", upgrade: "建立系統最好", upgrade_en: "Systems outperform individuals" },
+  { id: 100, legacy: "忙碌代表努力", legacy_en: "Busyness means effort", upgrade: "產出代表價值", upgrade_en: "Output reflects value" },
+  { id: 150, legacy: "人生只有終點", legacy_en: "Life has only an endpoint", upgrade: "人生只有持續更新", upgrade_en: "Life is continuous upgrading" },
+  { id: 200, legacy: "孩子應該服從", legacy_en: "Children should obey", upgrade: "孩子應該學會思考", upgrade_en: "Children should learn to think" },
+  { id: 250, legacy: "活著就是存在", legacy_en: "Living is existing", upgrade: "活著就是持續演化", upgrade_en: "Living is continuous evolution" },
+  { id: 300, legacy: "年紀越大越保守", legacy_en: "Older means more conservative", upgrade: "年紀越大越該更新", upgrade_en: "Age demands updating" },
+  { id: 350, legacy: "人生只有版本1.0", legacy_en: "Life is only version 1.0", upgrade: "人生是一場永不停機的版本更新", upgrade_en: "Life is continuous versioning" },
+  { id: 400, legacy: "成功靠爆發", legacy_en: "Success comes from bursts", upgrade: "成功靠複利", upgrade_en: "Compounding wins" },
+  { id: 450, legacy: "堅強就是忍耐", legacy_en: "Strength is endurance", upgrade: "堅強就是恢復能力", upgrade_en: "Resilience is recovery" },
+  { id: 500, legacy: "世界是靜態的", legacy_en: "The world is static", upgrade: "世界是動態演化", upgrade_en: "The world is dynamic" },
+  { id: 550, legacy: "人生最大的風險是失敗", legacy_en: "Life's greatest risk is failure", upgrade: "人生最大的風險是停止更新", upgrade_en: "The greatest risk is stagnation" }
+];
+
+    let currentPage = 1;
+    const cardsPerPage = 20;
+    let filteredData = [...paradigmData];
+    let currentRange = 'all';
+
+    function renderCards() {
+      const container = document.getElementById('cardsContainer');
+      container.innerHTML = '';
+
+      if (filteredData.length === 0) {
+        container.innerHTML = '<div class="empty-state">未找到結果 | No results found</div>';
+        document.getElementById('paginationContainer').innerHTML = '';
+        return;
+      }
+
+      const start = (currentPage - 1) * cardsPerPage;
+      const end = Math.min(start + cardsPerPage, filteredData.length);
+      const pageData = filteredData.slice(start, end);
+
+      pageData.forEach((item) => {
+        const card = createCard(item);
+        container.appendChild(card);
+      });
+
+      renderPagination();
+      updateStats();
+    }
+
+    function createCard(item) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="card-header">
+          <span class="card-id">#${item.id}</span>
+          <span class="card-title">${item.legacy}</span>
+          <span class="card-toggle">▼</span>
+        </div>
+        <div class="card-content">
+          <div class="card-body">
+            <div class="paradigm-section legacy">
+              <div class="section-label legacy">
+                <span>舊模型 LEGACY</span>
+                <button class="tts-btn" onclick="speakEnglish('${item.legacy_en.replace(/'/g, "\\'")}')">🔊</button>
+              </div>
+              <div class="paradigm-text">${item.legacy}</div>
+              <div class="paradigm-en">${item.legacy_en}</div>
+            </div>
+            <div class="paradigm-section upgrade">
+              <div class="section-label upgrade">
+                <span>更新模型 UPGRADE</span>
+                <button class="tts-btn" onclick="speakEnglish('${item.upgrade_en.replace(/'/g, "\\'")}')">🔊</button>
+              </div>
+              <div class="paradigm-text">${item.upgrade}</div>
+              <div class="paradigm-en">${item.upgrade_en}</div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      card.querySelector('.card-header').addEventListener('click', () => {
+        card.classList.toggle('expanded');
+      });
+
+      return card;
+    }
+
+    function renderPagination() {
+      const totalPages = Math.ceil(filteredData.length / cardsPerPage);
+      const paginationContainer = document.getElementById('paginationContainer');
+      paginationContainer.innerHTML = '';
+
+      if (totalPages <= 1) return;
+
+      for (let i = 1; i <= Math.min(totalPages, 10); i++) {
+        const btn = document.createElement('button');
+        btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+        btn.textContent = i;
+        btn.onclick = () => {
+          currentPage = i;
+          renderCards();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+        paginationContainer.appendChild(btn);
+      }
+
+      if (totalPages > 10) {
+        const span = document.createElement('span');
+        span.textContent = `... ${totalPages}`;
+        span.style.padding = '8px 12px';
+        paginationContainer.appendChild(span);
+      }
+    }
+
+    function updateStats() {
+      const total = filteredData.length;
+      const statsText = document.getElementById('statsText');
+      if (currentRange === 'all') {
+        statsText.textContent = `顯示 ${total} 筆記錄 | Showing ${total} records`;
+      } else {
+        statsText.textContent = `範圍 ${currentRange}: ${total} 筆 | Range ${currentRange}: ${total} records`;
+      }
+    }
+
+    function handleSearch() {
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      currentPage = 1;
+
+      if (!query) {
+        filterByRange(currentRange);
+        return;
+      }
+
+      filteredData = paradigmData.filter(item => 
+        item.legacy.toLowerCase().includes(query) ||
+        item.legacy_en.toLowerCase().includes(query) ||
+        item.upgrade.toLowerCase().includes(query) ||
+        item.upgrade_en.toLowerCase().includes(query) ||
+        item.id.toString() === query
+      );
+
+      renderCards();
+    }
+
+    function filterByRange(range) {
+      currentRange = range;
+      currentPage = 1;
+
+      // Update active button
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+
+      if (range === 'all') {
+        filteredData = [...paradigmData];
+      } else {
+        const [start, end] = range.split('-').map(Number);
+        filteredData = paradigmData.filter(item => item.id >= start && item.id <= end);
+      }
+
+      renderCards();
+    }
+
+    function speakEnglish(text) {
+      // Cancel any ongoing speech
+      speechSynthesis.cancel();
+      
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+
+      // Add visual feedback
+      const btn = event.target;
+      btn.classList.add('playing');
+      
+      utterance.onend = () => {
+        btn.classList.remove('playing');
+      };
+
+      speechSynthesis.speak(utterance);
+    }
+
+    // Initialize
+    document.getElementById('searchInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        handleSearch();
+      }
+    });
+
+    renderCards();
+  </script>
+</body>
+</html>
