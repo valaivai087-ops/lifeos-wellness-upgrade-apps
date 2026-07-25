@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高濃度負離子能量灸 | 健康與療癒的新選擇</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', 微軟正黑體, sans-serif;
+            background-color: #ffffff;
+            color: #1A2B5F;
+            line-height: 1.8;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1A2B5F 0%, #0A7A72 100%);
+            color: #ffffff;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(26, 43, 95, 0.15);
+        }
+
+        header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        header p {
+            font-size: 18px;
+            opacity: 0.95;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 30px 0;
+            justify-content: center;
+        }
+
+        nav button {
+            background-color: #1A2B5F;
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Microsoft JhengHei', sans-serif;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        nav button:hover {
+            background-color: #0A7A72;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(10, 122, 114, 0.3);
+        }
+
+        nav button.active {
+            background-color: #C9960C;
+            box-shadow: 0 4px 12px rgba(201, 150, 12, 0.3);
+        }
+
+        section {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background-color: #f8f9fa;
+            border-left: 4px solid #C9960C;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(26, 43, 95, 0.1);
+            transform: translateX(4px);
+        }
+
+        .card h3 {
+            color: #1A2B5F;
+            font-size: 20px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-content {
+            display: none;
+            color: #333;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        .card.expanded .card-content {
+            display: block;
+        }
+
+        .card-icon {
+            font-size: 24px;
+        }
+
+        .benefit-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .benefit-item {
+            background-color: #f0f4f8;
+            border-left: 4px solid #0A7A72;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .benefit-item strong {
+            color: #0A7A72;
+            font-size: 18px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 15px;
+        }
+
+        .specs-table th, .specs-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .specs-table th {
+            background-color: #1A2B5F;
+            color: white;
+            font-weight: bold;
+        }
+
+        .specs-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .price-highlight {
+            background-color: #fff3cd;
+            border: 2px solid #C9960C;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .price-highlight h3 {
+            color: #1A2B5F;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .price-highlight .price {
+            font-size: 32px;
+            color: #C9960C;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .price-highlight .original {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 18px;
+        }
+
+        .warning-box {
+            background-color: #ffe6e6;
+            border-left: 4px solid #d9534f;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        .warning-box strong {
+            color: #c82333;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            border-left: 4px solid #0A7A72;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        .info-box strong {
+            color: #0A7A72;
+        }
+
+        .upgrade-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f0f4f8 100%);
+            border-left: 4px solid #C9960C;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+        }
+
+        .upgrade-box strong {
+            color: #C9960C;
+            font-size: 16px;
+            display: block;
+            margin: 10px 0 5px 0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: #C9960C;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px 0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-family: 'Microsoft JhengHei', sans-serif;
+        }
+
+        .cta-button:hover {
+            background-color: #1A2B5F;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(201, 150, 12, 0.4);
+        }
+
+        .section-title {
+            color: #1A2B5F;
+            font-size: 28px;
+            margin: 30px 0 20px 0;
+            border-bottom: 3px solid #C9960C;
+            padding-bottom: 10px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .comparison-box {
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #0A7A72;
+        }
+
+        .comparison-box strong {
+            color: #0A7A72;
+        }
+
+        .spec-item {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 15px;
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .spec-item strong {
+            color: #1A2B5F;
+            font-size: 16px;
+        }
+
+        .spec-value {
+            color: #0A7A72;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f0f4f8 100%);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #0A7A72;
+        }
+
+        .feature-card strong {
+            color: #0A7A72;
+            font-size: 16px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .cert-item {
+            background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #0A7A72;
+            text-align: center;
+        }
+
+        .cert-item strong {
+            color: #0A7A72;
+            font-size: 16px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .cert-item p {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .quality-highlight {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left: 4px solid #C9960C;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .quality-highlight strong {
+            color: #C9960C;
+            font-size: 16px;
+            display: block;
+            margin: 10px 0 5px 0;
+        }
+
+        .line-link-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f0f4f8 100%);
+            border-left: 4px solid #C9960C;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .line-link-box h3 {
+            color: #1A2B5F;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .line-link-box p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .line-button {
+            display: inline-block;
+            background-color: #00B900;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 15px 0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-family: 'Microsoft JhengHei', sans-serif;
+        }
+
+        .line-button:hover {
+            background-color: #009000;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 185, 0, 0.4);
+        }
+
+        footer {
+            background-color: #1A2B5F;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        footer p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin: 5px 0;
+        }
+
+        ul {
+            margin-left: 20px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        .conductivity-info {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe6cc 100%);
+            border-left: 4px solid #C9960C;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .conductivity-info strong {
+            color: #856404;
+            font-size: 16px;
+            display: block;
+            margin: 10px 0 5px 0;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 24px;
+            }
+
+            nav {
+                flex-direction: column;
+            }
+
+            nav button {
+                width: 100%;
+            }
+
+            .benefit-list {
+                grid-template-columns: 1fr;
+            }
+
+            .specs-table {
+                font-size: 13px;
+            }
+
+            .specs-table th, .specs-table td {
+                padding: 10px;
+            }
+
+            .spec-item {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cert-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>✨ 高濃度負離子能量灸</h1>
+        <p>自然療癒的力量 × 科學驗證的效果</p>
+    </header>
+
+    <div class="container">
+        <nav>
+            <button onclick="showSection('intro')" class="nav-btn active">為什麼選擇</button>
+            <button onclick="showSection('specs')" class="nav-btn">技術規格</button>
+            <button onclick="showSection('upgrade')" class="nav-btn">新款升級</button>
+            <button onclick="showSection('science')" class="nav-btn">科學原理</button>
+            <button onclick="showSection('benefits')" class="nav-btn">全面功效</button>
+            <button onclick="showSection('safety')" class="nav-btn">安全保障</button>
+            <button onclick="showSection('usage')" class="nav-btn">使用指南</button>
+            <button onclick="showSection('quality')" class="nav-btn">品質保障</button>
+            <button onclick="showSection('pricing')" class="nav-btn">購買資訊</button>
+        </nav>
+
+        <!-- 為什麼選擇我們 -->
+        <section id="intro" class="active">
+            <h2 class="section-title">🌱 為什麼選擇負離子能量灸？</h2>
+            
+            <div class="card">
+                <h3><span class="card-icon">💚</span> 我們的初衷</h3>
+                <div class="card-content">
+                    <p>不是要大家亂花錢，而是幫助大家省錢、走最有效的康復之路。</p>
+                    <p style="margin-top: 10px;">我們不只提供單一產品，而是一個<strong>身心靈整合的療育系統</strong>：</p>
+                    <ul style="margin-top: 10px;">
+                        <li>營養素 → 補充能量、提升免疫力</li>
+                        <li>負離子機 → 協助理療、調整自律神經</li>
+                        <li>身心靈支持 → 減壓、安心、找回希望</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">🎯</span> 我們的願景</h3>
+                <div class="card-content">
+                    <p>癌友、長期病友不只是消費者，更是推廣者。</p>
+                    <ul style="margin-top: 10px;">
+                        <li>一邊療癒自己</li>
+                        <li>一邊幫助別人做理療</li>
+                        <li>同時還能賺取服務費與分享收益</li>
+                    </ul>
+                    <p style="margin-top: 10px;"><strong>💰 一小時負離子灸理療可收 NT$900 以上</strong></p>
+                    <p style="margin-top: 10px;">真正的療癒，來自於：<strong>身體康復 × 心靈安心 × 財務自由</strong></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">🌿</span> 與自然同步</h3>
+                <div class="card-content">
+                    <p>你是否曾在森林、瀑布或高山感到特別舒暢？</p>
+                    <p style="margin-top: 10px;">那是因為空氣中有高濃度的負離子。</p>
+                    <p style="margin-top: 10px;">現代人長時間待在空調房，負離子濃度可能比室外少<strong>10倍以上</strong>。</p>
+                    <p style="margin-top: 10px;">負離子能量灸就是把森林的自然療癒力帶進你的家。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 技術規格 -->
+        <section id="specs">
+            <h2 class="section-title">🔬 公開技術規格</h2>
+
+            <div class="card">
+                <h3><span class="card-icon">📊</span> 負離子濃度</h3>
+                <div class="card-content">
+                    <p><strong>業界領先的濃度數據：</strong></p>
+                    <div class="spec-item">
+                        <strong>發射器近端</strong>
+                        <div class="spec-value">約 70 億個負離子/cm³</div>
+                    </div>
+                    <div class="spec-item">
+                        <strong>1 公尺距離</strong>
+                        <div class="spec-value">約 80 萬個/cm³</div>
+                    </div>
+                    <div class="spec-item">
+                        <strong>2 公尺距離</strong>
+                        <div class="spec-value">約 50 萬個/cm³</div>
+                    </div>
+                    <div class="spec-item">
+                        <strong>3 公尺距離</strong>
+                        <div class="spec-value">約 20 萬個/cm³</div>
+                    </div>
+                    <p style="margin-top: 15px;"><strong>✅ 通過認證：</strong></p>
+                    <ul>
+                        <li>歐盟最嚴格檢測標準</li>
+                        <li>台灣專業高階工程師檢驗</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">⚡</span> 電氣規格</h3>
+                <div class="card-content">
+                    <div class="spec-item">
+                        <strong>額定電壓</strong>
+                        <div class="spec-value">12V（低電壓設計）</div>
+                    </div>
+                    <div class="spec-item">
+                        <strong>額定功率</strong>
+                        <div class="spec-value">3W（超低功率）</div>
+                    </div>
+                    <div class="spec-item">
+                        <strong>台灣使用</strong>
+                        <div class="spec-value">110V 轉接</div>
+                    </div>
+                    <div class="spec-item">
+                        <strong>耗電量參考</strong>
+                        <div class="spec-value">接近小夜燈</div>
+                    </div>
+                    <div class="spec-item">
+                        <strong>連續運轉</strong>
+                        <div class="spec-value">24 小時可用（建議每天停機一次）</div>
+                    </div>
+                    <div class="spec-item">
+                        <strong>充電寶供電</strong>
+                        <div class="spec-value">✅ 支持（上門服務、公園廣場擺攤）</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">🛡️</span> 安全規格</h3>
+                <div class="card-content">
+                    <ul>
+                        <li><strong>低電壓 12V</strong> - 極低觸電風險</li>
+                        <li><strong>低功率 3W</strong> - 幾乎不耗電</li>
+                        <li><strong>設計目標為低臭氧</strong> - 採用奈米富勒烯技術</li>
+                        <li><strong>靜電 ≠ 漏電</strong> - 靜電屬正常現象</li>
+                        <li><strong>無有害輻射</strong> - 廠商認證</li>
+                        <li><strong>新款免接地線</strong> - 使用更安全方便</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">🎛️</span> 產品工作模式</h3>
+                <div class="card-content">
+                    <p><strong>模式 1：理療模式</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>身體需要接導電墊（導流環）</li>
+                        <li>使用距離：5-20 公分（越近越好，只要沒有靜電）</li>
+                        <li>導電墊需直接接觸皮膚，純棉衣物也可</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>模式 2：空氣淨化模式</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>可 24 小時連續運轉</li>
+                        <li>可搭配導電墊（環）使用</li>
+                        <li>不配導電墊只有空氣淨化效果</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;">⚠️ 兩種模式下，<strong>導流墊（環）都要接機器才能發揮效果</strong></p>
+                </div>
+            </div>
+
+            <table class="specs-table">
+                <thead>
+                    <tr>
+                        <th>項目</th>
+                        <th>桌上型</th>
+                        <th>落地型</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>零售價（台幣）</strong></td>
+                        <td>NT$60,000</td>
+                        <td>尚未敲定</td>
+                    </tr>
+                    <tr>
+                        <td><strong>團購價（台幣）</strong></td>
+                        <td>NT$26,000</td>
+                        <td>尚未敲定</td>
+                    </tr>
+                    <tr>
+                        <td><strong>體積和重量</strong></td>
+                        <td>輕便，方便攜帶</td>
+                        <td>支架 + 重量，需放置</td>
+                    </tr>
+                    <tr>
+                        <td><strong>使用方式</strong></td>
+                        <td>放在書桌或床邊，可整晚吹臉</td>
+                        <td>雙主機板，療效最大化</td>
+                    </tr>
+                    <tr>
+                        <td><strong>主要優勢</strong></td>
+                        <td>便於移動和儲存</td>
+                        <td>雙主機板更快生效，療效更強</td>
+                    </tr>
+                    <tr>
+                        <td><strong>導電裝置</strong></td>
+                        <td colspan="2">新款配導流環，可綁在手環上</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 新款升級 -->
+        <section id="upgrade">
+            <h2 class="section-title">🎉 台式離子灸升級優化（新款）</h2>
+
+            <div class="upgrade-box">
+                <p style="font-size: 18px; color: #C9960C; font-weight: bold; text-align: center;">✨ 體感更強、效果更佳！</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <strong>1️⃣ 面積加大</strong>
+                    <p>釋放孔數量增加至 <strong>56孔</strong>，覆蓋更廣面積，養護效果更快！</p>
+                </div>
+
+                <div class="feature-card">
+                    <strong>2️⃣ 程序優化</strong>
+                    <p>開機默認 30 分鐘；可調節 60、120、240、480 分鐘，更多時間調節，適合更多場景使用！</p>
+                </div>
+
+                <div class="feature-card">
+                    <strong>3️⃣ 導流環升級</strong>
+                    <p>導流墊更新為<strong>導流手環</strong>，使用更便捷，可直接綁在手上！</p>
+                </div>
+
+                <div class="feature-card">
+                    <strong>4️⃣ 工藝升級</strong>
+                    <p>釋放針為稀有金屬電鍍 <strong>24K 真金</strong>，品質更佳，效果更穩定！</p>
+                </div>
+
+                <div class="feature-card">
+                    <strong>5️⃣ 外型設計</strong>
+                    <p>外型更美觀大氣，色系以<strong>天空藍</strong>為主，具有放鬆寧靜、清新與活力的意義！</p>
+                </div>
+
+                <div class="feature-card">
+                    <strong>6️⃣ 多場景應用</strong>
+                    <p>可使用充電寶供電，上門服務、公園廣場擺攤，拓客上人不用愁！</p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px; color: #1A2B5F; font-size: 22px;">舊款 vs 新款對比</h3>
+
+            <div class="grid-2" style="margin-top: 20px;">
+                <div class="comparison-box">
+                    <strong style="font-size: 18px; color: #d9534f;">舊款特色</strong>
+                    <ul style="margin-top: 15px;">
+                        <li>✅ 導電布（長方形）</li>
+                        <li>✅ 穩定性好</li>
+                        <li>✅ 價格親民</li>
+                        <li>⚠️ 攜帶不如新款方便</li>
+                        <li>⚠️ 可升級為導流手環</li>
+                    </ul>
+                </div>
+
+                <div class="comparison-box">
+                    <strong style="font-size: 18px; color: #0A7A72;">新款特色</strong>
+                    <ul style="margin-top: 15px;">
+                        <li>✨ 導流手環（可綁在手上）</li>
+                        <li>✨ 56孔設計，效果更強</li>
+                        <li>✨ 時間可調（更靈活）</li>
+                        <li>✨ 24K金針工藝</li>
+                        <li>✨ 免接地線，更安全</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="conductivity-info">
+                <strong>📌 導流墊 / 導流手環的作用</strong>
+                <p>❶ <strong>集中效果：</strong>起到集中效果的作用，讓負離子更精準作用</p>
+                <p>❷ <strong>形成負電位場：</strong>形成循環負電位場，增強療效</p>
+                <p>❸ <strong>導走多餘電子：</strong>把多餘的電子導走，保護身體</p>
+            </div>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <strong>⚠️ 重要提醒：使用導流裝置的正確方式</strong>
+                <ul style="margin-top: 15px;">
+                    <li>導電布或導電手環都要<strong>接在機器上</strong></li>
+                    <li><strong>不能拔掉</strong> - 先接著再開機</li>
+                    <li>如果要負離子滲透身體，<strong>裸露的身體要接觸導電布或導電環</strong></li>
+                    <li>舊款如果想改成導流手環，需要<strong>預訂購買</strong>（約 NT$200）</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 科學原理 -->
+        <section id="science">
+            <h2 class="section-title">🧬 科學驗證的療癒原理</h2>
+
+            <div class="card">
+                <h3><span class="card-icon">🫁</span> 呼吸系統的淨化</h3>
+                <div class="card-content">
+                    <p><strong>高濃度負氧離子（>2000個/cm³）對呼吸系統改善效果明顯。</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>直徑僅 0.001-0.003 微米，可穿透肺泡進入血液</li>
+                        <li>能吸附空氣中的PM2.5，清除效率可提升約<strong>40%</strong></li>
+                        <li>形成隱形保護罩，防止有害微粒進入</li>
+                        <li>纖毛運動加快，呼吸道內病原體停留時間縮短 50%</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>臨床案例：北京協和醫院研究</strong></p>
+                    <p>COPD患者每天接觸高濃度負氧離子2小時，兩週後：</p>
+                    <ul style="margin-top: 10px;">
+                        <li>血氧飽和度提升 <strong>4.2%</strong></li>
+                        <li>喘息症狀緩解率達 <strong>67%</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">🧠</span> 神經系統的天然調節</h3>
+                <div class="card-content">
+                    <p><strong>當負氧離子濃度達 5000個/cm³ 以上，對神經系統的作用明顯。</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>能穿過血腦屏障，使 α 波腦電波振幅增加</li>
+                        <li>帶來深度放鬆感，有效調節自律神經</li>
+                        <li>抑制單胺氧化酶，延緩「快樂激素」分解</li>
+                        <li>醫療級濃度（>10000個/cm³）可改善抑鬱症患者血清 5-羥色胺，兩週內恢復至正常值的 85%</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>日本早稻田大學實驗</strong></p>
+                    <p>受試者在高負氧離子環境工作 3 小時，結果：</p>
+                    <ul style="margin-top: 10px;">
+                        <li>皮質醇下降 <strong>38%</strong></li>
+                        <li>注意力提升 <strong>25%</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">🛡️</span> 免疫系統的智慧開關</h3>
+                <div class="card-content">
+                    <p><strong>高濃度負離子可調整 Th1/Th2 平衡，增強抗病毒能力，同時降低過敏反應。</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>NK 細胞活性提升 <strong>27%</strong></li>
+                        <li>過度活化的 T 細胞受抑 <strong>19%</strong></li>
+                        <li>帶負電的微粒可與免疫細胞受體結合，改變細胞膜通透性</li>
+                        <li>增強抗病毒能力，同時降低過敏反應</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>清華大學動物實驗</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>流感病毒感染存活率提升 <strong>42%</strong></li>
+                        <li>過敏原引起的組胺釋放量下降 <strong>55%</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">❤️</span> 心血管系統的天然助力</h3>
+                <div class="card-content">
+                    <p><strong>每立方厘米 8000 個負氧離子可：</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>提升血液 zeta 電位 <strong>15%</strong>，降低紅細胞聚集率 <strong>22%</strong></li>
+                        <li>血液黏稠度下降，減少血栓風險</li>
+                        <li>增加 eNOS 活性，使 NO 生成量增加 <strong>40%</strong></li>
+                        <li>改善血脂，減少壞膽固醇，提高好膽固醇</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>臨床效果</strong></p>
+                    <p>高血壓患者暴露 2 小時後，收縮壓平均下降 <strong>12mmHg</strong>，無藥物副作用。</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">⏳</span> 細胞抗衰老作用</h3>
+                <div class="card-content">
+                    <p><strong>負氧離子是天然自由基清除劑，可中和羥自由基。</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>皮膚細胞 SOD 活性提升 <strong>35%</strong></li>
+                        <li>端粒酶活性增強 <strong>19%</strong></li>
+                        <li>延緩細胞老化 <strong>28%</strong></li>
+                        <li>阻止脂質過氧化，減緩衰老</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>臨床案例</strong></p>
+                    <p>燒傷患者在高負氧離子病房中：</p>
+                    <ul style="margin-top: 10px;">
+                        <li>表皮再生速度加快 <strong>40%</strong></li>
+                        <li>疤痕發生率下降 <strong>55%</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 全面功效 -->
+        <section id="benefits">
+            <h2 class="section-title">⭐ 負離子的全面功效彙整</h2>
+
+            <div class="card">
+                <h3><span class="card-icon">🎯</span> 十大神奇功效（LINE社群精選）</h3>
+                <div class="card-content">
+                    <div class="benefit-list">
+                        <div class="benefit-item">
+                            <strong>🌿 改善肺功能</strong>
+                            <p>吸入負離子後，肺部氧氣吸收能力提升 20%，同時排出更多二氧化碳達 14%。</p>
+                        </div>
+
+                        <div class="benefit-item">
+                            <strong>💪 增強免疫力</strong>
+                            <p>負離子能淨化血液中的有害物質，加強人體單核吞噬細胞系統功能，提高非特異性免疫功能。</p>
+                        </div>
+
+                        <div class="benefit-item">
+                            <strong>🌡️ 調節酸性體質</strong>
+                            <p>負離子可活化多種酶，有助於改善因攝取過多碳酸飲料或肉類而導致的酸性體質。</p>
+                        </div>
+
+                        <div class="benefit-item">
+                            <strong>💤 改善睡眠和亞健康</strong>
+                            <p>能活化腦內的荷爾蒙 B—內啡肽，穩定自律神經，防止神經衰弱，改善睡眠品質。</p>
+                        </div>
+
+                        <div class="benefit-item">
+                            <strong>🚬 淨化二手煙</strong>
+                            <p>負離子能有效沉降灰塵和細小微粒，中和電視、電腦的輻射與靜電。</p>
+                        </div>
+
+                        <div class="benefit-item">
+                            <strong>🦠 殺菌功能</strong>
+                            <p>負離子容易吸附細菌，導致其結構改變和能量轉移，最終使細菌死亡。</p>
+                        </div>
+
+                        <div class="benefit-item">
+                            <strong>😌 舒緩神經</strong>
+                            <p>有效調節人體自主神經高級中樞，改善腦部皮質功能，對失眠、偏頭痛、神經衰弱有防治效果。</p>
+                        </div>
+
+                        <div class="benefit-item">
+                            <strong>🩺 預防三高</strong>
+                            <p>負離子能降低血壓及血脂，改善心臟功能及心肌營養不良，對糖尿病、心腦血管疾病有防治效果。</p>
+                        </div>
+
+                        <div class="benefit-item">
+                            <strong>🌬️ 改善呼吸功能</strong>
+                            <p>負離子加強氣管黏膜上皮纖毛運動頻率，改善肺功能，防治氣喘及慢性支氣管炎。</p>
+                        </div>
+
+                        <div class="benefit-item">
+                            <strong>🛡️ 提高免疫力</strong>
+                            <p>有效加強人體單核吞噬細胞系統功能，增強人體自身抵抗疾病的能力。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">✨</span> 7大身體系統改善（深度功效分析）</h3>
+                <div class="card-content">
+                    <p><strong>① 細胞充電，啟動生命力</strong></p>
+                    <ul style="margin-top: 10px; margin-bottom: 15px;">
+                        <li>負氧離子可以進入細胞內，給細胞「充電」，讓細胞更活躍</li>
+                        <li>幫助身體自己修復受損組織，提升自然治癒力</li>
+                        <li>啟動休眠的細胞，讓身體補充功能，幫助對抗疾病</li>
+                    </ul>
+
+                    <p><strong>② 神經系統調整</strong></p>
+                    <ul style="margin-top: 10px; margin-bottom: 15px;">
+                        <li>吸入負氧離子後，會刺激肺泡周圍的神經，讓信號傳到全身</li>
+                        <li>幫助呼吸、心臟、肝膽、胃腸、膈肌、腦部等器官保持平衡</li>
+                        <li>改善鼻炎、哮喘、慢性氣管炎、心律不整、失眠、腦疲勞等症狀</li>
+                    </ul>
+
+                    <p><strong>③ 改善血液與體液</strong></p>
+                    <ul style="margin-top: 10px; margin-bottom: 15px;">
+                        <li>血液中的紅血球帶負電，能互相排斥，保持血液流動順暢</li>
+                        <li>補充血液電荷，讓紅血球不聚集，血管暢通</li>
+                        <li>改善血脂，減少壞膽固醇，提高好膽固醇</li>
+                    </ul>
+
+                    <p><strong>④ 提升細胞氧氣供應</strong></p>
+                    <ul style="margin-top: 10px; margin-bottom: 15px;">
+                        <li>負氧離子能增加血液中的氧氣，讓細胞獲得更多能量</li>
+                        <li>抑制血小板釋放阻礙氧氣吸收的物質，改善缺氧狀態</li>
+                        <li>對腦供血不足、心肌供血不足、肺部疾病有幫助</li>
+                    </ul>
+
+                    <p><strong>⑤ 調整細胞「電場」</strong></p>
+                    <ul style="margin-top: 10px; margin-bottom: 15px;">
+                        <li>人體細胞有生物電，負氧離子會形成負離子場</li>
+                        <li>可以幫助細胞場恢復正常，改善身體功能</li>
+                    </ul>
+
+                    <p><strong>⑥ 清除自由基，減緩老化</strong></p>
+                    <ul style="margin-top: 10px; margin-bottom: 15px;">
+                        <li>負氧離子是天然自由基清除劑，能中和有害自由基</li>
+                        <li>增加抗氧化物質（像SOD），保護細胞健康</li>
+                        <li>促進人體自然產生對健康有益的物質</li>
+                    </ul>
+
+                    <p><strong>⑦ 智力與精神保健</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>對腦部有保護作用，可以提升注意力、學習能力和記憶力</li>
+                        <li>幫助舒緩壓力、減少焦慮、改善睡眠品質</li>
+                        <li>提升精神和情緒穩定性</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">🧠</span> 神經衰弱特別對症</h3>
+                <div class="card-content">
+                    <p><strong>什麼是神經衰弱？</strong></p>
+                    <p>現代生活壓力大，精神緊張、容易疲勞，常表現為容易興奮、腦力疲勞、失眠或注意力不集中。</p>
+                    
+                    <p style="margin-top: 15px;"><strong>負離子治療神經衰弱有效嗎？</strong></p>
+                    <p><strong>有效！</strong> 空氣中的小粒徑負離子可以進入人體血腦屏障，影響大腦化學物質。</p>
+                    
+                    <p style="margin-top: 15px;"><strong>臨床研究顯示，負離子能：</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>改善大腦皮質功能，讓人更清醒、精力充沛</li>
+                        <li>消除疲勞，提高工作或學習效率</li>
+                        <li>增加食慾，促進身體健康</li>
+                        <li>改善睡眠質量，對神經衰弱有明顯幫助</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 安全保障 -->
+        <section id="safety">
+            <h2 class="section-title">🔒 安心安全的保障</h2>
+
+            <div class="card">
+                <h3><span class="card-icon">⚡</span> 靜電 ≠ 漏電</h3>
+                <div class="card-content">
+                    <div class="info-box">
+                        <strong>✅ 機器運作時確實會產生一點「靜電感」</strong>
+                        <p style="margin-top: 10px;">這是負離子釋放的自然副作用。請放心，這不是漏電，也完全不會危險。靜電屬於正常現象。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">💨</span> 無臭氧困擾</h3>
+                <div class="card-content">
+                    <p>設計上就是要避免臭氧釋放。採用<strong>奈米富勒烯技術</strong>，可以產生高純度負離子而幾乎沒有臭氧。</p>
+                    <p style="margin-top: 10px;">傳統負離子機在釋放高濃度離子時會產生少量臭氧，但我們的機器不會。</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">📡</span> 無輻射危害</h3>
+                <div class="card-content">
+                    <ul>
+                        <li>機器輸入電壓只有<strong>12V、3W</strong></li>
+                        <li>功率超低，幾乎不耗電</li>
+                        <li>廠商認證：<strong>無有害輻射</strong></li>
+                        <li>可 24 小時運作也沒問題</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">🔧</span> 使用注意事項</h3>
+                <div class="card-content">
+                    <p><strong>理療時保護</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>靠近機器 5-20 公分內<strong>一定要戴上導電墊（環）防靜電</strong></li>
+                        <li>導電墊需直接接觸皮膚（或純棉衣物）</li>
+                        <li>不要觸摸正在理療的人，否則也會產生靜電</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>電器操作距離</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>機子開機之後 50 公分以內的電器用品最好不要開</li>
+                        <li>會產生靜電現象</li>
+                        <li><strong>新款可以玩手機</strong>，機器要距離 50 公分以上</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>開機初期</strong></p>
+                    <p>如果空氣潮濕，開機時容易因靜電產生火花。建議在乾燥環境使用。</p>
+
+                    <p style="margin-top: 15px;"><strong>特殊人群提醒</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li><strong>植入式電子醫療裝置患者不能使用</strong>（如心臟起搏器）</li>
+                        <li>孕婦使用高強度負離子需先諮詢醫生</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>身體狀況調整</strong></p>
+                    <p>可依身體狀況調整使用時間。</p>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ 重要法律聲明</strong><br>
+                本產品<strong>不能作為醫療器材</strong>進口台灣。因此對外絕對不能宣稱醫療效果，否則產品會被扣住或產生額外紛爭。購買前請務必同意此條款。
+            </div>
+        </section>
+
+        <!-- 使用指南 -->
+        <section id="usage">
+            <h2 class="section-title">📖 使用指南</h2>
+
+            <div class="card">
+                <h3><span class="card-icon">🛏️</span> 睡眠使用（最推薦）</h3>
+                <div class="card-content">
+                    <p>每晚睡覺時，在臉的上方或旁邊放置機器，讓它吹著臉部。</p>
+                    <ul style="margin-top: 10px;">
+                        <li>可以整晚運作</li>
+                        <li>睡眠變得比較深，半夜比較不容易醒來</li>
+                        <li>皮膚摸起來比較細緻，氣色也比較亮</li>
+                        <li>吸入負離子效果最大化</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">☀️</span> 白天使用</h3>
+                <div class="card-content">
+                    <p>白天也可以用，用的時間越長越好。但機器需要適當休息。</p>
+                    <p style="margin-top: 10px;"><strong>快感冒時：</strong>增加使用時間，可有效減緩症狀，幫助快速恢復。</p>
+                    <p style="margin-top: 10px;"><strong>工作疲勞時：</strong>半小時的使用可以讓你恢復活力。</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">🔌</span> 導流環 / 導電墊的使用</h3>
+                <div class="card-content">
+                    <div class="conductivity-info" style="margin-bottom: 20px;">
+                        <strong>📌 導流墊 / 導流手環的三大作用</strong>
+                        <p style="margin-top: 10px;"><strong>① 起到集中效果的作用</strong><br>讓負離子更精準集中作用在身體特定部位，提升療效。</p>
+                        <p style="margin-top: 10px;"><strong>② 形成循環負電位場</strong><br>形成穩定的循環負電位場，增強整體療效。</p>
+                        <p style="margin-top: 10px;"><strong>③ 把多餘的電子導走</strong><br>把多餘的電子導走，保護身體，防止靜電累積。</p>
+                        <p style="margin-top: 15px; font-size: 16px; font-weight: bold; color: #C9960C;">⚠️ 導流墊和導流手環一定要接機器（不能拔掉）才能開機</p>
+                    </div>
+
+                    <p><strong>位置選擇</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>通常放在脖子下方</li>
+                        <li>有人放在背部</li>
+                        <li>有人放在肚子上方</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>新款設計（推薦）</strong></p>
+                    <p>新款是<strong>導流手環</strong>，可以直接綁在手環上，更方便靈活，無需拆裝。</p>
+
+                    <p style="margin-top: 15px;"><strong>舊款設計</strong></p>
+                    <p>舊款是<strong>長方形導電布</strong>，效果穩定，可另購新款導流手環升級（約 NT$200）。</p>
+
+                    <p style="margin-top: 15px;"><strong>正確使用方式</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>導電布或導電手環都要<strong>接在機器上</strong></li>
+                        <li><strong>不能拔掉</strong> - 先接著再開機才能發揮完整效果</li>
+                        <li>如果要負離子滲透身體，<strong>裸露的身體要接觸導電布或導電環</strong></li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>效果重點</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>最好直接吹到皮膚</li>
+                        <li>如果隔著衣物要使用<strong>純棉材質</strong></li>
+                        <li>負離子才能滲透到身體裡面</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">📱</span> 重要提醒</h3>
+                <div class="card-content">
+                    <p><strong>距離要求</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>機子開機之後 50 公分以內的電器用品最好不要開</li>
+                        <li>會產生靜電現象</li>
+                        <li><strong>新款可以玩手機</strong>，機器要距離 50 公分以上</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>最佳使用時間</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>不是使用一天就有感</li>
+                        <li>而是<strong>持續每天使用</strong></li>
+                        <li>把它當成生活環境的一部分</li>
+                        <li>時間越久，整體感受越明顯</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>連續使用建議</strong></p>
+                    <p>可 24 小時連續運轉，但最好還是要每天停機一次。</p>
+
+                    <p style="margin-top: 15px;"><strong>新款時間調整</strong></p>
+                    <p>開機默認 30 分鐘，可調節：60 分鐘、120 分鐘、240 分鐘、480 分鐘，根據需求靈活設置。</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">🎯</span> 理療距離說明</h3>
+                <div class="card-content">
+                    <p><strong>最佳理療距離：5-20 公分</strong></p>
+                    <p style="margin-top: 10px;">越近越好，只要沒有靜電現象就可以。</p>
+                    <p style="margin-top: 10px;">在此距離內進行理療時，<strong>必須配合導電墊（環）</strong>使用，防止靜電對身體的影響。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 品質保障 -->
+        <section id="quality">
+            <h2 class="section-title">🏆 品質保障｜中健醫療科技</h2>
+
+            <div class="quality-highlight">
+                <strong>🎖️ 中健醫療科技（江門）有限公司</strong>
+                <p style="margin-top: 10px;">專注氫氧健康產品研發生產約十年｜生產基地約 80,000 平方公尺｜100+ 專利與知識產權｜50+ 研發團隊人員｜100+ 銷售國家／地區</p>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">🔬</span> 國家專利認證</h3>
+                <div class="card-content">
+                    <p><strong>不是只有一張專利，而是累積數十項專利</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>✅ 發明專利證書</li>
+                        <li>✅ 實用新型專利證書（多項）</li>
+                        <li>✅ 外觀設計專利證書（多項）</li>
+                        <li>✅ 產品外觀、內部結構與零組件均申請多項專利</li>
+                        <li>✅ <strong>累積數十項專利</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">🌍</span> 國際安全認證</h3>
+                <div class="card-content">
+                    <p><strong>不是只有 CE，而是同時展示多項認證</strong></p>
+                    <div class="cert-grid">
+                        <div class="cert-item">
+                            <strong>CE</strong>
+                            <p>歐盟安全認證</p>
+                        </div>
+                        <div class="cert-item">
+                            <strong>RoHS</strong>
+                            <p>有害物質限制</p>
+                        </div>
+                        <div class="cert-item">
+                            <strong>EMC</strong>
+                            <p>電磁相容認證</p>
+                        </div>
+                        <div class="cert-item">
+                            <strong>LVD</strong>
+                            <p>低電壓安全認證</p>
+                        </div>
+                        <div class="cert-item">
+                            <strong>CNAS</strong>
+                            <p>實驗室認可</p>
+                        </div>
+                        <div class="cert-item">
+                            <strong>SGS</strong>
+                            <p>安全生產規範</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">📋</span> 第三方檢測機構報告</h3>
+                <div class="card-content">
+                    <p><strong>不是只有產品照片，而是公開所有檢測報告</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>✅ CTB 檢測報告</li>
+                        <li>✅ CMA 檢測認可</li>
+                        <li>✅ CNAS 認可實驗室檢測</li>
+                        <li>✅ ILAC-MRA 國際互認</li>
+                        <li>✅ GB4706.1-2005 安規檢測</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">🧪</span> 產品安全檢測項目</h3>
+                <div class="card-content">
+                    <p><strong>不是只說安全，而是公開所有檢測項目</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>✅ 臭氧檢測 &lt; 0.003 mg/m³（超低安全）</li>
+                        <li>✅ 氫氣純度檢測 &gt; 99.99%</li>
+                        <li>✅ 電氣安全檢測</li>
+                        <li>✅ 材料安全檢測</li>
+                        <li>✅ 性能穩定性測試</li>
+                        <li>✅ 整機壽命測試</li>
+                        <li>✅ 電磁兼容測試</li>
+                        <li>✅ 環境適應性測試</li>
+                    </ul>
+                    <div class="info-box" style="margin-top: 15px;">
+                        <strong>🔍 公開規格指標</strong>
+                        <p style="margin-top: 10px;">• 臭氧檢測值：&lt; 0.003 mg/m³</p>
+                        <p>• 氫氣純度：&gt; 99.99%</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">🏭</span> 現代化品質管理設施</h3>
+                <div class="card-content">
+                    <p><strong>完整的生產基地與檢測體系</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>✅ 組裝生產車間</li>
+                        <li>✅ 無塵組裝車間（最高標準）</li>
+                        <li>✅ 鈑金加工車間</li>
+                        <li>✅ 注塑生產車間</li>
+                        <li>✅ 檢測實驗室</li>
+                        <li>✅ 老化測試室</li>
+                        <li>✅ 測試實驗中心</li>
+                        <li>✅ 總裝車間</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>從研發、生產到檢測皆有制度化管理</strong></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">💡</span> 研發能力</h3>
+                <div class="card-content">
+                    <div class="spec-item">
+                        <strong>研發歷程</strong>
+                        <div class="spec-value">專注約十年</div>
+                    </div>
+                    <div class="spec-item">
+                        <strong>生產規模</strong>
+                        <div class="spec-value">約 80,000 平方公尺</div>
+                    </div>
+                    <div class="spec-item">
+                        <strong>知識產權</strong>
+                        <div class="spec-value">100+ 專利與知識產權</div>
+                    </div>
+                    <div class="spec-item">
+                        <strong>研發團隊</strong>
+                        <div class="spec-value">50+ 人員</div>
+                    </div>
+                    <div class="spec-item">
+                        <strong>全球覆蓋</strong>
+                        <div class="spec-value">100+ 銷售國家／地區</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">✨</span> 建立信任的重點</h3>
+                <div class="card-content">
+                    <p><strong>完全透明的品質管控</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>✅ 公開專利</li>
+                        <li>✅ 公開安全認證</li>
+                        <li>✅ 公開第三方檢測</li>
+                        <li>✅ 公開生產基地</li>
+                        <li>✅ 公開檢測設備</li>
+                        <li>✅ 公開品質管理流程</li>
+                        <li>✅ 公開臭氧檢測</li>
+                        <li>✅ 公開電氣安全</li>
+                        <li>✅ 公開性能測試</li>
+                        <li>✅ 公開環境測試</li>
+                    </ul>
+                    <div class="quality-highlight" style="margin-top: 15px;">
+                        <strong>品質理念</strong>
+                        <p style="margin-top: 10px;">權威資質保障 × 安全可靠 × 品質可追溯 × 多項國家專利 × 多項第三方檢測 × 完整品質管控流程</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 購買資訊 -->
+        <section id="pricing">
+            <h2 class="section-title">💳 購買資訊</h2>
+
+            <div class="price-highlight">
+                <h3>🎁 桌上型團購優惠價格</h3>
+                <div class="original">一般零售價：NT$60,000</div>
+                <div class="price">團購價：NT$26,000</div>
+                <p style="font-size: 16px; color: #1A2B5F; margin-top: 10px;">
+                    <strong>節省 NT$34,000 的超划算優惠！</strong>
+                </p>
+                <p style="font-size: 14px; color: #666; margin-top: 10px;">
+                    新款全面升級，免接地線，使用更方便安全<br>
+                    落地型價格尚未敲定，敬請期待
+                </p>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">✅</span> 為什麼這次值得把握？</h3>
+                <div class="card-content">
+                    <ul>
+                        <li><strong>一般買不到的合作價格</strong> - 直接與源頭廠商合作爭取優惠</li>
+                        <li><strong>新款全面升級</strong> - 56孔設計、導流手環、24K金針、免接地線</li>
+                        <li><strong>社群已有許多舊款使用者再次升級新款</strong> - 真正好的產品靠回購說話</li>
+                        <li><strong>保固和維修皆由公司負責</strong> - 無後顧之憂</li>
+                        <li><strong>設備不用耗材</strong> - 正常保養可使用多年</li>
+                        <li><strong>耗電量極低</strong> - 每天平均使用成本相對低廉</li>
+                        <li><strong>充電寶供電</strong> - 上門服務、公園廣場擺攤輕鬆搞定</li>
+                        <li><strong>持續升級產品</strong> - 不是停留在舊版本，技術不斷進步</li>
+                        <li><strong>可提供理療服務創收</strong> - 一小時負離子灸理療可收 NT$900 以上</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">🚨</span> 關於名額</h3>
+                <div class="card-content">
+                    <p><strong>現在只剩下不多的名額！</strong></p>
+                    <p style="margin-top: 10px;">額滿後，是否還能維持這次優惠價格，仍需視後續與公司合作條件而定。</p>
+                    <p style="margin-top: 10px;">建議把握這次難得的源頭合作機會。</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">📦</span> 進口和使用須知</h3>
+                <div class="card-content">
+                    <p><strong>進口注意事項</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li><strong>機器用空氣清淨機進口台灣</strong></li>
+                        <li><strong>不能作為醫療器材進口台灣</strong></li>
+                        <li>會通知大概什麼時候收到貨</li>
+                        <li>請配合按 EZway 的申報相符（非醫療用品，以空氣清淨機入關）</li>
+                    </ul>
+
+                    <p style="margin-top: 15px;"><strong>收貨後</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>我們會拍給你們實際中國醫院醫療的數據</li>
+                        <li><strong>但為了安全起見，對外絕對不能宣稱這是醫療級的東西</strong></li>
+                        <li>這是合法合作的必要條件，請大家合作！</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="line-link-box">
+                <h3>👉 加入團購 LINE 社群</h3>
+                <p style="font-size: 16px; color: #1A2B5F; margin-top: 10px;">
+                    歡迎加入高濃度負離子能量灸團購社群，了解最新動態、用戶見證、購買詳情。
+                </p>
+                <a href="https://line.me/R/ti/g/KswB6BehfL" class="line-button" target="_blank">
+                    加入 LINE 社群
+                </a>
+                <p style="font-size: 13px; color: #666; margin-top: 15px;">
+                    ✅ 直接連結至團購社群，點擊即可加入
+                </p>
+            </div>
+
+            <div class="warning-box" style="margin-top: 30px;">
+                <strong>⚠️ 重要提醒</strong><br>
+                本產品不能作為醫療器材使用。購買前，請務必理解並同意相關法律限制。本應用程式所提供的任何資訊均非醫療建議，不能替代醫療專業人士的診斷和治療。如有疾病或身體不適，請尋求專業醫療人員協助。
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>✨ 高濃度負離子能量灸 | 自然療癒的力量</p>
+        <p>建立健康系統，改善生活品質</p>
+        <p style="margin-top: 20px; font-size: 12px; opacity: 0.7;">
+            本應用為產品介紹頁面，所有資訊均基於科學研究和用戶體驗。<br>
+            購買使用前，請詳閱所有安全提示和法律聲明。
+        </p>
+    </footer>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Add click event to expand/collapse cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('expanded');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
