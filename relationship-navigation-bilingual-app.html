@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>關係導航 雙語APP | Relationship Navigation Bilingual App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft JhengHei', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #0D1B3E;
+            line-height: 1.8;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #0D1B3E 0%, #006B7D 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 8px;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+        
+        select, input, button {
+            padding: 12px 16px;
+            font-size: 1em;
+            border: 2px solid #006B7D;
+            border-radius: 6px;
+            background-color: white;
+            color: #0D1B3E;
+            font-family: 'Microsoft JhengHei', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: #B8860B;
+            box-shadow: 0 0 8px rgba(184, 134, 11, 0.3);
+        }
+        
+        button {
+            background-color: #006B7D;
+            color: white;
+            font-weight: bold;
+            border: none;
+        }
+        
+        button:hover {
+            background-color: #0D1B3E;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(13, 27, 62, 0.3);
+        }
+        
+        button.gold {
+            background-color: #B8860B;
+        }
+        
+        button.gold:hover {
+            background-color: #8B6508;
+        }
+        
+        input[type="text"] {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .content-area {
+            background-color: white;
+            border: 2px solid #006B7D;
+            border-radius: 8px;
+            padding: 30px;
+            min-height: 500px;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .bilingual-card {
+            background-color: #f9f9f9;
+            border-left: 4px solid #B8860B;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .bilingual-card:hover {
+            background-color: #f0f5fa;
+            box-shadow: 0 4px 12px rgba(6, 107, 125, 0.15);
+            border-left-color: #006B7D;
+        }
+        
+        .bilingual-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .chinese-text {
+            color: #0D1B3E;
+            font-size: 1.1em;
+        }
+        
+        .english-text {
+            color: #006B7D;
+            font-size: 1em;
+            font-style: italic;
+        }
+        
+        .tts-button {
+            background-color: #B8860B;
+            color: white;
+            padding: 8px 12px;
+            font-size: 0.9em;
+            margin-top: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .tts-button:hover {
+            background-color: #8B6508;
+        }
+        
+        .tts-button.playing {
+            background-color: #006B7D;
+        }
+        
+        h2 {
+            color: #0D1B3E;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #B8860B;
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            color: #006B7D;
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .highlight {
+            background-color: #fffacd;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-box {
+            background: linear-gradient(135deg, #0D1B3E 0%, #006B7D 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 6px;
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+        }
+        
+        .stat-box h4 {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        
+        .stat-box .number {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-button {
+            padding: 10px 16px;
+            background-color: #f0f0f0;
+            color: #0D1B3E;
+            border: 2px solid #cccccc;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button.active {
+            background-color: #006B7D;
+            color: white;
+            border-color: #006B7D;
+        }
+        
+        .no-result {
+            text-align: center;
+            color: #999;
+            padding: 30px;
+        }
+
+        @media (max-width: 1000px) {
+            .bilingual-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>關係導航 OS APP</h1>
+            <p>Relationship Navigation Operating System | 完整雙語版 Bilingual Edition</p>
+        </header>
+
+        <div class="stats">
+            <div class="stat-box">
+                <h4>檔案數量</h4>
+                <div class="number">7</div>
+            </div>
+            <div class="stat-box">
+                <h4>內容頁面</h4>
+                <div class="number">100+</div>
+            </div>
+            <div class="stat-box">
+                <h4>語言</h4>
+                <div class="number">雙語</div>
+            </div>
+            <div class="stat-box">
+                <h4>TTS</h4>
+                <div class="number">英文</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <select id="fileSelector" onchange="switchFile(this.value)">
+                <option value="">選擇檔案 / Select File</option>
+                <option value="file1">關係導航OS APP | Relationship Navigation OS</option>
+                <option value="file2">關係是最大的槓桿 | Relationship is the Biggest Leverage</option>
+                <option value="file3">關係混亂的源頭 | The Root of Relationship Chaos</option>
+                <option value="file4">關係工程 | Relationship Engineering</option>
+                <option value="file5">關係工程2 | Relationship Engineering 2</option>
+                <option value="file6">利己說話數 | The Art of Beneficial Speaking</option>
+                <option value="file7">你在哪一層就過哪一種人生 | Which Layer You're In Is the Life You're Living</option>
+            </select>
+            <input type="text" id="searchBox" placeholder="搜尋 / Search..." onkeyup="searchContent()">
+            <button onclick="toggleAllCards()">展開/收起 Toggle</button>
+        </div>
+
+        <div class="content-area">
+            <!-- File 1 -->
+            <div id="file1" class="section active">
+                <h2>關係導航OS APP | Relationship Navigation OS</h2>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text"><strong>副標題</strong><br/>理解人性・建立信任・化解衝突・創造高品質關係</div>
+                        <div class="english-text"><strong>Subtitle</strong><br/>Understand Human Nature • Build Trust • Resolve Conflicts • Create High-Quality Relationships</div>
+                    </div>
+                    <button class="tts-button" onclick="speak('Relationship Navigation OS - Understand Human Nature, Build Trust, Resolve Conflicts, Create High-Quality Relationships')">🔊 聆聽</button>
+                </div>
+
+                <h3>APP核心目標 | Core App Objectives</h3>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text"><strong>從情緒反應 → 理解需求 → 建立信任 → 形成合作 → 提升影響力 → 建立幸福人生</strong></div>
+                        <div class="english-text"><strong>From Emotional Reaction → Understanding Needs → Building Trust → Forming Cooperation → Enhancing Influence → Creating a Happy Life</strong></div>
+                    </div>
+                </div>
+
+                <h3>首頁功能 | Home Page Features</h3>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text">
+                            <strong>今天想改善哪種關係？</strong><br/>
+                            • 我和自己<br/>
+                            • 我和父母<br/>
+                            • 我和孩子<br/>
+                            • 我和伴侶<br/>
+                            • 我和同事<br/>
+                            • 我和主管<br/>
+                            • 我和學生<br/>
+                            • 我和朋友<br/>
+                            • 我和團隊<br/>
+                            • 我和社群
+                        </div>
+                        <div class="english-text">
+                            <strong>Which relationship would you like to improve today?</strong><br/>
+                            • Me and Myself<br/>
+                            • Me and Parents<br/>
+                            • Me and Children<br/>
+                            • Me and Partner<br/>
+                            • Me and Colleagues<br/>
+                            • Me and Boss<br/>
+                            • Me and Students<br/>
+                            • Me and Friends<br/>
+                            • Me and Team<br/>
+                            • Me and Community
+                        </div>
+                    </div>
+                    <button class="tts-button" onclick="speak('Which relationship would you like to improve today')">🔊 聆聽</button>
+                </div>
+
+                <h3>核心能力樹 | Core Capability Tree</h3>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text">
+                            看見情緒 → 看見需求 → 理解信念 → 建立信任 → 有效溝通 → 化解衝突 → 建立邊界 → 形成合作 → 創造影響 → 經營關係
+                        </div>
+                        <div class="english-text">
+                            See Emotions → See Needs → Understand Beliefs → Build Trust → Communicate Effectively → Resolve Conflicts → Set Boundaries → Form Cooperation → Create Influence → Manage Relationships
+                        </div>
+                    </div>
+                    <button class="tts-button" onclick="speak('See Emotions, See Needs, Understand Beliefs, Build Trust, Communicate Effectively, Resolve Conflicts, Set Boundaries, Form Cooperation, Create Influence, Manage Relationships')">🔊 聆聽</button>
+                </div>
+
+                <h3>十大模組 | 10 Core Modules</h3>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text">
+                            <strong>第一模組：溝通導航中心 Communication OS</strong><br/>
+                            為什麼總是講不聽？ Why doesn't anyone listen?<br/>
+                            <strong>第二模組：衝突導航中心 Conflict OS</strong><br/>
+                            為什麼一直吵架？ Why do we always argue?<br/>
+                            <strong>第三模組：邊界導航中心 Boundary OS</strong><br/>
+                            為什麼我一直委屈？ Why do I always feel wronged?<br/>
+                            <strong>第四模組：合作導航中心 Cooperation OS</strong><br/>
+                            如何一起成功？ How to succeed together?<br/>
+                            <strong>第五模組：依附導航中心 Attachment OS</strong><br/>
+                            為什麼害怕失去？ Why am I afraid of loss?<br/>
+                            <strong>第六模組：信任導航中心 Trust OS</strong><br/>
+                            如何讓人相信我？ How to earn trust?<br/>
+                            <strong>第七模組：家庭導航中心 Family OS</strong><br/>
+                            如何家庭和諧？ How to create family harmony?<br/>
+                            <strong>第八模組：伴侶導航中心 Partner OS</strong><br/>
+                            如何長久相愛？ How to love long-term?<br/>
+                            <strong>第九模組：團隊導航中心 Team OS</strong><br/>
+                            如何帶領團隊？ How to lead a team?<br/>
+                            <strong>第十模組：社群導航中心 Community OS</strong><br/>
+                            如何建立影響力？ How to build influence?
+                        </div>
+                        <div class="english-text">
+                            Module 1: Communication Center - Why doesn't anyone listen?<br/>
+                            Module 2: Conflict Center - Why do we always argue?<br/>
+                            Module 3: Boundary Center - Why do I always feel wronged?<br/>
+                            Module 4: Cooperation Center - How to succeed together?<br/>
+                            Module 5: Attachment Center - Why am I afraid of loss?<br/>
+                            Module 6: Trust Center - How to earn trust?<br/>
+                            Module 7: Family Center - How to create family harmony?<br/>
+                            Module 8: Partner Center - How to love long-term?<br/>
+                            Module 9: Team Center - How to lead a team?<br/>
+                            Module 10: Community Center - How to build influence?
+                        </div>
+                    </div>
+                    <button class="tts-button" onclick="speak('10 Core Modules for Relationship Navigation')">🔊 聆聽</button>
+                </div>
+
+                <h3>十大核心能力 | 10 Core Competencies</h3>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text">
+                            傾聽力 → 提問力 → 同理力 → 需求辨識力 → 信任建立力 → 共識形成力 → 引導力 → 影響力 → 領導力 → 關係智慧
+                        </div>
+                        <div class="english-text">
+                            Listening • Questioning • Empathy • Need Identification • Trust Building • Consensus Formation • Guidance • Influence • Leadership • Relationship Wisdom
+                        </div>
+                    </div>
+                    <button class="tts-button" onclick="speak('Ten core competencies: Listening, Questioning, Empathy, Need Identification, Trust Building, Consensus Formation, Guidance, Influence, Leadership, and Relationship Wisdom')">🔊 聆聽</button>
+                </div>
+
+                <h3>傾聽力金句30句 | 30 Wisdom on Listening</h3>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text">
+                            1. 傾聽是最高級的尊重<br/>
+                            2. 人最想要的不是答案，而是被理解<br/>
+                            3. 傾聽創造信任<br/>
+                            4. 理解比回應重要<br/>
+                            5. 安靜是一種力量<br/>
+                            6. 傾聽是關係的起點<br/>
+                            7. 聽情緒比聽內容重要<br/>
+                            8. 聽需求比聽抱怨重要<br/>
+                            9. 聽懂人比聽懂事重要<br/>
+                            10. 真正的傾聽沒有急著給答案
+                        </div>
+                        <div class="english-text">
+                            1. Listening is the highest form of respect<br/>
+                            2. People want to be understood, not answered<br/>
+                            3. Listening creates trust<br/>
+                            4. Understanding is more important than responding<br/>
+                            5. Silence is a form of power<br/>
+                            6. Listening is where relationships begin<br/>
+                            7. Hearing emotions is more important than hearing words<br/>
+                            8. Hearing needs is more important than hearing complaints<br/>
+                            9. Understanding people is more important than understanding things<br/>
+                            10. True listening doesn't rush to give answers
+                        </div>
+                    </div>
+                    <button class="tts-button" onclick="speak('30 wisdoms on listening capability')">🔊 聆聽</button>
+                </div>
+            </div>
+
+            <!-- File 2 -->
+            <div id="file2" class="section">
+                <h2>關係是最大的槓桿 | Relationship is the Biggest Leverage</h2>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text"><strong>核心概念：</strong><br/>好的關係是人生最大的槓桿。每一個高品質的關係，都能創造指數級的回報——在心理上、經濟上、健康上、幸福感上。</div>
+                        <div class="english-text"><strong>Core Concept:</strong><br/>Quality relationships are the greatest leverage in life. Every high-quality relationship creates exponential returns—psychologically, economically, in health, and in happiness.</div>
+                    </div>
+                    <button class="tts-button" onclick="speak('Quality relationships are the greatest leverage in life')">🔊 聆聽</button>
+                </div>
+
+                <h3>100個關係模型框架 | 100 Relationship Models</h3>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text">
+                            <strong>結構：</strong><br/>
+                            - 每個模型有一句話定義<br/>
+                            - 30句智慧<br/>
+                            - 30項能力行為<br/>
+                            - 總計：3000智慧 + 3000能力行為<br/>
+                            - 約40~60萬字<br/>
+                            - 可轉換成APP、電子書、課程
+                        </div>
+                        <div class="english-text">
+                            <strong>Structure:</strong><br/>
+                            - One-sentence definition per model<br/>
+                            - 30 wisdom statements<br/>
+                            - 30 behavioral capabilities<br/>
+                            - Total: 3,000 wisdoms + 3,000 behaviors<br/>
+                            - Approximately 400,000-600,000 characters<br/>
+                            - Can be converted into apps, ebooks, courses
+                        </div>
+                    </div>
+                    <button class="tts-button" onclick="speak('100 relationship models with 3000 wisdom statements and 3000 behavioral capabilities')">🔊 聆聽</button>
+                </div>
+
+                <h3>001 安全感模型 | Security Model</h3>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text">
+                            <strong>一句話定義：</strong><br/>
+                            安全感不是別人給的。安全感是相信自己有能力面對未來。
+                        </div>
+                        <div class="english-text">
+                            <strong>One-Sentence Definition:</strong><br/>
+                            Security is not given by others. Security is believing you have the ability to face the future.
+                        </div>
+                    </div>
+                    <button class="tts-button" onclick="speak('Security is not given by others. Security is believing you have the ability to face the future')">🔊 聆聽</button>
+                </div>
+
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text">
+                            <strong>智慧前10句：</strong><br/>
+                            1. 安全感來自能力，不是控制<br/>
+                            2. 真正的安全感來自可預測性<br/>
+                            3. 安全感不是沒有風險，而是有能力處理風險<br/>
+                            4. 愛會增加安全感<br/>
+                            5. 信任建立安全感<br/>
+                            6. 一致性建立安全感<br/>
+                            7. 誠實建立安全感<br/>
+                            8. 承諾建立安全感<br/>
+                            9. 尊重建立安全感<br/>
+                            10. 傾聽建立安全感
+                        </div>
+                        <div class="english-text">
+                            <strong>First 10 Wisdoms:</strong><br/>
+                            1. Security comes from capability, not control<br/>
+                            2. True security comes from predictability<br/>
+                            3. Security is not the absence of risk, but the ability to handle risk<br/>
+                            4. Love increases security<br/>
+                            5. Trust builds security<br/>
+                            6. Consistency builds security<br/>
+                            7. Honesty builds security<br/>
+                            8. Commitment builds security<br/>
+                            9. Respect builds security<br/>
+                            10. Listening builds security
+                        </div>
+                    </div>
+                    <button class="tts-button" onclick="speak('Security comes from capability, not control. True security comes from predictability.')">🔊 聆聽</button>
+                </div>
+            </div>
+
+            <!-- File 3 -->
+            <div id="file3" class="section">
+                <h2>關係混亂的源頭 | The Root of Relationship Chaos</h2>
+                
+                <h3>四大混亂根源 | Four Sources of Chaos</h3>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text"><strong>① 依附失衡 | 把關係當生存</strong><br/>害怕被丟下、沒有對方就沒價值、過度依附、情緒綁定他人、長期討好、害怕衝突、缺乏獨立感、關係主控權流失</div>
+                        <div class="english-text"><strong>① Attachment Imbalance | Treating Relationships as Survival</strong><br/>Fear of abandonment, worthlessness without others, over-attachment, emotional dependence, chronic people-pleasing, conflict avoidance, lack of independence, loss of relational control</div>
+                    </div>
+                    <button class="tts-button" onclick="speak('Attachment imbalance: fear of abandonment and emotional dependence')">🔊 聆聽</button>
+                </div>
+
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text"><strong>② 高衝突循環 | 情緒互相污染</strong><br/>情緒直接反應、缺乏停頓觀察、小事放大化、彼此防衛、衝突反覆重播、情緒勒索、高警報互動、理性系統下線</div>
+                        <div class="english-text"><strong>② High Conflict Cycles | Emotional Contamination</strong><br/>Direct emotional reactions, lack of pause and observation, amplifying minor issues, mutual defensiveness, repeated conflicts, emotional blackmail, high-alert interactions, rational system offline</div>
+                    </div>
+                    <button class="tts-button" onclick="speak('High conflict cycles with emotional contamination between partners')">🔊 聆聽</button>
+                </div>
+
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text"><strong>③ 投射型關係 | 把內在問題丟給別人</strong><br/>把情緒怪罪對方、把創傷投射別人、過度讀心術、差異視為敵意、把過去帶進現在、情緒=真相</div>
+                        <div class="english-text"><strong>③ Projection-Based Relationships | Externalizing Inner Problems</strong><br/>Blaming others for emotions, projecting trauma, mind-reading, seeing differences as hostility, bringing the past into present, emotions as truth</div>
+                    </div>
+                    <button class="tts-button" onclick="speak('Projection-based relationships where inner problems are externalized onto others')">🔊 聆聽</button>
+                </div>
+
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text"><strong>④ 討好人格 | 失去真實自己</strong><br/>不敢拒絕、一直配合別人、怕別人生氣、壓抑真實需求、邊界崩壞、長期委屈、失去自我</div>
+                        <div class="english-text"><strong>④ People-Pleasing Personality | Losing True Self</strong><br/>Unable to refuse, always accommodating, fear of others' anger, suppressed needs, collapsed boundaries, chronic resentment, loss of self</div>
+                    </div>
+                    <button class="tts-button" onclick="speak('People-pleasing personality leads to loss of true self')">🔊 聆聽</button>
+                </div>
+            </div>
+
+            <!-- File 4 -->
+            <div id="file4" class="section">
+                <h2>關係工程 | Relationship Engineering</h2>
+                
+                <h3>關係的本質 | The Essence of Relationships</h3>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text"><strong>關係不是交易</strong><br/>關係不是控制<br/>關係是連結<br/>關係是生命網路</div>
+                        <div class="english-text"><strong>Relationships are not transactions<br/>Relationships are not control<br/>Relationships are connection<br/>Relationships are life networks</strong></div>
+                    </div>
+                    <button class="tts-button" onclick="speak('Relationships are not transactions or control. Relationships are connections and life networks')">🔊 聆聽</button>
+                </div>
+
+                <h3>為什麼人需要關係 | Why We Need Relationships</h3>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text">
+                            • 人不是孤島<br/>
+                            • 愛的需求<br/>
+                            • 歸屬需求<br/>
+                            • 合作需求<br/>
+                            • 成長需求
+                        </div>
+                        <div class="english-text">
+                            • People are not islands<br/>
+                            • Need for love<br/>
+                            • Need for belonging<br/>
+                            • Need for cooperation<br/>
+                            • Need for growth
+                        </div>
+                    </div>
+                    <button class="tts-button" onclick="speak('We need relationships for love, belonging, cooperation, and growth')">🔊 聆聽</button>
+                </div>
+
+                <h3>自我關係篇 | Self-Relationship Chapter</h3>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text">
+                            <strong>第4章：我與自己的關係</strong><br/>
+                            • 自我認識 Self-knowledge<br/>
+                            • 自我接納 Self-acceptance<br/>
+                            • 自我尊重 Self-respect<br/>
+                            • 自我成長 Self-growth<br/><br/>
+                            <strong>第5章：自我對話系統</strong><br/>
+                            • 內在批判者 Inner critic<br/>
+                            • 受害者聲音 Victim voice<br/>
+                            • 成長者聲音 Growth voice<br/>
+                            • 智慧者聲音 Wisdom voice
+                        </div>
+                        <div class="english-text">
+                            <strong>Chapter 4: Relationship with Myself</strong><br/>
+                            • Self-knowledge<br/>
+                            • Self-acceptance<br/>
+                            • Self-respect<br/>
+                            • Self-growth<br/><br/>
+                            <strong>Chapter 5: Inner Dialogue System</strong><br/>
+                            • Inner critic voice<br/>
+                            • Victim voice<br/>
+                            • Growth voice<br/>
+                            • Wisdom voice
+                        </div>
+                    </div>
+                    <button class="tts-button" onclick="speak('The relationship with ourselves is the foundation of all relationships')">🔊 聆聽</button>
+                </div>
+            </div>
+
+            <!-- File 5 -->
+            <div id="file5" class="section">
+                <h2>關係工程2 | Relationship Engineering Volume 2</h2>
+                
+                <h3>核心公式 | Core Formula</h3>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text">
+                            <strong>信任 + 理解 + 尊重 + 溝通 = 高品質關係</strong><br/><br/>
+                            信任下降 → 誤解增加 → 衝突增加 → 關係惡化
+                        </div>
+                        <div class="english-text">
+                            <strong>Trust + Understanding + Respect + Communication = High-Quality Relationships</strong><br/><br/>
+                            Trust decreases → Misunderstandings increase → Conflicts increase → Relationships deteriorate
+                        </div>
+                    </div>
+                    <button class="tts-button" onclick="speak('Trust plus Understanding plus Respect plus Communication equals High-Quality Relationships')">🔊 聆聽</button>
+                </div>
+
+                <h3>關係五大核心 | 5 Core Elements of Relationships</h3>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text">
+                            <strong>①傾聽 Listening</strong><br/>傾聽決定關係品質<br/><br/>
+                            <strong>②理解 Understanding</strong><br/>理解決定連結深度<br/><br/>
+                            <strong>③表達 Expression</strong><br/>表達決定溝通效率<br/><br/>
+                            <strong>④信任 Trust</strong><br/>信任決定關係強度<br/><br/>
+                            <strong>⑤感謝 Gratitude</strong><br/>感謝決定關係溫度
+                        </div>
+                        <div class="english-text">
+                            <strong>① Listening</strong><br/>Listening determines relationship quality<br/><br/>
+                            <strong>② Understanding</strong><br/>Understanding determines depth of connection<br/><br/>
+                            <strong>③ Expression</strong><br/>Expression determines communication efficiency<br/><br/>
+                            <strong>④ Trust</strong><br/>Trust determines relationship strength<br/><br/>
+                            <strong>⑤ Gratitude</strong><br/>Gratitude determines relationship warmth
+                        </div>
+                    </div>
+                    <button class="tts-button" onclick="speak('The 5 core elements: Listening, Understanding, Expression, Trust, and Gratitude')">🔊 聆聽</button>
+                </div>
+
+                <h3>關係三大預測節點 | 3 Key Predictors</h3>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text">
+                            <strong>①是否願意傾聽</strong><br/>Willingness to listen<br/><br/>
+                            <strong>②是否願意溝通</strong><br/>Willingness to communicate<br/><br/>
+                            <strong>③是否願意修復</strong><br/>Willingness to repair
+                        </div>
+                        <div class="english-text">
+                            <strong>① Willingness to Listen</strong><br/>是否願意傾聽<br/><br/>
+                            <strong>② Willingness to Communicate</strong><br/>是否願意溝通<br/><br/>
+                            <strong>③ Willingness to Repair</strong><br/>是否願意修復
+                        </div>
+                    </div>
+                    <button class="tts-button" onclick="speak('The 3 key predictors of relationship success: willingness to listen, communicate, and repair')">🔊 聆聽</button>
+                </div>
+            </div>
+
+            <!-- File 6 -->
+            <div id="file6" class="section">
+                <h2>利己說話數 | The Art of Beneficial Speaking</h2>
+                
+                <h3>四大核心主題 | 4 Core Topics</h3>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text">
+                            <strong>① 記憶與幸福</strong><br/>記憶的力量 • 記憶決定幸福 • 幸福可以被設計<br/><br/>
+                            <strong>② 脈輪頻率轉換</strong><br/>七大脈輪與情緒 • 30句頻率轉換金句 • 情緒轉化60句<br/><br/>
+                            <strong>③ 戲劇三角與賦權</strong><br/>受害者→創造者的轉變<br/><br/>
+                            <strong>④ 心理韌性與壓力導航</strong><br/>身心自癒 • 能量提升 • 現實轉換術
+                        </div>
+                        <div class="english-text">
+                            <strong>① Memory and Happiness</strong><br/>The Power of Memory • Memory Determines Happiness • Happiness Can Be Designed<br/><br/>
+                            <strong>② Chakra Frequency Transformation</strong><br/>7 Chakras and Emotions • 30 Frequency Transformation Quotes • 60 Emotion Transformation Quotes<br/><br/>
+                            <strong>③ Drama Triangle and Empowerment</strong><br/>Transformation from Victim to Creator<br/><br/>
+                            <strong>④ Psychological Resilience and Stress Navigation</strong><br/>Body-Mind Self-Healing • Energy Enhancement • Reality Transformation Techniques
+                        </div>
+                    </div>
+                    <button class="tts-button" onclick="speak('4 core topics: Memory and Happiness, Chakra Frequency Transformation, Drama Triangle and Empowerment, Psychological Resilience')">🔊 聆聽</button>
+                </div>
+
+                <h3>第一章：記憶的力量 | Chapter 1: The Power of Memory</h3>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text">
+                            <strong>記憶與自我認知</strong><br/>
+                            記憶是大腦的故事書。大腦把我們過去的經歷整理成故事，故事裡的主角就是自己。<br/><br/>
+                            <strong>正向記憶的影響</strong><br/>
+                            • 增加自信與能力感<br/>
+                            • 提升情緒穩定度<br/>
+                            • 促進多巴胺分泌<br/>
+                            • 強化解決問題的勇氣<br/>
+                            • 形成樂觀的世界觀
+                        </div>
+                        <div class="english-text">
+                            <strong>Memory and Self-Perception</strong><br/>
+                            Memory is the brain's story book. The brain organizes our past experiences into stories where we are the main character.<br/><br/>
+                            <strong>Impact of Positive Memories</strong><br/>
+                            • Increase confidence and competence<br/>
+                            • Enhance emotional stability<br/>
+                            • Promote dopamine release<br/>
+                            • Strengthen problem-solving courage<br/>
+                            • Foster optimistic worldview
+                        </div>
+                    </div>
+                    <button class="tts-button" onclick="speak('Memory is the brain story book that shapes our self-perception and worldview')">🔊 聆聽</button>
+                </div>
+
+                <h3>放大好記憶的30種策略 | 30 Strategies to Amplify Good Memories</h3>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text">
+                            <strong>記錄類：</strong> 寫快樂日記、做回顧清單、寫成就清單、做手帳、把快樂貼牆上<br/>
+                            <strong>感官類：</strong> 拍照留念、重溫舊照片、唱歌聽音樂、用味覺回憶、用嗅覺回憶<br/>
+                            <strong>行動類：</strong> 和朋友分享、做心情地圖、做手工、為小事慶祝、看開心影片
+                        </div>
+                        <div class="english-text">
+                            <strong>Recording Methods:</strong> Happy diary, review lists, achievement lists, journaling, visual reminders<br/>
+                            <strong>Sensory Methods:</strong> Photography, revisit photos, singing, taste memories, scent memories<br/>
+                            <strong>Action Methods:</strong> Share with friends, emotion maps, crafts, celebrate small things, happy videos
+                        </div>
+                    </div>
+                    <button class="tts-button" onclick="speak('30 strategies across recording, sensory, and action methods to amplify positive memories')">🔊 聆聽</button>
+                </div>
+            </div>
+
+            <!-- File 7 -->
+            <div id="file7" class="section">
+                <h2>你在哪一層就過哪一種人生 | Which Layer You're In Is the Life You're Living</h2>
+                
+                <h3>三階段人生系統模型 | Three-Stage Life System</h3>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text">
+                            <strong>🔴 生存者 Survivor</strong><br/>反應模型 • 什麼都控制不了 • 活下來，但沒有方向<br/><br/>
+                            <strong>🟡 觀察者 Observer</strong><br/>看見模型 • 控制自己的解讀 • 開始看懂，但還沒改世界<br/><br/>
+                            <strong>🟢 創造者 Creator</strong><br/>生成模型 • 創造現實的條件 • 不只活，也在創造世界
+                        </div>
+                        <div class="english-text">
+                            <strong>🔴 Survivor</strong><br/>Reaction Model • Cannot control anything • Alive but no direction<br/><br/>
+                            <strong>🟡 Observer</strong><br/>Model Recognition • Control your interpretation • Understanding but not changing<br/><br/>
+                            <strong>🟢 Creator</strong><br/>Generation Model • Create reality conditions • Not just living but creating
+                        </div>
+                    </div>
+                    <button class="tts-button" onclick="speak('Three life stages: Survivor, Observer, and Creator')">🔊 聆聽</button>
+                </div>
+
+                <h3>核心本體：控制權升維 | Core Framework: Control Evolution</h3>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text">
+                            <strong>人生不是「成功 vs 失敗」</strong><br/>
+                            而是「控制權」的層層升維<br/><br/>
+                            你對自己生命的掌控程度，決定了你能創造什麼、影響什麼、成為什麼。
+                        </div>
+                        <div class="english-text">
+                            <strong>Life is not "Success vs Failure"</strong><br/>
+                            But rather "Control" evolving through levels<br/><br/>
+                            Your degree of mastery over your life determines what you can create, influence, and become.
+                        </div>
+                    </div>
+                    <button class="tts-button" onclick="speak('Life is about the evolution of control over your circumstances and yourself')">🔊 聆聽</button>
+                </div>
+
+                <h3>三層的決策路徑 | Decision Paths at Three Levels</h3>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text">
+                            <strong>🔴 生存者：</strong><br/>刺激 → 反應<br/>（無中介層，直接情緒反應）<br/><br/>
+                            <strong>🟡 觀察者：</strong><br/>刺激 → 模型 → 理解<br/>（有認知中介層）<br/><br/>
+                            <strong>🟢 創造者：</strong><br/>模型 → 行動 → 生成<br/>（反向生成，主動創造）
+                        </div>
+                        <div class="english-text">
+                            <strong>🔴 Survivor:</strong><br/>Stimulus → Reaction<br/>(No intermediary, direct emotional response)<br/><br/>
+                            <strong>🟡 Observer:</strong><br/>Stimulus → Model → Understanding<br/>(Cognitive intermediary)<br/><br/>
+                            <strong>🟢 Creator:</strong><br/>Model → Action → Generation<br/>(Reverse generation, active creation)
+                        </div>
+                    </div>
+                    <button class="tts-button" onclick="speak('The decision paths evolve from direct reaction to mindful understanding to creative generation')">🔊 聆聽</button>
+                </div>
+
+                <h3>升維路徑 | Upgrade Pathways</h3>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text">
+                            <strong>從生存者到觀察者：</strong><br/>
+                            需要學會停頓、觀察、反思。在刺激和反應之間，加入思考的空間。<br/><br/>
+                            <strong>從觀察者到創造者：</strong><br/>
+                            需要從分析進入生成。不只看懂世界，還要主動創造條件、塑造現實。
+                        </div>
+                        <div class="english-text">
+                            <strong>From Survivor to Observer:</strong><br/>
+                            Learn to pause, observe, and reflect. Insert thinking space between stimulus and response.<br/><br/>
+                            <strong>From Observer to Creator:</strong><br/>
+                            Move from analysis to generation. Not just understanding the world, but actively creating conditions and shaping reality.
+                        </div>
+                    </div>
+                    <button class="tts-button" onclick="speak('Upgrade from Survivor to Observer through reflection, then from Observer to Creator through generation')">🔊 聆聽</button>
+                </div>
+
+                <h3>你的語法決定你的層級 | Your Language Determines Your Level</h3>
+                
+                <div class="bilingual-card">
+                    <div class="bilingual-row">
+                        <div class="chinese-text">
+                            <strong>🔴 生存者的語法：</strong><br/>「我沒選擇」「我無能為力」「這是命運」<br/><br/>
+                            <strong>🟡 觀察者的語法：</strong><br/>「我在用什麼模型」「我可以這樣看」「我可以改變視角」<br/><br/>
+                            <strong>🟢 創造者的語法：</strong><br/>「我來創造」「我來建構」「我來改變條件」
+                        </div>
+                        <div class="english-text">
+                            <strong>🔴 Survivor's Language:</strong><br/>
+                            "I have no choice" "I'm powerless" "It's my fate"<br/><br/>
+                            <strong>🟡 Observer's Language:</strong><br/>
+                            "What model am I using" "I can see this differently" "I can change my perspective"<br/><br/>
+                            <strong>🟢 Creator's Language:</strong><br/>
+                            "I will create" "I will build" "I will change the conditions"
+                        </div>
+                    </div>
+                    <button class="tts-button" onclick="speak('Your language reflects your level: powerlessness, perspective, or creation')">🔊 聆聽</button>
+                </div>
+            </div>
+
+            <div class="no-result" id="noResult" style="display: none;">
+                未找到相關內容 | No matching content found
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const files = {
+            file1: { name: '關係導航OS APP', content: '' },
+            file2: { name: '關係是最大的槓桿', content: '' },
+            file3: { name: '關係混亂的源頭', content: '' },
+            file4: { name: '關係工程', content: '' },
+            file5: { name: '關係工程2', content: '' },
+            file6: { name: '利己說話數', content: '' },
+            file7: { name: '你在哪一層就過哪一種人生', content: '' }
+        };
+
+        let currentFile = 'file1';
+        let isPlaying = false;
+
+        function switchFile(fileId) {
+            if (!fileId) return;
+            
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(fileId).classList.add('active');
+            currentFile = fileId;
+        }
+
+        function speak(text) {
+            if (isPlaying) {
+                speechSynthesis.cancel();
+                isPlaying = false;
+                return;
+            }
+            
+            isPlaying = true;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            
+            utterance.onend = () => {
+                isPlaying = false;
+            };
+            
+            speechSynthesis.speak(utterance);
+        }
+
+        function toggleAllCards() {
+            const cards = document.querySelectorAll('.bilingual-card');
+            cards.forEach(card => {
+                card.style.display = card.style.display === 'none' ? 'block' : 'none';
+            });
+        }
+
+        function searchContent() {
+            const query = document.getElementById('searchBox').value.toLowerCase();
+            const cards = document.querySelectorAll('.bilingual-card');
+            let found = false;
+            
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (query && text.includes(query)) {
+                    card.style.display = 'block';
+                    found = true;
+                } else if (query) {
+                    card.style.display = 'none';
+                } else {
+                    card.style.display = 'block';
+                }
+            });
+            
+            document.getElementById('noResult').style.display = (query && !found) ? 'block' : 'none';
+        }
+
+        // Initialize
+        document.getElementById('file1').classList.add('active');
+    </script>
+</body>
+</html>
